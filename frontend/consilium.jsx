@@ -8,7 +8,7 @@ const hashHistory = require('react-router').hashHistory;
 const HomeContent = require('./home_content');
 const Profile = require('./profile');
 const Navigation = require('./navigation');
-
+const Graph = require('./graph');
 
 const Consilium = React.createClass({
   render: function() {
@@ -24,8 +24,9 @@ const Consilium = React.createClass({
 const routes = (
   <Router history={hashHistory}>
     <Route path="/" component={Consilium}>
-      <IndexRoute component={HomeContent}/>
+      <IndexRoute component={Graph}/>
       <Route path="/profile" component={Profile}/>
+      <Route path="/home" component={HomeContent}/>
     </Route>
   </Router>
 );
