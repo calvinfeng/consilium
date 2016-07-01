@@ -1,34 +1,24 @@
 const React = require('react');
 const hashHistory = require('react-router').hashHistory;
-const Nav = require('react-bootstrap').Nav;
-const NavItem = require('react-bootstrap').NavItem;
+const Carousel = require('react-bootstrap').Carousel;
 
 const HomeContent = React.createClass({
-  getInitialState: function() {
-    return {activeKey: 1};
-  },
-
-  handleSelect: function(selectedKey) {
-    this.setState({activeKey: selectedKey});
-  },
-
-  handleClick: function(event) {
-    event.preventDefault();
-    hashHistory.push("/graph");
-  },
-
   render: function() {
     return (
-      <div>
-        <Nav bsStyle="tabs" activeKey={this.state.activeKey} onSelect={this.handleSelect}>
-          <NavItem eventKey={1}>Home</NavItem>
-          <NavItem eventKey={2}>Graph</NavItem>
-          <NavItem eventKey={3}>Login</NavItem>
-        </Nav>
-        <h1>Home</h1>
-        <div>
-          <button onClick={this.handleClick}>Graph</button>
-        </div>
+      <div className="carousel">
+        <Carousel interval="2000">
+          <Carousel.Item>
+            <img src="http://res.cloudinary.com/vechau/image/upload/v1467271000/photo-1453090927415-5f45085b65c0_o2iojc.jpg"/>
+            <Carousel.Caption>
+            </Carousel.Caption>
+          </Carousel.Item>
+          <Carousel.Item>
+            <img src="http://res.cloudinary.com/vechau/image/upload/v1467272765/photo-1445965752525-ac2d3c195ffe_qdcaum.jpg"/>
+          </Carousel.Item>
+          <Carousel.Item>
+            <img src="http://res.cloudinary.com/vechau/image/upload/v1467272522/photo-1450859018738-29f67b1a6102_mmvfxu.jpg"/>
+          </Carousel.Item>
+        </Carousel>
       </div>
     );
   }

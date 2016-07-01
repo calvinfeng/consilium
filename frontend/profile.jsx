@@ -1,7 +1,7 @@
 const React = require('react');
 
-const Graph = React.createClass({
-  
+const Profile = React.createClass({
+
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
@@ -14,11 +14,10 @@ const Graph = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>Graph</h1>
-        <button onClick={this.handleClick}>Home</button>
+        <h1>Profile</h1>
       </div>
     );
   }
 });
 
-module.exports = Graph;
+module.exports = Profile;
