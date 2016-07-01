@@ -5,10 +5,10 @@ const Route = require('react-router').Route;
 const IndexRoute = require('react-router').IndexRoute;
 const hashHistory = require('react-router').hashHistory;
 
-const HomeContent = require('./home_content');
-const Profile = require('./profile');
-const Navigation = require('./navigation');
-const Graph = require('./graph');
+const HomeContent = require('./components/home_content');
+const Profile = require('./components/profile');
+const Navigation = require('./components/navigation');
+const Graph = require('./components/graph');
 
 const Consilium = React.createClass({
   render: function() {

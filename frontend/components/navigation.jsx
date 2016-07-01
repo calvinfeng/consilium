@@ -32,7 +32,7 @@ const Navigation = React.createClass({
     return (
       <div>
         <Nav bsStyle="tabs" activeKey={this.state.activeKey} onSelect={this.handleSelect}>
-          <NavItem eventKey={1}>3D Surface Plot</NavItem>
+          <NavItem eventKey={1}>Regression</NavItem>
           <NavItem eventKey={2}>Linear Algebra</NavItem>
           <NavItem eventKey={3}>Predictions</NavItem>
           <NavDropdown eventKey={4} title="Menu" id="nav-dropdown">
