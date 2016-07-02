@@ -3,7 +3,7 @@ const Loader = require('react-loader');
 const StockActions = require('../actions/stock_actions');
 const StockStore = require('../stores/stock_store');
 const LinearRegressionActions = require('../actions/linear_regression_actions');
-
+const RegressionDisplay = require('./regression_display');
 /* global Plotly */
 const Graph = React.createClass({
 
@@ -13,15 +13,14 @@ const Graph = React.createClass({
 
   componentWillMount: function() {
     StockActions.fetchStockPrices();
-    LinearRegressionActions.computeRegression({x:[1,2,3,4,5], y:[1,2,3,4,5]});
   },
 
   componentDidMount: function() {
-    this.storeListener = StockStore.addListener(this.__onChange);
+    this.stockStoreListener = StockStore.addListener(this.__onChange);
   },
 
   componentWillUnmount: function() {
-    this.storeListener.remove();
+    this.stockStoreListener.remove();
   },
 
   __onChange: function() {
@@ -34,6 +33,7 @@ const Graph = React.createClass({
     }
     this.setState({loaded: true});
     this.plot(timeline, stockPrice);
+    LinearRegressionActions.computeRegression({x: timeline, y: stockPrice});
   },
 
   plot: function(xArr, yArr) {
@@ -45,7 +45,7 @@ const Graph = React.createClass({
     };
 
     var layout = {
-      title: 'Linear Regression',
+      title: 'FB Stock Prices',
       autosize: false,
       width: window.innerWidth,
       height: window.innerHeight*0.80,
@@ -54,16 +54,25 @@ const Graph = React.createClass({
         r: 200,
         b: 50,
         t: 50
+      },
+      xaxis: {
+        title: 'Days Since Unix Epoch'
+      },
+      yaxis: {
+        title: '$ Dollars'
       }
     };
-    Plotly.newPlot('plot',[scatter], layout);
+    Plotly.newPlot('data-plot',[scatter], layout);
   },
 
   render: function() {
     return (
-      <Loader className="spinner" loadedClassName="loadedContent" loaded={this.state.loaded}>
-        <div id="plot"></div>
-      </Loader>
+      <div>
+        <Loader className="spinner" loadedClassName="loadedContent" loaded={this.state.loaded}>
+          <div id="data-plot"></div>
+        </Loader>
+        <RegressionDisplay/>
+      </div>
     );
   }
 

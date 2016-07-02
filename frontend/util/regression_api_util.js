@@ -4,7 +4,7 @@ const RegressionApiUtil = {
       url: `api/regressions`,
       dataType: "JSON",
       data: {data: inputData},
-      method: "GET",
+      method: "POST",
       success: successCb,
       error: errorCb
     });

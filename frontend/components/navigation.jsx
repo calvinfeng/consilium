@@ -33,8 +33,8 @@ const Navigation = React.createClass({
       <div>
         <Nav bsStyle="tabs" activeKey={this.state.activeKey} onSelect={this.handleSelect}>
           <NavItem eventKey={1}>Regression</NavItem>
-          <NavItem eventKey={2}>Linear Algebra</NavItem>
-          <NavItem eventKey={3}>Predictions</NavItem>
+          <NavItem eventKey={2}>Placeholder</NavItem>
+          <NavItem eventKey={3}>Placeholder</NavItem>
           <NavDropdown eventKey={4} title="Menu" id="nav-dropdown">
             <MenuItem eventKey={4.1} onClick={this.redirectToHome}>Home</MenuItem>
             <MenuItem eventKey={4.2} onClick={this.redirectToProfile}>Profile</MenuItem>

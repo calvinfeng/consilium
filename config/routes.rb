@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
   root to: "static_pages#root"
-  get 'api/regressions', :to => 'api/regressions#linear_regression'
+  post 'api/regressions', :to => 'api/regressions#linear_regression'
 end

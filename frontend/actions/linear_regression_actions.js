@@ -1,11 +1,12 @@
-const Dispatcher = require('../dispatcher/dispatcher');
 const RegressionApiUtil = require('../util/regression_api_util');
 const RegressionConstants = require('../constants/regression_constants');
+const Dispatcher = require('../dispatcher/dispatcher');
+
 /*
 Submit data in this format
 {
-  x:[1,2,3,4,5],
-  y:[1,2,3,4,5]
+x:[1,2,3,4,5],
+y:[1,2,3,4,5]
 }
 */
 const LinearRegressionActions = {
@@ -18,10 +19,10 @@ const LinearRegressionActions = {
   },
 
   // Server Actions
-  receiveComputedResults: function(resultantData) {
+  receiveComputedResults: function(computationResult) {
     Dispatcher.dispatch({
       actionType: RegressionConstants.RECEIVE_COMPUTATION,
-      resultantData: resultantData
+      computationResult: computationResult
     });
   },
 

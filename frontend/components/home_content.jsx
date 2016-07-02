@@ -6,7 +6,7 @@ const HomeContent = React.createClass({
   render: function() {
     return (
       <div className="carousel">
-        <Carousel interval="2000">
+        <Carousel>
           <Carousel.Item>
             <img src="http://res.cloudinary.com/vechau/image/upload/v1467271000/photo-1453090927415-5f45085b65c0_o2iojc.jpg"/>
             <Carousel.Caption>

@@ -1,14 +1,13 @@
-const Store = require('flux/utils').Store;
-const hashHistory = require('react-router').hashHistory;
-const Dispatcher = require('../dispatcher/dispatcher');
-
 const StockConstants = require('../constants/stock_constants');
-const StockStore = new Store(Dispatcher);
+var Store = require('flux/utils').Store;
+var Dispatcher = require('../dispatcher/dispatcher');
+var StockStore = new Store(Dispatcher);
 
-var _stocks, _errors;
+var _stocks = [];
+var _errors = [];
 
 StockStore.__onDispatch = function(payload) {
-  console.log("StockStore is listening!");
+
   switch(payload.actionType) {
     case StockConstants.RECEIVE:
       StockStore.setStocks(payload.stockData.dataset_data.data);
@@ -19,6 +18,7 @@ StockStore.__onDispatch = function(payload) {
       StockStore.setErrors(payload.errors);
       StockStore.__emitChange();
     break;
+
   }
 };
 
@@ -33,7 +33,5 @@ StockStore.setErrors = function(errors) {
 StockStore.inventory = function() {
   return _stocks.slice();
 };
-
-
 
 module.exports = StockStore;
