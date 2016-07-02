@@ -2,6 +2,7 @@ const React = require('react');
 const Loader = require('react-loader');
 const StockActions = require('../actions/stock_actions');
 const StockStore = require('../stores/stock_store');
+const LinearRegressionActions = require('../actions/linear_regression_actions');
 
 /* global Plotly */
 const Graph = React.createClass({
@@ -12,6 +13,7 @@ const Graph = React.createClass({
 
   componentWillMount: function() {
     StockActions.fetchStockPrices();
+    LinearRegressionActions.computeRegression({x:[1,2,3,4,5], y:[1,2,3,4,5]});
   },
 
   componentDidMount: function() {

@@ -1,12 +1,14 @@
 const Store = require('flux/utils').Store;
 const hashHistory = require('react-router').hashHistory;
 const Dispatcher = require('../dispatcher/dispatcher');
+
 const StockConstants = require('../constants/stock_constants');
 const StockStore = new Store(Dispatcher);
 
 var _stocks, _errors;
 
 StockStore.__onDispatch = function(payload) {
+  console.log("StockStore is listening!");
   switch(payload.actionType) {
     case StockConstants.RECEIVE:
       StockStore.setStocks(payload.stockData.dataset_data.data);

@@ -6,7 +6,7 @@ const StockConstants = require('../constants/stock_constants');
 const StockActions = {
   // Client Actions
   fetchStockPrices: function() {
-    QuandlApiUtil.fetchStockPrices("AAPL",
+    QuandlApiUtil.fetchStockPrices("FB",
       StockActions.receiveStockPrices,
       StockActions.handleError
     );
