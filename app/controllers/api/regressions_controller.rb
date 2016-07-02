@@ -1,5 +1,4 @@
 require './lib/linear_regression.rb'
-require 'byebug'
 class Api::RegressionsController < ApplicationController
 
   def linear_regression

@@ -1,4 +1,3 @@
-require 'byebug'
 class LinearRegression
   # Hypothesis - Linear - h(x) = p0 + p1 x
 
