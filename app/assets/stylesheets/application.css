@@ -18,3 +18,34 @@
   height: 95vh;
   overflow: hidden;
 }
+
+video {
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+button {
+  margin-top: 5px;
+  border-radius: 5px;
+  box-shadow: none;
+  background-color: white;
+}
+
+.video-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#capture {
+  width: 200px;
+}
+
+#message-container {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+  aligh-items: center;
+  font-size: 1.2em;
+}

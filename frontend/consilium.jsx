@@ -5,7 +5,7 @@ const Route = require('react-router').Route;
 const IndexRoute = require('react-router').IndexRoute;
 const hashHistory = require('react-router').hashHistory;
 
-const HomeContent = require('./components/home_content');
+const EmotionDetection = require('./components/emotion_detection');
 const Profile = require('./components/profile');
 const Navigation = require('./components/navigation');
 const Graph = require('./components/graph');
@@ -26,7 +26,7 @@ const routes = (
     <Route path="/" component={Consilium}>
       <IndexRoute component={Graph}/>
       <Route path="/profile" component={Profile}/>
-      <Route path="/home" component={HomeContent}/>
+      <Route path="/emotion" component={EmotionDetection}/>
     </Route>
   </Router>
 );
