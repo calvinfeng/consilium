@@ -17,12 +17,9 @@ const Navigation = React.createClass({
       hashHistory.push("/");
     } else if (selectedKey === 2) {
       hashHistory.push("/emotion");
+    } else if (selectedKey === 3) {
+      hashHistory.push("/profile");
     }
-  },
-
-  redirectToProfile: function(event) {
-    event.preventDefault();
-    hashHistory.push("/profile");
   },
 
   render: function() {
@@ -31,11 +28,11 @@ const Navigation = React.createClass({
         <Nav bsStyle="tabs" activeKey={this.state.activeKey} onSelect={this.handleSelect}>
           <NavItem eventKey={1}>Regression</NavItem>
           <NavItem eventKey={2}>Emotion Detection</NavItem>
-          <NavItem eventKey={3}>Placeholder</NavItem>
+          <NavItem eventKey={3}>Profile</NavItem>
           <NavDropdown eventKey={4} title="Menu" id="nav-dropdown">
-            <MenuItem eventKey={4.1}>Home</MenuItem>
-            <MenuItem eventKey={4.2}>Profile</MenuItem>
-            <MenuItem eventKey={4.3}>Exit</MenuItem>
+            <MenuItem eventKey={4.1}>Menu Item 1</MenuItem>
+            <MenuItem eventKey={4.2}>Menu Item 2</MenuItem>
+            <MenuItem eventKey={4.3}>Menu Item 3</MenuItem>
           </NavDropdown>
         </Nav>
       </div>
