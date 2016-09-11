@@ -1,5 +1,4 @@
 require 'csv'
-require 'byebug'
 #$redis = Redis.new(:host => 'localhost', :port => 6379)
 host = "ec2-184-73-182-113.compute-1.amazonaws.com"
 port = 12229

@@ -7,7 +7,7 @@ system by running machine learning algorithm(s) to make predictions on movie rat
 [live]:https://consilium.herokuapp.com/
 
 ## Instruction for Collaborators
-Beside the standard
+Besides the standard,
 ```
 $ bundle install
 $ npm intall
@@ -20,6 +20,15 @@ $ brew install redis
 Linux
 $ sudo apt-get install redis-server
 ```
+
+### Redis instance on Heroku
+Redis URL can be found by running
+
+`$ heroku config | grep REDIS`
+
+Redis instance info can be found by running
+
+`$ heroku redis:info`
 
 ## Regression
 The first step of this project is to use gradient descent to fit linear/quadratic
