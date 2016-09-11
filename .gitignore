@@ -20,4 +20,4 @@ bundle.js.map
 /tmp
 
 # Ignore application configuration
-/config/application.yml
+# /config/application.yml
