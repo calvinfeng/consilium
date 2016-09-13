@@ -1,5 +1,5 @@
-require './lib/linear_regression.rb'
-require './lib/multivariate_regression.rb'
+require './lib/regression/linear_regression.rb'
+require './lib/regression/multivariate_regression.rb'
 class Api::RegressionsController < ApplicationController
 
   def linear_regression

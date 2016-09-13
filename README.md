@@ -39,6 +39,16 @@ Redis instance info can be found by running
 
 `$ heroku redis:info`
 
+### Start running
+First you need to start your Redis server by typing in
+```
+$ redis-server
+```
+Now you can start your Rails server
+```
+$ rails s
+```
+Don't forget webpack!
 
 ## Regression
 The first step of this project is to use gradient descent to fit linear/quadratic
