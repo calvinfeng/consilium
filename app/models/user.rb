@@ -1,3 +1,8 @@
+# ==============================================================================
+# This is not an usual Rails model. It doesn't inherit from ActiveRecord::Base
+# The purpose of this model class is to perform business logic; the core logic
+# of the recommender system.
+# ==============================================================================
 class User
   attr_reader :id, :ratings, :avg_rating
   def initialize(user_id, movie_ratings)

@@ -60,6 +60,14 @@ def compute_avg_ratings(movies)
   return nil
 end
 
-movies, users = load_data
-$redis.set('movies', movies)
-$redis.set('users', users)
+movies_map, users_map = load_data
+# Cache the hash in Redis
+$redis.set('movies', movies_map)
+$redis.set('users', users_map)
+
+users = Hash.new
+users_map.each do |user_id, user_movie_ratings|
+  users[user_id] = User.new(user_id, user_movie_ratings)
+end
+# Cache the user objects in Rails
+Rails.cache.write("users", users)
