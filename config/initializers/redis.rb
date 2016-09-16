@@ -63,7 +63,7 @@ end
 movies_map, users_map = load_data
 # Cache the hash in Redis
 $redis.set('movies', movies_map)
-$redis.set('users', users_map)
+#$redis.set('users', users_map)
 
 users = Hash.new
 users_map.each do |user_id, user_movie_ratings|
