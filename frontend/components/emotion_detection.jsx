@@ -7,9 +7,9 @@ const EmotionStore = require('../stores/emotion_store');
 const EmotionDetection = React.createClass({
 
   getInitialState: function() {
-    let welcomeText = "Hi, I am Larry. Calvin created me to understand you. ";
-    welcomeText += "\nTake a picture of your face and let me tell you what I think. ";
-    welcomeText += "\nDon't worry, photos are not saved";
+    let welcomeText = "Take a picture and the computer will evaluate your current state of emotion.";
+    welcomeText += "\nHowever, the algorithm has its limitation, don't expect it to know anything";
+    welcomeText += "\nunless you explicitly show your emotion in the picture.";
     return (
       {
         text: welcomeText,

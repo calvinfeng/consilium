@@ -14,11 +14,6 @@
  *= require_self
  */
 
-.carousel {
-  height: 95vh;
-  overflow: hidden;
-}
-
 video {
   margin-top: 20px;
   border-radius: 10px;

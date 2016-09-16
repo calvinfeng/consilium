@@ -1,0 +1,12 @@
+.movie-index {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.movie-item {
+  display: flex;
+  flex-direction: column;
+  margin: 1em 1em 1em 1em;
+  max-width: calc(100vw/6);
+}
