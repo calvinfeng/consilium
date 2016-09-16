@@ -22,7 +22,7 @@ class Movie
     @viewers.each do |viewer_id|
       neighbor = users[viewer_id]
       sim = user.sim(neighbor)
-      if sim != 0
+      if sim >= 0.5
         score += sim*(neighbor.ratings[@id] - neighbor.avg_rating)
         sim_norm += sim.abs
       end
