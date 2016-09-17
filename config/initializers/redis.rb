@@ -67,10 +67,8 @@ $redis.set('movies', movies_map)
 
 users = Hash.new
 users_map.each do |user_id, user_movie_ratings|
-  if (user_id <= 5000)
-    users[user_id] = User.new(user_id, user_movie_ratings)
-  end
+  users[user_id] = User.new(user_id, user_movie_ratings)
 end
 # Cache the user objects in Rails
 Rails.cache.clear()
-Rails.cache.write("users", users)
+Rails.cache.write("users", users_map)
