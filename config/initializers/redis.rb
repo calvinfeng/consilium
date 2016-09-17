@@ -65,10 +65,10 @@ movies_map, users_map = load_data
 $redis.set('movies', movies_map)
 #$redis.set('users', users_map)
 
-users = Hash.new
-users_map.each do |user_id, user_movie_ratings|
-  users[user_id] = User.new(user_id, user_movie_ratings)
-end
-# Cache the user objects in Rails
-Rails.cache.clear()
-Rails.cache.write("users", users_map)
+# users = Hash.new
+# users_map.each do |user_id, user_movie_ratings|
+#   users[user_id] = User.new(user_id, user_movie_ratings)
+# end
+# # Cache the user objects in Rails
+# Rails.cache.clear()
+# Rails.cache.write("users", users_map)
