@@ -8,7 +8,7 @@ $redis = Redis.new(:host => host, :port => port, :password => password)
 $redis.flushdb
 
 def load_data()
-  movies_csv = File.read('config/csv/ml-data/movies.csv')
+  movies_csv = File.read('config/ml-data/knn-5k-users/movies.csv')
   csv = CSV.parse(movies_csv, :headers => true)
   movies = Hash.new
   csv.each do |row|
@@ -22,7 +22,7 @@ def load_data()
 end
 
 def load_movie_ratings_from_users(movies)
-  ratings_csv = File.read('config/csv/ml-data/ratings.csv')
+  ratings_csv = File.read('config/ml-data/knn-5k-users/ratings.csv')
   csv = CSV.parse(ratings_csv, :headers => true)
   users = Hash.new
   csv.each do |row|
@@ -60,15 +60,15 @@ def compute_avg_ratings(movies)
   return nil
 end
 
-# movies_map, users_map = load_data
+movies_map, users_map = load_data
 # Cache the hash in Redis
-# $redis.set('movies', movies_map)
-#$redis.set('users', users_map)
+$redis.set('movies', movies_map)
+# $redis.set('users', users_map)
 
-# users = Hash.new
-# users_map.each do |user_id, user_movie_ratings|
-#   users[user_id] = User.new(user_id, user_movie_ratings)
-# end
+users = Hash.new
+users_map.each do |user_id, user_movie_ratings|
+  users[user_id] = User.new(user_id, user_movie_ratings)
+end
 # # Cache the user objects in Rails
-# Rails.cache.clear()
-# Rails.cache.write("users", users_map)
+Rails.cache.clear()
+Rails.cache.write("users", users)
