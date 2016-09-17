@@ -60,9 +60,9 @@ def compute_avg_ratings(movies)
   return nil
 end
 
-movies_map, users_map = load_data
+# movies_map, users_map = load_data
 # Cache the hash in Redis
-$redis.set('movies', movies_map)
+# $redis.set('movies', movies_map)
 #$redis.set('users', users_map)
 
 # users = Hash.new
