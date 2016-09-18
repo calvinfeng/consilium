@@ -65,7 +65,9 @@ end
 movies_map, users_map = load_data
 # Cache movies_with_many_reviews in Redis
 movies_with_many_reviews = {}
+movie_ids = []
 movies_map.each do |movie_id, info|
+  movie_ids << movie_id
   if info[:viewers].size > 100
     movies_with_many_reviews[movie_id] = {
       title: info[:title],
@@ -75,6 +77,7 @@ movies_map.each do |movie_id, info|
     }
   end
 end
+$redis.set('movie_ids', movie_ids)
 $redis.set('movies_with_many_reviews', movies_with_many_reviews)
 # Cache the hash in Redis
 $redis.set('movies', movies_map)
