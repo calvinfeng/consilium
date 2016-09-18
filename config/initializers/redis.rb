@@ -1,4 +1,5 @@
 require 'csv'
+
 #$redis = Redis.new(:host => 'localhost', :port => 6379)
 host = "ec2-184-73-182-113.compute-1.amazonaws.com"
 port = 12229
@@ -61,6 +62,18 @@ def compute_avg_ratings(movies)
 end
 
 movies_map, users_map = load_data
+# Cache movies_with_many_reviews in Redis
+movies_with_many_reviews = {}
+movies_map.each do |movie_id, info|
+  if info[:viewers].size > 100
+    movies_with_many_reviews[movie_id] = {
+      title: info[:title],
+      viewers: info[:viewers],
+      avg_rating: info[:avg_rating]
+    }
+  end
+end
+$redis.set('movies_with_many_reviews', movies_with_many_reviews)
 # Cache the hash in Redis
 $redis.set('movies', movies_map)
 # $redis.set('users', users_map)
