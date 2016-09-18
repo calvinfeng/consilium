@@ -4,12 +4,11 @@
 # of the recommender system.
 # ==============================================================================
 class Movie
-  attr_reader :id, :title, :ratings, :viewers, :avg_rating
+  attr_reader :id, :title, :viewers, :avg_rating
 
-  def initialize(movie_id, title, ratings, viewers, avg_rating)
+  def initialize(movie_id, title, viewers, avg_rating)
     @id = movie_id
     @title = title
-    @ratings = ratings
     @viewers = viewers
     @avg_rating = avg_rating
   end
@@ -35,32 +34,18 @@ class Movie
     end
   end
 
-  def self.top_rated(n)
-    if Rails.cache.read("movies_by_rating")
-      return Rails.cache.read("movies_by_rating").take(n)
+  def self.movies_with_many_reviews
+    cached = Rails.cache.read("gauge_set")
+    if cached
+      return cached
     else
-      movies = []
-      movies_hash = eval($redis.get("movies"))
+      gauge_set = []
+      movies_hash = eval($redis.get('movies_with_many_reviews'))
       movies_hash.each do |id, info|
-        movies << Movie.new(id, info[:title], info[:ratings], info[:viewers], info[:avg_rating])
+        gauge_set << Movie.new(id, info[:title], info[:viewers], info[:avg_rating])
       end
-      movies_by_rating = Movie.sort_by_avg_rating(movies)
-      Rails.cache.write("movies_by_rating", movies_by_rating)
-      return movies_by_rating.take(n)
+      Rails.cache.write("gauge_set", gauge_set)
+      gauge_set
     end
   end
-
-  private
-  def self.sort_by_avg_rating(movies)
-    if movies.length <= 1
-      return movies
-    else
-      pivot = movies.first
-      left = movies.select {|movie| movie.avg_rating > pivot.avg_rating}
-      middle = movies.select {|movie| movie.avg_rating == pivot.avg_rating}
-      right = movies.select {|movie| movie.avg_rating < pivot.avg_rating}
-      Movie.sort_by_avg_rating(left) + middle + Movie.sort_by_avg_rating(right)
-    end
-  end
-
 end
