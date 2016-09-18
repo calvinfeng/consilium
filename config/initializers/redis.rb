@@ -1,5 +1,5 @@
 require 'csv'
-
+require 'byebug'
 #$redis = Redis.new(:host => 'localhost', :port => 6379)
 host = "ec2-184-73-182-113.compute-1.amazonaws.com"
 port = 12229
@@ -15,7 +15,8 @@ def load_data()
   csv.each do |row|
     id = row["movieId"].to_i
     title = row["title"]
-    movies[id] = {title: title}
+    year = row["year"].to_i
+    movies[id] = {title: title, year: year}
   end
   users = load_movie_ratings_from_users(movies)
   compute_avg_ratings(movies)
@@ -68,6 +69,7 @@ movies_map.each do |movie_id, info|
   if info[:viewers].size > 100
     movies_with_many_reviews[movie_id] = {
       title: info[:title],
+      year: info[:year],
       viewers: info[:viewers],
       avg_rating: info[:avg_rating]
     }
@@ -77,7 +79,6 @@ $redis.set('movies_with_many_reviews', movies_with_many_reviews)
 # Cache the hash in Redis
 $redis.set('movies', movies_map)
 # $redis.set('users', users_map)
-
 users = Hash.new
 users_map.each do |user_id, user_movie_ratings|
   users[user_id] = User.new(user_id, user_movie_ratings)
