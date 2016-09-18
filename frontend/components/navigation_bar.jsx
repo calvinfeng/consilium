@@ -33,9 +33,18 @@ const NavigationBar = React.createClass({
           <NavItem eventKey={2}>Emotion Detection</NavItem>
           <NavItem eventKey={3}>About</NavItem>
           <NavDropdown eventKey={4} id="nav-dropdown" title="Our Team">
-            <MenuItem href="https://www.linkedin.com/in/calvin-feng">Calvin Feng</MenuItem>
-            <MenuItem href="https://www.linkedin.com/in/steven-cheong-55404bbb">Steven Cheong</MenuItem>
-            <MenuItem href="https://www.linkedin.com/in/veronica-chau">Veronica Chau</MenuItem>
+            <MenuItem href="https://www.linkedin.com/in/calvin-feng">
+              <i className="fa fa-linkedin-square" aria-hidden="true"></i>
+                &nbsp;Calvin Feng
+            </MenuItem>
+            <MenuItem href="https://www.linkedin.com/in/steven-cheong-55404bbb">
+              <i className="fa fa-linkedin-square" aria-hidden="true"></i>
+                &nbsp;Steven Cheong
+            </MenuItem>
+            <MenuItem href="https://www.linkedin.com/in/veronica-chau">
+              <i className="fa fa-linkedin-square" aria-hidden="true"></i>
+                &nbsp;Veronica Chau
+            </MenuItem>
           </NavDropdown>
         </Nav>
       </div>

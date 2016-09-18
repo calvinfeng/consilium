@@ -1,0 +1,17 @@
+.page-container {
+  height: 100%;
+  width: 100%;
+  padding: 1em 1em 1em 1em;
+}
+
+.page-container p {
+  margin: 1em 0px 1em 0px;
+}
+
+.page-container div {
+  margin: 0px 1em 0px 1em;
+}
+
+.teammate-name {
+  margin: 0px 0em 0px 0px;
+}
