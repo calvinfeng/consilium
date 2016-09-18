@@ -20,6 +20,7 @@ def load_data()
   end
   users = load_movie_ratings_from_users(movies)
   compute_avg_ratings(movies)
+  load_imdb_id(movies)
   return [movies, users]
 end
 
@@ -28,6 +29,7 @@ def load_movie_ratings_from_users(movies)
   csv = CSV.parse(ratings_csv, :headers => true)
   users = Hash.new
   csv.each do |row|
+    # Parse data from csv file
     user_id = row["userId"].to_i
     movie_id = row["movieId"].to_i
     rating = row["rating"].to_f
@@ -39,7 +41,7 @@ def load_movie_ratings_from_users(movies)
       movies[movie_id][:ratings] = [rating]
       movies[movie_id][:viewers] = [user_id]
     end
-    # Record user rating pattern
+    # Record user rating to users
     if users[user_id]
       users[user_id][movie_id] = rating
     else
@@ -47,6 +49,18 @@ def load_movie_ratings_from_users(movies)
     end
   end
   return users
+end
+
+def load_imdb_id(movies)
+  links_csv = File.read('config/ml-data/knn-5k-users/links.csv')
+  csv = CSV.parse(links_csv, :headers => true)
+  csv.each do |row|
+    movie_id = row["movieId"].to_i
+    imdb_id = row["imdbId"]
+    tmdb_id = row["tmdbId"]
+    movies[movie_id][:imdb_id] = imdb_id
+    movies[movie_id][:tmdb_id] = tmdb_id
+  end
 end
 
 def compute_avg_ratings(movies)
@@ -71,7 +85,8 @@ movies_map.each do |movie_id, info|
       title: info[:title],
       year: info[:year],
       viewers: info[:viewers],
-      avg_rating: info[:avg_rating]
+      avg_rating: info[:avg_rating],
+      imdb_id: info[:imdb_id]
     }
   end
 end

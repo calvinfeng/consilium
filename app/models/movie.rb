@@ -6,12 +6,13 @@
 class Movie
   attr_reader :id, :title, :year, :viewers, :avg_rating
 
-  def initialize(movie_id, title, year, viewers, avg_rating)
+  def initialize(movie_id, title, year, viewers, avg_rating, imdb_id)
     @id = movie_id
     @title = title
     @year = year
     @viewers = viewers
     @avg_rating = avg_rating
+    @imdb_id = imdb_id
   end
 
   def predicted_rating_for(user)
@@ -43,7 +44,8 @@ class Movie
       gauge_set = []
       movies_hash = eval($redis.get('movies_with_many_reviews'))
       movies_hash.each do |id, info|
-        gauge_set << Movie.new(id, info[:title], info[:year], info[:viewers], info[:avg_rating])
+        gauge_set << Movie.new(id, info[:title], info[:year], info[:viewers],
+          info[:avg_rating], info[:imdb_id])
       end
       Rails.cache.write("gauge_set", gauge_set)
       gauge_set
