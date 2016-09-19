@@ -28,7 +28,7 @@ class Movie
         sim_norm += sim.abs
       end
     end
-
+    #return statements
     if sim_norm == 0
       raise "User hasn't rated enough movies for the system to determine his/her preference"
     else
