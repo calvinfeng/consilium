@@ -4,7 +4,7 @@
 # of the recommender system.
 # ==============================================================================
 class Movie
-  attr_reader :id, :title, :year, :viewers, :avg_rating
+  attr_reader :id, :title, :year, :viewers, :avg_rating, :imdb_id
 
   def initialize(movie_id, title, year, viewers, avg_rating, imdb_id)
     @id = movie_id
@@ -30,7 +30,7 @@ class Movie
     end
     #return statements
     if sim_norm == 0
-      raise "User hasn't rated enough movies for the system to determine his/her preference"
+      return "User hasn't rated enough movies for the system to determine his/her preference"
     else
       return user.avg_rating + (score/sim_norm)
     end

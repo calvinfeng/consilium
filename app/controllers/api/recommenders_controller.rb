@@ -1,3 +1,4 @@
+require 'byebug'
 class Api::RecommendersController < ApplicationController
   def for_new_visitor
     #fetch movies for new visitors to rate
@@ -7,33 +8,50 @@ class Api::RecommendersController < ApplicationController
 
   def recommendations
     @movies = []
-    rated = recommender_params[:rated]
-    queue = recommender_params[:queue]
-    all_movies = eval($redis.get('movies'))
-    all_ids = eval($redis.get('movie_ids'))
-
-    calculated = {}
-    user = User.new(nil, rated)
-    until @movies.size > 21 - queue.size
-      id = all_ids.sample
-      movie = Movie.new(
-        id,
-        all_movies[id][:title],
-        all_movies[id][:year],
-        all_movies[id][:viewers],
-        all_movies[id][:avg_rating]
-      )
-      unless rated[id] || queue[id] || calculated[id] || movie.predicted_rating_for(user) < user.compute_avg_rating
-        @movies << movie
-      end
-      calculated[id] = true
+    rated = Hash.new
+    recommender_params[:rated].each do |key, val|
+      rated[key.to_i] = val.to_f
     end
-
+    queue = Hash.new
+    recommender_params[:queue].each do |key, val|
+      queue[key.to_i] = val
+    end
+    current_user = User.new(nil, rated)
+    generate_recommendations(current_user, 21 - queue.size, queue)
     render "api/recommender/movies.json.jbuilder"
   end
 
   private
+  def generate_recommendations(user, items_needed, queue)
+    movies_collection = eval($redis.get('movies'))
+    movie_ids = eval($redis.get('movie_ids'))
+    calculated = {}
+    prediction_attempted, prediction_failed = 0, 0
+    until @movies.size > items_needed
+      id = movie_ids.sample
+      prediction_attempted += 1
+      movie = Movie.new(
+        id,
+        movies_collection[id][:title],
+        movies_collection[id][:year],
+        movies_collection[id][:viewers],
+        movies_collection[id][:avg_rating],
+        movies_collection[id][:imdb_id]
+      )
+      predicted_rating = movie.predicted_rating_for(user)
+      if predicted_rating.is_a? Numeric
+        unless user.ratings[id] || queue[id] || calculated[id] || predicted_rating < user.avg_rating
+          @movies << movie
+        end
+        calculated[id] = true
+      else
+        prediction_failed += 1
+      end
+    end
+    puts "Prediction attempted: #{prediction_attempted}, failed: #{prediction_failed}"
+  end
+
   def recommender_params
-    params.require(:recommender).permit(:rated, :queue)
+    params.require(:recommender)
   end
 end

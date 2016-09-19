@@ -21,6 +21,41 @@ const About = React.createClass({
     return {value: ''};
   },
 
+  componentWillMount() {
+    $.ajax({
+      url: "/api/recommender/recommendations",
+      dataType: "JSON",
+      method: "GET",
+      data: {
+        recommender: {
+          rated: {
+            1: 5,
+            91500: 3.5,
+            91529: 3,
+            98809: 2.5,
+            99114: 5,
+            106782: 4.5,
+            109487: 4.5,
+            112552: 3.5,
+            480: 5,
+            519: 2.5,
+            527: 5,
+            541: 5,
+            587: 3
+          },
+          queue: {
+            2: true,
+            4: true,
+            125: true
+          }
+        }
+      },
+      success: function(data) {
+        debugger
+      }
+    });
+  },
+
   componentDidMount() {
     let ratingAggregation = "r_{u,i} = \\bar{r}_{u} +k \\sum_{u' \\in N} sim(u, u') r_{u', i}";
     this.renderKatex("rating-prediction", ratingAggregation);

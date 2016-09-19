@@ -92,15 +92,19 @@ movies_map.each do |movie_id, info|
     }
   end
 end
+# Caching in redis
 $redis.set('movie_ids', movie_ids)
 $redis.set('movies_with_many_reviews', movies_with_many_reviews)
-# Cache the hash in Redis
 $redis.set('movies', movies_map)
 # $redis.set('users', users_map)
+
+# Immediately free up memory and let garbage collector do its work
+movie_ids, movies_with_many_reviews, movies_map = nil, nil, nil
+
+# Cache the user objects in Rails
 users = Hash.new
 users_map.each do |user_id, user_movie_ratings|
   users[user_id] = User.new(user_id, user_movie_ratings)
 end
-# # Cache the user objects in Rails
 Rails.cache.clear()
 Rails.cache.write("users", users)
