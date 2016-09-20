@@ -5,7 +5,7 @@ const MovieActions = require('../actions/movie_actions');
 
 const MovieIndex = React.createClass({
   getInitialState(){
-    return { popularMovies: [] };
+    return { popularMovies: [], firstTenMovies: [] };
   },
   componentDidMount(){
     this.movieListener = MovieStore.addListener(this.getPopularMovies);
@@ -16,22 +16,16 @@ const MovieIndex = React.createClass({
   },
   getPopularMovies(){
     this.setState({
-      popularMovies: MovieStore.popularMovies()
+      popularMovies: MovieStore.popularMovies(),
+      firstTenMovies: MovieStore.tenMovies()
     });
   },
   getMovies() {
-    let movies = [
-      {id: 1, title: "Toy Story"},
-      {id: 2, title: "Inception"},
-      {id: 3, title: "Shutter Island"},
-      {id: 4, title: "Interstellar"},
-      {id: 5, title: "Fight Club"}
-    ];
+    let movies = this.state.firstTenMovies;
     return movies.map(function(movie) {
       return <MovieItem key={movie.id} title={movie.title} movieId={movie.id}/>;
     });
   },
-
   render() {
     return <div className="movie-index">{this.getMovies()}</div>;
   }
