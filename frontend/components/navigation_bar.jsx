@@ -16,8 +16,6 @@ const NavigationBar = React.createClass({
     if (selectedKey === 1) {
       hashHistory.push("/");
     } else if (selectedKey === 2) {
-      hashHistory.push("/emotion");
-    } else if (selectedKey === 3) {
       hashHistory.push("/about");
     }
   },
@@ -30,9 +28,8 @@ const NavigationBar = React.createClass({
       <div>
         <Nav bsStyle="tabs" activeKey={this.state.activeKey} onSelect={this.tabSelect}>
           <NavItem eventKey={1}>Movie Recommender</NavItem>
-          <NavItem eventKey={2}>Emotion Detection</NavItem>
-          <NavItem eventKey={3}>About</NavItem>
-          <NavDropdown eventKey={4} id="nav-dropdown" title="Our Team">
+          <NavItem eventKey={2}>About</NavItem>
+          <NavDropdown eventKey={3} id="nav-dropdown" title="Our Team">
             <MenuItem href="https://www.linkedin.com/in/calvin-feng">
               <i className="fa fa-linkedin-square" aria-hidden="true"></i>
                 &nbsp;Calvin Feng

@@ -12,6 +12,13 @@ const NavigationBar = require('./components/navigation_bar');
 // Graph may be useful to us in the future, but now, keep it lean
 const Graph = require('./deprecated_components/graph');
 
+
+const MovieActions = require('./actions/movie_actions');
+window.MovieActions = MovieActions;
+const MovieStore = require('./stores/movie_store');
+window.MovieStore = MovieStore;
+
+
 const Consilium = React.createClass({
   render: function() {
     return (
@@ -28,7 +35,6 @@ const routes = (
     <Route path="/" component={Consilium}>
       <IndexRoute component={MovieRecommender}/>
       <Route path="/about" component={About}/>
-      <Route path="/emotion" component={EmotionDetection}/>
       <Route path="/graph" component={Graph}/>
     </Route>
   </Router>

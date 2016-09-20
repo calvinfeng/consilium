@@ -1,7 +1,24 @@
 const React = require('react');
 const MovieItem = require('./movie_item');
+const MovieStore = require('../stores/movie_store');
+const MovieActions = require('../actions/movie_actions');
 
 const MovieIndex = React.createClass({
+  getInitialState(){
+    return { popularMovies: [] };
+  },
+  componentDidMount(){
+    this.movieListener = MovieStore.addListener(this.getPopularMovies);
+    MovieActions.fetchPopularMovies();
+  },
+  componentWillUnmount(){
+    this.movieListener.remove();
+  },
+  getPopularMovies(){
+    this.setState({
+      popularMovies: MovieStore.popularMovies()
+    });
+  },
   getMovies() {
     let movies = [
       {id: 1, title: "Toy Story"},

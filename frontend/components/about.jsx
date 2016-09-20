@@ -51,7 +51,7 @@ const About = React.createClass({
         }
       },
       success: function(data) {
-        debugger
+        console.log(data);
       }
     });
   },
