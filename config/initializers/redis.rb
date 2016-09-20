@@ -5,7 +5,6 @@ $redis = Redis.new(:host => 'localhost', :port => 6379)
 # port = 12229
 # password = "pb56s1fjj1147takjkahe3r4n38"
 #$redis = Redis.new(:host => host, :port => port, :password => password)
-
 $redis.flushdb
 
 def load_data()
