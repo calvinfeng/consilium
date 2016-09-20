@@ -52,6 +52,9 @@ const About = React.createClass({
       },
       success: function(data) {
         debugger
+      },
+      error: function(data) {
+        console.log(data.responseJSON.errors);
       }
     });
   },
