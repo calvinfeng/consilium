@@ -9,6 +9,8 @@ const MovieStore = new Store(Dispatcher);
 let _popularMovies = {};
 let _recommendedMovies = {};
 let _initialTenMovies = {};
+let _movieInformation = {};
+let count = 0;
 
 MovieStore.popularMovies = function(){
   return Object.keys(_popularMovies).map( (movieId) => {
@@ -25,7 +27,6 @@ MovieStore.recommendedMovies = function(){
 MovieStore.tenMovies = function(){
   let selected;
   let movies = this.popularMovies();
-  let count = 0;
   while (count < 10){
     selected = movies[Math.floor(Math.random()*movies.length)];
     if (Object.keys(_initialTenMovies).length === 0){
@@ -34,8 +35,6 @@ MovieStore.tenMovies = function(){
     } else if (!_initialTenMovies.hasOwnProperty(selected.id)) {
       _initialTenMovies[selected.id] = selected;
       count ++;
-    } else {
-      console.log(_initialTenMovies);
     }
   }
   return Object.keys(_initialTenMovies).map( (movieDbId) => {
@@ -59,7 +58,7 @@ const getRecommendedMovies = function(movies) {
 };
 
 MovieStore.__onDispatch = payload => {
-  switch(payload.actionType) {
+  switch (payload.actionType) {
     case MovieConstants.POPULAR_MOVIES_RECEIVED:
       getPopularMovies(payload.movies);
       MovieStore.__emitChange();

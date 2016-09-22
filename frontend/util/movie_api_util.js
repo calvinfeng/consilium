@@ -19,13 +19,27 @@ const MovieApiUtil = {
       dataType: "JSON",
       method: "GET",
       data: rated,
-      success: success,
+      success,
+      fail(xhr) {
+        console.log(xhr);
+      }
+    });
+  },
+
+  getMovieInfo(imdbId, success) {
+    $.ajax({
+      url: "http://www.omdbapi.com/",
+      dataType: "JSON",
+      method: "GET",
+      data: {
+        i: imdbId, plot: 'short'
+      },
+      success,
       fail(xhr) {
         console.log(xhr);
       }
     });
   }
-
 };
 
 module.exports = MovieApiUtil;
