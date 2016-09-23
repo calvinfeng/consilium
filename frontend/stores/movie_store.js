@@ -42,14 +42,14 @@ MovieStore.tenMovies = function(){
   });
 };
 
-const getPopularMovies = function(movies) {
+const receivePopularMovies = function(movies) {
   _popularMovies = {};
   movies.forEach( (movie) => {
     _popularMovies[movie.id] = movie;
   });
 };
 
-const getRecommendedMovies = function(movies) {
+const receiveRecommendedMovies = function(movies) {
   _popularMovies = {};
   _recommendedMovies = {};
   movies.forEach( (movie) => {
@@ -60,11 +60,11 @@ const getRecommendedMovies = function(movies) {
 MovieStore.__onDispatch = payload => {
   switch (payload.actionType) {
     case MovieConstants.POPULAR_MOVIES_RECEIVED:
-      getPopularMovies(payload.movies);
+      receivePopularMovies(payload.movies);
       MovieStore.__emitChange();
       break;
     case MovieConstants.RECOMMENDED_MOVIES_RECEIVED:
-      getRecommendedMovies(payload.movies);
+      receiveRecommendedMovies(payload.movies);
       MovieStore.__emitChange();
       break;
   }

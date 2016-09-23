@@ -16,12 +16,11 @@ const MovieItem = React.createClass({
   getInitialState() {
     return {
       ratingValue: "",
-      movieInfo: {},
+      movieInfo: {Title: "Loading", Plot: "Loading", Poster: "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg"},
     };
   },
 
   componentDidMount() {
-    console.log(this.props);
     this.movieInfoListener = MovieInfoStore.addListener(this.receiveMovieInfo);
     MovieInfoActions.fetchMovieInfo(this.props.imdbId);
   },
@@ -47,6 +46,13 @@ const MovieItem = React.createClass({
 
   render() {
     let currentMovie = this.state.movieInfo;
+    let poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg"
+
+    // if (currentMovie.poster.length > 5){
+    //   poster = currentMovie.poster;
+    // }
+
+    console.log(currentMovie);
     return (
       <div className="movie-item">
         <h3>{currentMovie.Title}</h3>
