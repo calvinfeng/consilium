@@ -5,6 +5,9 @@ const FormControl = require('react-bootstrap').FormControl;
 const ControlLabel = require('react-bootstrap').ControlLabel;
 const HelpBlock = require('react-bootstrap').HelpBlock;
 
+
+const MovieInfoStore = require('../stores/movie_info_store');
+const MovieInfoActions = require('../actions/movie_info_action');
 // Please use Open Movie Database for movie information
 // Or if you prefer, use the node package IMDb-API because IMBd doens't provide
 // a well-documented API
@@ -13,9 +16,21 @@ const MovieItem = React.createClass({
   getInitialState() {
     return {
       ratingValue: "",
-      description: "This is a movie about someone did something and something bad happened...",
-      imageURL: "http://ia.media-imdb.com/images/M/MV5BMTk2NTI1MTU4N15BMl5BanBnXkFtZTcwODg0OTY0Nw@@._V1_SX300.jpg"
+      movieInfo: {Title: "Loading", Plot: "Loading", Poster: "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg"},
     };
+  },
+
+  componentDidMount() {
+    this.movieInfoListener = MovieInfoStore.addListener(this.receiveMovieInfo);
+    MovieInfoActions.fetchMovieInfo(this.props.imdbId);
+  },
+
+  componentWillUnmount() {
+    this.movieInfoListener.remove();
+  },
+
+  receiveMovieInfo(){
+    this.setState({ movieInfo: MovieInfoStore.getMovieInfo(this.props.imdbId)});
   },
 
   handleChange(e) {
@@ -30,11 +45,19 @@ const MovieItem = React.createClass({
   },
 
   render() {
+    let currentMovie = this.state.movieInfo;
+    let poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg"
+
+    // if (currentMovie.poster.length > 5){
+    //   poster = currentMovie.poster;
+    // }
+
+    console.log(currentMovie);
     return (
       <div className="movie-item">
-        <h3>{this.props.title}</h3>
-        <div>Plot outline: {this.state.description}</div>
-        <img src={this.state.imageURL}/>
+        <h3>{currentMovie.Title}</h3>
+        <div>Plot outline: {currentMovie.Plot}</div>
+        <img src={currentMovie.Poster}/>
         <form>
           <FormGroup
             controlId="formBasicText"

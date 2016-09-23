@@ -14,6 +14,8 @@ const MovieActions = require('./actions/movie_actions');
 window.MovieActions = MovieActions;
 const MovieStore = require('./stores/movie_store');
 window.MovieStore = MovieStore;
+const MovieInfoStore = require('./stores/movie_info_store');
+window.MovieInfoStore = MovieStore;
 
 
 const Consilium = React.createClass({
