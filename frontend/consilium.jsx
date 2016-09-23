@@ -9,9 +9,6 @@ const MovieRecommender = require('./components/movie_recommender');
 const EmotionDetection = require('./components/emotion_detection');
 const About = require('./components/about');
 const NavigationBar = require('./components/navigation_bar');
-// Graph may be useful to us in the future, but now, keep it lean
-const Graph = require('./deprecated_components/graph');
-
 
 const MovieActions = require('./actions/movie_actions');
 window.MovieActions = MovieActions;
@@ -37,7 +34,6 @@ const routes = (
     <Route path="/" component={Consilium}>
       <IndexRoute component={MovieRecommender}/>
       <Route path="/about" component={About}/>
-      <Route path="/graph" component={Graph}/>
     </Route>
   </Router>
 );
