@@ -57,15 +57,17 @@ const MovieItem = React.createClass({
 
     return (
       <div className="movie-item">
-        <h3>{currentMovie.Title}</h3>
-        <div>Plot outline: {currentMovie.Plot}</div>
-        <img src={poster}/>
-        <form>
+        <h3 className="m-title">{currentMovie.Title}</h3>
+        <div className="m-plot">{currentMovie.Plot}</div>
+        <div className="m-poster">
+          <img src={poster}/>
+        </div>
+        <form className="m-form">
           <FormGroup
             controlId="formBasicText"
             validationState={this.getValidationState()}
             >
-            <ControlLabel>Name</ControlLabel>
+            <ControlLabel>Rating</ControlLabel>
             <FormControl type="text" value={this.state.ratingValue} placeholder="Enter Rating"
               onChange={this.handleChange}/>
             <FormControl.Feedback />
