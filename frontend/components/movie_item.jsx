@@ -46,18 +46,20 @@ const MovieItem = React.createClass({
 
   render() {
     let currentMovie = this.state.movieInfo;
-    let poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg"
+    let poster;
 
-    // if (currentMovie.poster.length > 5){
-    //   poster = currentMovie.poster;
-    // }
-
+    if (currentMovie.Poster === "N/A"){
+      poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg";
+    } else {
+      poster = currentMovie.Poster;
+    }
     console.log(currentMovie);
+
     return (
       <div className="movie-item">
         <h3>{currentMovie.Title}</h3>
         <div>Plot outline: {currentMovie.Plot}</div>
-        <img src={currentMovie.Poster}/>
+        <img src={poster}/>
         <form>
           <FormGroup
             controlId="formBasicText"
