@@ -1,19 +1,20 @@
 .movie-index {
-  width: 80%;
-  margin: auto;
-  /*display: flex;
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;*/
+  justify-content: space-between;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 .movie-item {
-  display: inline-block;
+  /*display: inline-block;*/
+  display: flex;
+  flex-direction: column;
   margin: 1em 1em 1em 1em;
-  width: 300px;
+  width: 320px;
   border: 1px solid black;
-  /*display: flex;
-  flex-direction: column;*/
+  border-radius: 8px;
 }
 
 .m-title {
@@ -24,7 +25,7 @@
   font-size: 1.5em;
   text-align: center;
   vertical-align: center;
-  padding: 10px 0;
+  padding: 5px 10px;
   margin: 0;
   overflow: scroll;
   border-bottom: 1px solid black;
@@ -34,16 +35,17 @@
   height: 80px;
   overflow-y: scroll;
   font-size: 1em;
-  padding: 10px;
-  border-bottom: 1px solid black;
+  padding: 5px 10px;
+  /*border-bottom: 1px solid black;*/
 }
 
 .m-poster {
   display: flex;
   justify-content: center;
   align-items: center;
-  /*margin-bottom: 10px;*/
-  padding: 10px 5px;
+  margin-top: 10px;
+  padding: 5px 5px;
+  border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
 
@@ -51,9 +53,8 @@
   display: flex;
   height: 300px;
   width: auto;
-  margin-bottom: 10px;
 }
 
 .m-form {
-  padding: 10px 5px;
+  padding: 5px 10px;
 }
