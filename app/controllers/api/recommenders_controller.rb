@@ -39,6 +39,7 @@ class Api::RecommendersController < ApplicationController
   def generate_recommendations(user, queue, items_needed=21-queue.size)
     movies_collection = eval($redis.get('movies'))
     movie_ids = eval($redis.get('movie_ids'))
+    #movie_features = eval($redis.get('features'))
     calculated = {}
     prediction_attempted, prediction_failed = 0, 0
 
@@ -54,7 +55,7 @@ class Api::RecommendersController < ApplicationController
         movies_collection[id][:avg_rating],
         movies_collection[id][:imdb_id]
         )
-        predicted_rating = movie.predicted_rating_for(user)
+        predicted_rating = movie.knn_prediction_for(user)
         prediction_attempted += 1
         calculated[id] = true
 
