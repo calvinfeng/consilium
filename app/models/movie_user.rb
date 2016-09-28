@@ -1,15 +1,22 @@
+# FEATURES = {
+#   35836 => [0.6, 0.8, -0.2, -0.2, 0.3, -0.2, 0.7, -0.6],
+#   51084 => [1, 0.75, -0.35, -0.2, 0.75, 0, 0.25, -0.75],
+#   4816 => [0.25, 0.9, 0.1, 0, -0.4, 0.3, 0.4, 0.3],
+#   5942 => [0.35, 1, -0.35, 0.15, -0.4, 0, 0, -0.6],
+#   69945 => [0.4, 0.3, 0.1, 0, 0.1, 1 ,0.8, 0.7],
+#   74458 => [0, -0.8, 1, 0, 1, 0.4, 0.75, 0.8],
+#   84187 => [0.5, -0.7, 0.8, 1, 0.9, 0.85, 0.75, 0],
+#   58559 => [0.7, -0.8, 0.8, 0.5, 1, 1, 0.85, 1],
+#   122882 => [-0.7, -0.7, 0.1, 0, 0.8, 1, 0.9, 0],
+#   91947 => [0, -0.9, 0.5, -0.2, 0.9, 0.75, 0.9, 0.6]
+# }
+
 FEATURES = {
-  35836 => [0.6, 0.8, -0.2, -0.2, 0.3, -0.2, 0.7, -0.6],
-  51084 => [1, 0.75, -0.35, -0.2, 0.75, 0, 0.25, -0.75],
-  4816 => [0.25, 0.9, 0.1, 0, -0.4, 0.3, 0.4, 0.3],
-  5942 => [0.35, 1, -0.35, 0.15, -0.4, 0, 0, -0.6],
-  69945 => [0.4, 0.3, 0.1, 0, 0.1, 1 ,0.8, 0.7],
-  74458 => [0, -0.8, 1, 0, 1, 0.4, 0.75, 0.8],
-  84187 => [0.5, -0.7, 0.8, 1, 0.9, 0.85, 0.75, 0],
-  58559 => [0.7, -0.8, 0.8, 0.5, 1, 1, 0.85, 1],
-  122882 => [-0.7, -0.7, 0.1, 0, 0.8, 1, 0.9, 0],
-  91947 => [0, -0.9, 0.5, -0.2, 0.9, 0.75, 0.9, 0.6]
+  1 => [1, 0, 0, 0, 0, 0, 0, 0],
+  2 => [0, 1, 0, 0, 0, 0, 0, 0],
+  3 => [0, 0, 1, 0, 0, 0, 0, 0]
 }
+
 
 RATINGS_OF_MOVIES = {
   35836 => 2.5,
@@ -99,7 +106,7 @@ class User
   end
 
   def dF(preference_idx, cost)
-    step, lambda_for_pref = 0, 0
+    step, lambda_for_pref = 0, 0.1
     step = lambda_for_pref * @preferences[preference_idx] if preference_idx > 0
 
     cost.each do |movie_id, cost|
@@ -114,21 +121,24 @@ end
 # movies = Hash.new
 # movies[35836] = Movie.new(35836, FEATURES[35836])
 # movies[51084] = Movie.new(51084, FEATURES[51084])
-zoo = Movie.new(4816, FEATURES)
 # movies[5942] = Movie.new(5942, FEATURES[5942])
 # movies[69945] = Movie.new(69945, FEATURES[69945])
 # movies[74458] = Movie.new(74458, FEATURES[74458])
 # movies[84187] = Movie.new(84187, FEATURES[84187])
-dark = Movie.new(58559, FEATURES)
 # movies[122882] = Movie.new(122882, FEATURES[122882])
 # movies[91947] = Movie.new(91947, FEATURES[91947])
 
-steven = User.new(nil, RATINGS_OF_MOVIES)
+ratings = {
+  1 => 5.0,
+  2 => 1.0,
+  3 => 5.0
+}
+
+steven = User.new(nil, ratings)
 p steven.preferences
-p zoo.predicted_rating_for(steven)
 
 FEATURES.each do |movie_id, feature_vec|
   movie = Movie.new(movie_id, FEATURES)
   prediction = movie.predicted_rating_for(steven)
-  puts "Movie id: #{movie_id}, prediction: #{prediction}, actual rating: #{RATINGS_OF_MOVIES[movie_id]}"
+  puts "Movie id: #{movie_id}, prediction: #{prediction}, actual rating: #{ratings[movie_id]}"
 end

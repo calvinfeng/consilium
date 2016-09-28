@@ -1,6 +1,7 @@
 "use strict";
 
 const MovieApiUtil = {
+  
   fetchPopularMovies(success) {
     $.ajax({
       url: "api/recommender/new_visitor",
@@ -13,12 +14,17 @@ const MovieApiUtil = {
     });
   },
 
-  fetchRecommendedMovies(rated, success) {
+  fetchRecommendedMovies(ratedMovies, queuedMovies, success) {
     $.ajax({
       url: "api/recommender/recommendations",
       dataType: "JSON",
       method: "GET",
-      data: rated,
+      data: {
+        recommender: {
+          rated: ratedMovies,
+          queue: queuedMovies
+        }
+      },
       success,
       fail(xhr) {
         console.log(xhr);

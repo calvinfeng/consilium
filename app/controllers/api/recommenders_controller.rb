@@ -26,8 +26,10 @@ class Api::RecommendersController < ApplicationController
       render :json => { :errors => messages }, :status => 422
     else
       queue = Hash.new
-      recommender_params[:queue].each do |key, val|
-        queue[key.to_i] = val
+      unless recommender_params[:queue].nil?
+        recommender_params[:queue].each do |key, val|
+          queue[key.to_i] = val
+        end
       end
       current_user = User.new(nil, rated)
       generate_recommendations(current_user, queue)
@@ -39,12 +41,12 @@ class Api::RecommendersController < ApplicationController
   def generate_recommendations(user, queue, items_needed=21-queue.size)
     movies_collection = eval($redis.get('movies'))
     movie_ids = eval($redis.get('movie_ids'))
+    movie_features = eval($redis.get('features'))
     calculated = {}
     prediction_attempted, prediction_failed = 0, 0
 
     until @movies.size > items_needed
       id = movie_ids.sample
-
       unless user.ratings[id] || queue[id] || calculated[id]
         movie = Movie.new(
         id,
@@ -52,9 +54,10 @@ class Api::RecommendersController < ApplicationController
         movies_collection[id][:year],
         movies_collection[id][:viewers],
         movies_collection[id][:avg_rating],
-        movies_collection[id][:imdb_id]
+        movies_collection[id][:imdb_id],
+        movie_features[id]
         )
-        predicted_rating = movie.predicted_rating_for(user)
+        predicted_rating = movie.svd_prediction_for(user)
         prediction_attempted += 1
         calculated[id] = true
 
@@ -65,7 +68,6 @@ class Api::RecommendersController < ApplicationController
         end
       end
     end
-
     p "Prediction attempted: #{prediction_attempted}, failed: #{prediction_failed}"
   end
 

@@ -62,6 +62,23 @@ def load_imdb_id(movies)
   end
 end
 
+def load_movie_features
+  movie_features = Hash.new
+  features_csv = File.read('config/ml-data/knn-5k-users/features.csv')
+  csv = CSV.parse(features_csv, :headers => true)
+  csv.each do |row|
+    movie_id = row["movieId"].to_i
+    i = 1
+    feature_vector = []
+    while i < row.length
+      feature_vector << row[i].to_f
+      i += 1
+    end
+    movie_features[movie_id] = feature_vector
+  end
+  movie_features
+end
+
 def compute_avg_ratings(movies)
   movies.each do |id, value|
     if movies[id][:ratings]
@@ -75,11 +92,13 @@ def compute_avg_ratings(movies)
   return nil
 end
 
-movies_map, users_map = load_data
+movie_store, user_store = load_data
+feature_store = load_movie_features
+
 # Cache movies_with_many_reviews in Redis
 movies_with_many_reviews = {}
 movie_ids = []
-movies_map.each do |movie_id, info|
+movie_store.each do |movie_id, info|
   movie_ids << movie_id
   if info[:viewers].size > 100
     movies_with_many_reviews[movie_id] = {
@@ -91,18 +110,21 @@ movies_map.each do |movie_id, info|
     }
   end
 end
+
 # Caching in redis
 $redis.set('movie_ids', movie_ids)
 $redis.set('movies_with_many_reviews', movies_with_many_reviews)
-$redis.set('movies', movies_map)
-# $redis.set('users', users_map)
+
+$redis.set('movies', movie_store)
+$redis.set('features', feature_store)
+# $redis.set('users', user_store)
 
 # Immediately free up memory and let garbage collector do its work
-movie_ids, movies_with_many_reviews, movies_map = nil, nil, nil
+movie_ids, movies_with_many_reviews, movie_store, feature_store = nil, nil, nil
 
 # Cache the user objects in Rails
 users = Hash.new
-users_map.each do |user_id, user_movie_ratings|
+user_store.each do |user_id, user_movie_ratings|
   users[user_id] = User.new(user_id, user_movie_ratings)
 end
 Rails.cache.clear()
