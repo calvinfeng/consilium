@@ -10,18 +10,19 @@ let _movieInfo = {};
 MovieInfoStore.__onDispatch = payload => {
   switch (payload.actionType) {
     case MovieConstants.MOVIE_INFO_RECEIVED:
-    MovieInfoStore.receiveMovieInfo(payload.movie);
+    MovieInfoStore.setMovieInfo(payload.movie);
     MovieInfoStore.__emitChange();
     break;
   }
+};
+
+MovieInfoStore.setMovieInfo = function(movie) {
+  _movieInfo[movie.imdbID] = movie;
 };
 
 MovieInfoStore.getMovieInfo = function(imdbId){
   return _movieInfo[imdbId];
 };
 
-MovieInfoStore.receiveMovieInfo = function(movie) {
-  _movieInfo[movie.imdbID] = movie;
-};
 
 module.exports = MovieInfoStore;

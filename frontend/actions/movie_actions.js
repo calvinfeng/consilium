@@ -13,7 +13,7 @@ const MovieActions = {
 
   fetchRecommendedMovies(ratedMovies, queuedMovies) {
     MovieApiUtil.fetchRecommendedMovies(
-      ratedMopvies,
+      ratedMovies,
       queuedMovies,
       MovieActions.receiveRecommendedMovies
     );

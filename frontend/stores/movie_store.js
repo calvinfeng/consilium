@@ -11,14 +11,28 @@ let _skippedMovies = {};
 MovieStore.__onDispatch = payload => {
   switch (payload.actionType) {
     case MovieConstants.POPULAR_MOVIES_RECEIVED:
-      MovieStore.receivePopularMovies(payload.movies);
-      MovieStore.__emitChange();
-      break;
+    MovieStore.setPopularMovies(payload.movies);
+    MovieStore.__emitChange();
+    break;
     case MovieConstants.RECOMMENDED_MOVIES_RECEIVED:
-      MovieStore.receiveRecommendedMovies(payload.movies);
-      MovieStore.__emitChange();
-      break;
+    MovieStore.setRecommendedMovies(payload.movies);
+    MovieStore.__emitChange();
+    break;
   }
+};
+
+MovieStore.setPopularMovies = function(movies) {
+  _popularMovies = {};
+  movies.forEach( (movie) => {
+    _popularMovies[movie.id] = movie;
+  });
+};
+
+MovieStore.setRecommendedMovies = function(movies) {
+  movies.forEach( (movie) => {
+    _recommendedMovies[movie.id] = movie;
+    console.log(movie);
+  });
 };
 
 MovieStore.getPopularMovies = function(){
@@ -41,19 +55,6 @@ MovieStore.findMovie = function(movieId) {
   } else {
     return undefined;
   }
-};
-
-MovieStore.receivePopularMovies = function(movies) {
-  _popularMovies = {};
-  movies.forEach( (movie) => {
-    _popularMovies[movie.id] = movie;
-  });
-};
-
-MovieStore.receiveRecommendedMovies = function(movies) {
-  movies.forEach( (movie) => {
-    _recommendedMovies[movie.id] = movie;
-  });
 };
 
 module.exports = MovieStore;

@@ -4,7 +4,7 @@ const Rating = require('react-rating');
 const MovieInfoStore = require('../stores/movie_info_store');
 const MovieInfoActions = require('../actions/movie_info_actions');
 const MovieRatingActions = require('../actions/movie_rating_actions');
-
+const Button = require('react-bootstrap').Button;
 //npm - https://github.com/dreyescat/react-rating
 const ratingStyle = {
   color: "yellow",
@@ -63,13 +63,16 @@ const MovieItem = React.createClass({
       );
     } else {
       return (
-        <Rating
-          fractions={2}
-          onClick={this.ratingClickHandler}
-          empty={'fa fa-star-o fa-3x'}
-          full={"fa fa-star fa-3x"}
-          color={"yellow"}
-          />
+        <div className="rating-toolbar">
+          <Rating
+            fractions={2}
+            onClick={this.ratingClickHandler}
+            empty={'fa fa-star-o fa-3x'}
+            full={"fa fa-star fa-3x"}
+            color={"yellow"}
+            />
+          <Button bsStyle="danger">Skip</Button>
+        </div>
       );
     }
   },
