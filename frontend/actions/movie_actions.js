@@ -5,6 +5,7 @@ const MovieConstants = require('../constants/movie_constants');
 const MovieApiUtil = require('../util/movie_api_util');
 
 const MovieActions = {
+  
   fetchPopularMovies() {
     MovieApiUtil.fetchPopularMovies(
       MovieActions.receivePopularMovies);

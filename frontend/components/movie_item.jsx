@@ -1,79 +1,76 @@
 const React = require('react');
 const Loader = require('react-loader');
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
-const ControlLabel = require('react-bootstrap').ControlLabel;
-const HelpBlock = require('react-bootstrap').HelpBlock;
-
-
+const Rating = require('react-rating');
 const MovieInfoStore = require('../stores/movie_info_store');
-const MovieInfoActions = require('../actions/movie_info_action');
-// Please use Open Movie Database for movie information
-// Or if you prefer, use the node package IMDb-API because IMBd doens't provide
-// a well-documented API
+const MovieInfoActions = require('../actions/movie_info_actions');
+const MovieRatingActions = require('../actions/movie_rating_actions');
+
+//npm - https://github.com/dreyescat/react-rating
+const ratingStyle = {
+  color: "yellow",
+  empty: 'fa fa-star-o fa-2x',
+  full: 'fa fa-star fa-2x'
+};
+
 const MovieItem = React.createClass({
 
   getInitialState() {
     return {
       ratingValue: "",
-      movieInfo: {Title: "Loading", Plot: "Loading", Poster: "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg"},
+      info: {
+        Title: "Loading...",
+        Plot: "Loading...",
+        Poster: "http://blog.teamtreehouse.com/wp-content/uploads/2015/05/InternetSlowdown_Day.gif"
+      }
     };
   },
 
   componentDidMount() {
     this.movieInfoListener = MovieInfoStore.addListener(this.receiveMovieInfo);
-    MovieInfoActions.fetchMovieInfo(this.props.imdbId);
+    if (MovieInfoStore.getMovieInfo(this.props.imdbId) === undefined) {
+      MovieInfoActions.fetchMovieInfo(this.props.imdbId);
+    }
   },
 
   componentWillUnmount() {
     this.movieInfoListener.remove();
   },
 
-  receiveMovieInfo(){
-    this.setState({ movieInfo: MovieInfoStore.getMovieInfo(this.props.imdbId)});
+  receiveMovieInfo() {
+    if (MovieInfoStore.getMovieInfo(this.props.imdbId)) {
+      let omdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
+      if (omdbInfo.Poster === undefined || omdbInfo.Poster === "N/A") {
+        omdbInfo.Poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg";
+      }
+      this.setState({info: omdbInfo});
+    }
   },
 
-  handleChange(e) {
-    this.setState({ ratingValue: e.target.value });
-  },
-
-  getValidationState() {
-    const length = this.state.ratingValue.length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
+  ratingClickHandler(rating) {
+    MovieRatingActions.submitRatingToStore({
+      movieId: this.props.movieId,
+      rating: rating
+    });
   },
 
   render() {
-    let currentMovie = this.state.movieInfo;
-    let poster;
-
-    if (currentMovie.Poster === "N/A"){
-      poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg";
-    } else {
-      poster = currentMovie.Poster;
-    }
-    console.log(currentMovie);
-
     return (
       <div className="movie-item">
-        <h3 className="m-title">{currentMovie.Title}</h3>
-        <div className="m-plot">{currentMovie.Plot}</div>
-        <div className="m-poster">
-          <img src={poster}/>
+        <h3 className="movie-title">{this.state.info.Title}({this.state.info.Year})</h3>
+        <div className="movie-plot">{this.state.info.Plot}</div>
+        <div className="movie-poster">
+          <img src={this.state.info.Poster}/>
         </div>
-        <form className="m-form">
-          <FormGroup
-            controlId="formBasicText"
-            validationState={this.getValidationState()}
-            >
-            <ControlLabel>Rating</ControlLabel>
-            <FormControl type="text" value={this.state.ratingValue} placeholder="Enter Rating"
-              onChange={this.handleChange}/>
-            <FormControl.Feedback />
-            <HelpBlock>Validation is based on string length</HelpBlock>
-          </FormGroup>
-        </form>
+        <div className="movie-rating">
+          <Rating
+            fractions={2}
+            onClick={this.ratingClickHandler}
+            empty={'fa fa-star-o fa-3x'}
+            full={"fa fa-star fa-3x"}
+            color={"yellow"}
+            />
+
+        </div>
       </div>
     );
   }

@@ -1,5 +1,4 @@
 const React = require('react');
-const DateTimeField = require('react-bootstrap-datetimepicker');
 const FormGroup = require('react-bootstrap').FormGroup;
 const FormControl = require('react-bootstrap').FormControl;
 const ControlLabel = require('react-bootstrap').ControlLabel;

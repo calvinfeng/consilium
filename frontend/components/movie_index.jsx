@@ -2,63 +2,69 @@ const React = require('react');
 const MovieItem = require('./movie_item');
 const MovieStore = require('../stores/movie_store');
 const MovieActions = require('../actions/movie_actions');
-const MovieInfoActions = require('../actions/movie_info_action');
+const MovieInfoActions = require('../actions/movie_info_actions');
+
+Array.prototype.shuffle = function() {
+  let i = this.length, j, temp;
+  if ( i === 0 ) {
+    return this;
+  }
+  while ( --i ) {
+     j = Math.floor( Math.random() * ( i + 1 ) );
+     temp = this[i];
+     this[i] = this[j];
+     this[j] = temp;
+  }
+  return this;
+};
 
 const MovieIndex = React.createClass({
+
   getInitialState(){
-    return { popularMovies: [], firstTenMovies: [] };
+    return { gaugeMovies: {} };
   },
+
   componentDidMount(){
-    this.movieListener = MovieStore.addListener(this.getPopularMovies);
+    this.movieStoreListener = MovieStore.addListener(this.populateGaugeSet);
     MovieActions.fetchPopularMovies();
   },
 
   componentWillUnmount(){
-    this.movieListener.remove();
+    this.movieStoreListener.remove();
   },
 
-  getPopularMovies(){
-    if (this.state.firstTenMovies.length < 10) {
-      this.setState({
-        popularMovies: MovieStore.popularMovies(),
-        firstTenMovies: MovieStore.tenMovies()
-      });
-    } else {
-      this.setState({
-        popularMovies: MovieStore.popularMovies()
-      });
+  // It is unnecessary for the Index to hold 700ish movies because that's what the store is for.
+  populateGaugeSet(){
+    // Once we know that movies are in store, we will then randomly select 10
+    let popularMovies = MovieStore.getPopularMovies().shuffle();
+    let gaugeMovies = this.state.gaugeMovies;
+    let i = 0;
+    while (Object.keys(gaugeMovies).length < 10) {
+      let movieId = popularMovies[i].id;
+      gaugeMovies[movieId] = popularMovies[i];
+      i += 1;
     }
+    this.setState({gaugeMovies: gaugeMovies});
   },
 
-  convertMovieToImdb(imdbId){
-    MovieActions.fetchMovieInfo(imdbId);
-    MovieStore.movieInfo(imdbId);
-  },
-
-  getMoviesToRate() {
-    let movies = this.state.firstTenMovies;
-    // movieInfos = store.movie information
-    // check length
-    let movieInfo;
-    if (movies.length === 10) {
-      return movies.map(function(movie) {
-        return (
+  //  Re-named to getGaugeSet() -> It implies this set of movies is for measurement
+  //  The idea is that as we improve our algorithm, we probably won't even need 10
+  getGaugeSet() {
+    let movies = this.state.gaugeMovies;
+    return Object.keys(movies).map((movieId) => {
+      let movie = movies[movieId];
+      return (
         <MovieItem
-        key={movie.id}
-        movieId={movie.id}
-        imdbId={movie.imdbId}/>
+          key={movie.id}
+          movieId={movie.id}
+          imdbId={movie.imdbId}/>
       );
-      });
-    } else {
-      return "";
-    }
+    });
   },
+
   render() {
-    return <div className="movie-index">{this.getMoviesToRate()}</div>;
+    return <div className="movie-index">{this.getGaugeSet()}</div>;
   }
-
-
-
 });
 
 module.exports = MovieIndex;

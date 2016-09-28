@@ -46,7 +46,7 @@ class Movie
     end
     predicted_rating
   end
-  
+
   def self.movies_with_many_reviews
     cached = Rails.cache.read("gauge_set")
     if cached
@@ -54,9 +54,10 @@ class Movie
     else
       gauge_set = []
       movies_hash = eval($redis.get('movies_with_many_reviews'))
+      features = eval($redis.get("features"))
       movies_hash.each do |id, info|
         gauge_set << Movie.new(id, info[:title], info[:year], info[:viewers],
-        info[:avg_rating], info[:imdb_id])
+        info[:avg_rating], info[:imdb_id], features[id])
       end
       Rails.cache.write("gauge_set", gauge_set)
       gauge_set
