@@ -5,15 +5,25 @@ const MovieConstants = require('../constants/movie_constants');
 const MovieApiUtil = require('../util/movie_api_util');
 
 const MovieActions = {
-  
+
   fetchPopularMovies() {
     MovieApiUtil.fetchPopularMovies(
       MovieActions.receivePopularMovies);
   },
 
-  fetchRecommendedMovies() {
+  fetchRecommendedMovies(ratedMovies, queuedMovies) {
     MovieApiUtil.fetchRecommendedMovies(
-      MovieActions.receiveRecommendedMovies);
+      ratedMopvies,
+      queuedMovies,
+      MovieActions.receiveRecommendedMovies
+    );
+  },
+
+  receiveRecommendedMovies(movies) {
+    Dispatcher.dispatch({
+      actionType: MovieConstants.RECOMMENDED_MOVIES_RECEIVED,
+      movies: movies
+    });
   },
 
   receivePopularMovies(movies){

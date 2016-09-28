@@ -20,4 +20,17 @@ MovieRatingStore.setRating = function(ratingObj) {
   _ratings[ratingObj.movieId] = ratingObj.rating;
 };
 
+MovieRatingStore.getRatings = function() {
+  // return the copy of my private variable
+  return JSON.parse(JSON.stringify(_ratings));
+};
+
+MovieRatingStore.hasRated = function(movieId) {
+  if (_ratings[movieId]) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 module.exports = MovieRatingStore;

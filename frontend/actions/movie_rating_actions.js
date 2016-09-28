@@ -10,7 +10,7 @@ const MovieRatingActions = {
       actionType: MovieConstants.MOVIE_RATING_RECEIVED,
       ratingObj: ratingObj
     });
-  }
+  },
 
 };
 

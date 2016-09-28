@@ -6,33 +6,7 @@ const MovieStore = new Store(Dispatcher);
 
 let _popularMovies = {};
 let _recommendedMovies = {};
-
-MovieStore.getPopularMovies = function(){
-  return Object.keys(_popularMovies).map( (movieId) => {
-    return _popularMovies[movieId];
-  });
-};
-
-MovieStore.getRecommendedMovies = function(){
-  return Object.keys(_recommendedMovies).map ( (movieId) => {
-    return _recommendedMovies[movieId];
-  });
-};
-
-MovieStore.receivePopularMovies = function(movies) {
-  _popularMovies = {};
-  movies.forEach( (movie) => {
-    _popularMovies[movie.id] = movie;
-  });
-};
-
-MovieStore.receiveRecommendedMovies = function(movies) {
-  _popularMovies = {};
-  _recommendedMovies = {};
-  movies.forEach( (movie) => {
-    _recommendedMovies[movie.id] = movie;
-  });
-};
+let _skippedMovies = {};
 
 MovieStore.__onDispatch = payload => {
   switch (payload.actionType) {
@@ -46,4 +20,40 @@ MovieStore.__onDispatch = payload => {
       break;
   }
 };
+
+MovieStore.getPopularMovies = function(){
+  return Object.keys(_popularMovies).map( (movieId) => {
+    return _popularMovies[movieId];
+  });
+};
+
+MovieStore.getRecommendedMovies = function(){
+  return Object.keys(_recommendedMovies).map ( (movieId) => {
+    return _recommendedMovies[movieId];
+  });
+};
+
+MovieStore.findMovie = function(movieId) {
+  if (_popularMovies[movieId]) {
+    return _popularMovies[movieId];
+  } else if (_recommendedMovies[movieId]) {
+    return _recommendedMovies[movieId];
+  } else {
+    return undefined;
+  }
+};
+
+MovieStore.receivePopularMovies = function(movies) {
+  _popularMovies = {};
+  movies.forEach( (movie) => {
+    _popularMovies[movie.id] = movie;
+  });
+};
+
+MovieStore.receiveRecommendedMovies = function(movies) {
+  movies.forEach( (movie) => {
+    _recommendedMovies[movie.id] = movie;
+  });
+};
+
 module.exports = MovieStore;

@@ -20,7 +20,7 @@ const MovieItem = React.createClass({
       info: {
         Title: "Loading...",
         Plot: "Loading...",
-        Poster: "http://blog.teamtreehouse.com/wp-content/uploads/2015/05/InternetSlowdown_Day.gif"
+        Poster: "http://cdn.mirs.com/images/tranzit/loading.gif"
       }
     };
   },
@@ -29,6 +29,9 @@ const MovieItem = React.createClass({
     this.movieInfoListener = MovieInfoStore.addListener(this.receiveMovieInfo);
     if (MovieInfoStore.getMovieInfo(this.props.imdbId) === undefined) {
       MovieInfoActions.fetchMovieInfo(this.props.imdbId);
+    } else {
+      let omdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
+      this.setState({info: omdbInfo});
     }
   },
 
@@ -53,6 +56,24 @@ const MovieItem = React.createClass({
     });
   },
 
+  renderRating() {
+    if (this.props.rated) {
+      return (
+        <div>{this.props.rating}</div>
+      );
+    } else {
+      return (
+        <Rating
+          fractions={2}
+          onClick={this.ratingClickHandler}
+          empty={'fa fa-star-o fa-3x'}
+          full={"fa fa-star fa-3x"}
+          color={"yellow"}
+          />
+      );
+    }
+  },
+
   render() {
     return (
       <div className="movie-item">
@@ -62,14 +83,7 @@ const MovieItem = React.createClass({
           <img src={this.state.info.Poster}/>
         </div>
         <div className="movie-rating">
-          <Rating
-            fractions={2}
-            onClick={this.ratingClickHandler}
-            empty={'fa fa-star-o fa-3x'}
-            full={"fa fa-star fa-3x"}
-            color={"yellow"}
-            />
-
+          {this.renderRating()}
         </div>
       </div>
     );

@@ -1,6 +1,7 @@
 const React = require('react');
 const Loader = require('react-loader');
-const MovieIndex = require('./movie_index');
+const GaugeIndex = require('./gauge_index');
+const RatedIndex = require('./rated_index');
 const MovieRatingStore = require('../stores/movie_rating_store');
 
 const MovieRecommender = React.createClass({
@@ -17,7 +18,18 @@ const MovieRecommender = React.createClass({
   },
 
   render() {
-    return <MovieIndex/>;
+    return (
+      <div className="recommender">
+        <h1>Popular Movies</h1>
+        <h4>
+          Here are some popular movies, if you have seen them, rate them! It will help our backend 
+          machine learning algorithm to learn your taste and preference
+        </h4>
+        <GaugeIndex/>
+        <h1>Rated Movies</h1>
+        <RatedIndex/>
+      </div>
+    );
   }
 });
 

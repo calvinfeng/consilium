@@ -1,3 +1,7 @@
+.recommender {
+  padding: 1em 1em 1em 1em;
+}
+
 .movie-index {
   display: flex;
   flex-direction: row;
