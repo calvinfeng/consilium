@@ -6,6 +6,13 @@ const MovieApiUtil = require('../util/movie_api_util');
 
 const MovieActions = {
 
+  skipMovie(movieId) {
+    Dispatcher.dispatch({
+      actionType: MovieConstants.SKIP_MOVIE,
+      movieId: movieId
+    });
+  },
+
   fetchPopularMovies() {
     MovieApiUtil.fetchPopularMovies(
       MovieActions.receivePopularMovies);

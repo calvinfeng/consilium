@@ -41,11 +41,17 @@ const MovieItem = React.createClass({
 
   receiveMovieInfo() {
     if (MovieInfoStore.getMovieInfo(this.props.imdbId)) {
-      let omdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
-      if (omdbInfo.Poster === undefined || omdbInfo.Poster === "N/A") {
-        omdbInfo.Poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg";
-      }
-      this.setState({info: omdbInfo});
+      // let omdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
+      // if (omdbInfo.Poster === undefined || omdbInfo.Poster === "N/A") {
+      //   omdbInfo.Poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg";
+      // }
+      let tmdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
+      let movieInfo = this.state.info;
+      movieInfo.Poster = "https://image.tmdb.org/t/p/w300" + tmdbInfo.poster_path;
+      movieInfo.Year = tmdbInfo.release_date.slice(0, 4);
+      movieInfo.Plot = tmdbInfo.overview;
+      movieInfo.Title = tmdbInfo.title;
+      this.setState({info: movieInfo});
     }
   },
 
@@ -56,10 +62,17 @@ const MovieItem = React.createClass({
     });
   },
 
+  skipClickHandler() {
+    MovieActions.skipMovie(this.props.movieId);
+  },
+
   renderRating() {
     if (this.props.rated) {
       return (
-        <div>{this.props.rating}</div>
+        <div>
+          <div>Your Rating: {this.props.rating}</div>
+          <p>Internet Movie Database(IMDb): {this.state.info.imdbRating}</p>
+        </div>
       );
     } else {
       return (
@@ -71,7 +84,11 @@ const MovieItem = React.createClass({
             full={"fa fa-star fa-3x"}
             color={"yellow"}
             />
-          <Button bsStyle="danger">Skip</Button>
+          <Button
+            onClick={this.skipClickHandler}
+            bsStyle="danger">
+            Skip
+          </Button>
         </div>
       );
     }
@@ -81,10 +98,10 @@ const MovieItem = React.createClass({
     return (
       <div className="movie-item">
         <h3 className="movie-title">{this.state.info.Title}({this.state.info.Year})</h3>
-        <div className="movie-plot">{this.state.info.Plot}</div>
         <div className="movie-poster">
           <img src={this.state.info.Poster}/>
         </div>
+        <div className="movie-plot">{this.state.info.Plot}</div>
         <div className="movie-rating">
           {this.renderRating()}
         </div>
