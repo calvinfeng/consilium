@@ -7,6 +7,7 @@ const MovieStore = new Store(Dispatcher);
 let _popularMovies = {};
 let _recommendedMovies = {};
 let _skippedMovies = {};
+let _queue = {};
 
 MovieStore.__onDispatch = payload => {
   switch (payload.actionType) {
@@ -18,7 +19,15 @@ MovieStore.__onDispatch = payload => {
     MovieStore.setRecommendedMovies(payload.movies);
     MovieStore.__emitChange();
     break;
+    case MovieConstants.SKIP_MOVIE:
+    MovieStore.setSkippedMovie(payload.movieId);
+    MovieStore.__emitChange();
+    break;
   }
+};
+
+MovieStore.setSkippedMovie = function(movieId) {
+  _skippedMovies[movieId] = true;
 };
 
 MovieStore.setPopularMovies = function(movies) {
@@ -45,6 +54,24 @@ MovieStore.getRecommendedMovies = function(){
   return Object.keys(_recommendedMovies).map ( (movieId) => {
     return _recommendedMovies[movieId];
   });
+};
+
+// Well the queue is the list of recommended movies that is currently being shown
+// to viewers, so we haven't defined that yet
+MovieStore.getQueue = function() {
+  return JSON.parse(JSON.stringify(_recommendedMovies));
+};
+
+MovieStore.getSkippedMovies = function() {
+  return JSON.parse(JSON.stringify(_skippedMovies));
+};
+
+MovieStore.isMovieSkipped = function(movieId) {
+  if (_skippedMovies[movieId]) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 MovieStore.findMovie = function(movieId) {

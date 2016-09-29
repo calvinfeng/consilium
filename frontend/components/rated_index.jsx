@@ -46,8 +46,11 @@ const RatedIndex = React.createClass({
 
   render() {
     return (
-      <div className="movie-index">
-        {this.renderRatedMovies()}
+      <div>
+        <h1>Rated Movies</h1>
+        <div className="movie-index">
+          {this.renderRatedMovies()}
+        </div>
       </div>
     );
   }

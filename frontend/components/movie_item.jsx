@@ -56,10 +56,17 @@ const MovieItem = React.createClass({
     });
   },
 
+  skipClickHandler() {
+    MovieActions.skipMovie(this.props.movieId);
+  },
+
   renderRating() {
     if (this.props.rated) {
       return (
-        <div>{this.props.rating}</div>
+        <div>
+          <div>Your Rating: {this.props.rating}</div>
+          <p>Internet Movie Database(IMDb) Rating: {this.state.info.imdbRating}</p>
+        </div>
       );
     } else {
       return (
@@ -71,7 +78,11 @@ const MovieItem = React.createClass({
             full={"fa fa-star fa-3x"}
             color={"yellow"}
             />
-          <Button bsStyle="danger">Skip</Button>
+          <Button
+            onClick={this.skipClickHandler}
+            bsStyle="danger">
+            Skip
+          </Button>
         </div>
       );
     }
