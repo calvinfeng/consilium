@@ -17,7 +17,7 @@ MovieInfoStore.__onDispatch = payload => {
 };
 
 MovieInfoStore.setMovieInfo = function(movie) {
-  _movieInfo[movie.imdbID] = movie;
+  _movieInfo[movie.imdb_id] = movie;
 };
 
 MovieInfoStore.getMovieInfo = function(imdbId){

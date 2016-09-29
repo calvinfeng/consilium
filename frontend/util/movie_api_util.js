@@ -1,5 +1,10 @@
 "use strict";
 
+
+const omdbUrl = "https://www.omdbapi.com/";
+const tmdbUrl = "https://api.themoviedb.org/3/movie/";
+const apiKey = "2afddf218bfb5d06ef460cc103af69bc";
+
 const MovieApiUtil = {
 
   fetchPopularMovies(success) {
@@ -34,11 +39,9 @@ const MovieApiUtil = {
 
   getMovieInfo(imdbId, success) {
     $.ajax({
-      url: "https://www.omdbapi.com/",
-      dataType: "JSON",
-      method: "GET",
+      url: tmdbUrl + imdbId,
       data: {
-        i: imdbId, plot: 'short'
+        api_key: apiKey
       },
       success,
       fail(xhr) {
@@ -46,6 +49,22 @@ const MovieApiUtil = {
       }
     });
   }
+
+
+  // getMovieInfo(imdbId, success) {
+  //   $.ajax({
+  //     url: "https://www.omdbapi.com/",
+  //     dataType: "JSON",
+  //     method: "GET",
+  //     data: {
+  //       i: imdbId, plot: 'short'
+  //     },
+  //     success,
+  //     fail(xhr) {
+  //       console.log(xhr);
+  //     }
+  //   });
+  // }
 };
 
 module.exports = MovieApiUtil;
