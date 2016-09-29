@@ -1,7 +1,7 @@
 "use strict";
 
 const MovieApiUtil = {
-  
+
   fetchPopularMovies(success) {
     $.ajax({
       url: "api/recommender/new_visitor",
@@ -34,7 +34,7 @@ const MovieApiUtil = {
 
   getMovieInfo(imdbId, success) {
     $.ajax({
-      url: "http://www.omdbapi.com/",
+      url: "https://www.omdbapi.com/",
       dataType: "JSON",
       method: "GET",
       data: {
