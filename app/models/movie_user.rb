@@ -11,26 +11,26 @@
 #   91947 => [0, -0.9, 0.5, -0.2, 0.9, 0.75, 0.9, 0.6]
 # }
 
-FEATURES = {
-  1 => [1, 0, 0, 0, 0, 0, 0, 0],
-  2 => [0, 1, 0, 0, 0, 0, 0, 0],
-  3 => [0, 0, 1, 0, 0, 0, 0, 0]
-}
+# FEATURES = {
+#   1 => [1, 0, 0, 0, 0, 0, 0, 0],
+#   2 => [0, 1, 0, 0, 0, 0, 0, 0],
+#   3 => [0, 0, 1, 0, 0, 0, 0, 0]
+# }
+#
+#
+# RATINGS_OF_MOVIES = {
+#   35836 => 2.5,
+#   51084 => 4.5,
+#   4816 => 1,
+#   5942 => 4,
+#   69945 => 2.5,
+#   74458 => 4.8,
+#   84187 => 4.6,
+#   58559 => 5,
+#   122882 => 2.3,
+#   91947 => 3.3
+# }
 
-
-RATINGS_OF_MOVIES = {
-  35836 => 2.5,
-  51084 => 4.5,
-  4816 => 1,
-  5942 => 4,
-  69945 => 2.5,
-  74458 => 4.8,
-  84187 => 4.6,
-  58559 => 5,
-  122882 => 2.3,
-  91947 => 3.3
-}
-require 'byebug'
 class Movie
   attr_reader :id, :features
 
@@ -128,17 +128,17 @@ end
 # movies[122882] = Movie.new(122882, FEATURES[122882])
 # movies[91947] = Movie.new(91947, FEATURES[91947])
 
-ratings = {
-  1 => 5.0,
-  2 => 1.0,
-  3 => 5.0
-}
-
-steven = User.new(nil, ratings)
-p steven.preferences
-
-FEATURES.each do |movie_id, feature_vec|
-  movie = Movie.new(movie_id, FEATURES)
-  prediction = movie.predicted_rating_for(steven)
-  puts "Movie id: #{movie_id}, prediction: #{prediction}, actual rating: #{ratings[movie_id]}"
-end
+# ratings = {
+#   1 => 5.0,
+#   2 => 1.0,
+#   3 => 5.0
+# }
+#
+# steven = User.new(nil, ratings)
+# p steven.preferences
+#
+# FEATURES.each do |movie_id, feature_vec|
+#   movie = Movie.new(movie_id, FEATURES)
+#   prediction = movie.predicted_rating_for(steven)
+#   puts "Movie id: #{movie_id}, prediction: #{prediction}, actual rating: #{ratings[movie_id]}"
+# end

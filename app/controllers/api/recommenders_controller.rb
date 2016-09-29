@@ -1,4 +1,3 @@
-require 'byebug'
 require 'set'
 class Api::RecommendersController < ApplicationController
   def for_new_visitor
