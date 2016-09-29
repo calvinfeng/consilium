@@ -7,7 +7,7 @@ const MovieStore = new Store(Dispatcher);
 let _popularMovies = {};
 let _recommendedMovies = {};
 let _skippedMovies = {};
-let _queue = {};
+let _notInterestedMovies = {};
 
 MovieStore.__onDispatch = payload => {
   switch (payload.actionType) {
@@ -68,6 +68,14 @@ MovieStore.getSkippedMovies = function() {
 
 MovieStore.isMovieSkipped = function(movieId) {
   if (_skippedMovies[movieId]) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+MovieStore.notInterested = function(movieId) {
+  if (_notInterestedMovies[movieId]) {
     return true;
   } else {
     return false;

@@ -19,6 +19,7 @@ const MovieItem = React.createClass({
       ratingValue: "",
       info: {
         Title: "Loading...",
+        Year: "....",
         Plot: "Loading...",
         Poster: "http://cdn.mirs.com/images/tranzit/loading.gif"
       }
@@ -30,8 +31,8 @@ const MovieItem = React.createClass({
     if (MovieInfoStore.getMovieInfo(this.props.imdbId) === undefined) {
       MovieInfoActions.fetchMovieInfo(this.props.imdbId);
     } else {
-      let omdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
-      this.setState({info: omdbInfo});
+      let tmdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
+      this.setInfo(tmdbInfo);
     }
   },
 
@@ -39,20 +40,24 @@ const MovieItem = React.createClass({
     this.movieInfoListener.remove();
   },
 
+  // let omdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
+  // if (omdbInfo.Poster === undefined || omdbInfo.Poster === "N/A") {
+  //   omdbInfo.Poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg";
+  // }
   receiveMovieInfo() {
     if (MovieInfoStore.getMovieInfo(this.props.imdbId)) {
-      // let omdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
-      // if (omdbInfo.Poster === undefined || omdbInfo.Poster === "N/A") {
-      //   omdbInfo.Poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg";
-      // }
       let tmdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
-      let movieInfo = this.state.info;
-      movieInfo.Poster = "https://image.tmdb.org/t/p/w300" + tmdbInfo.poster_path;
-      movieInfo.Year = tmdbInfo.release_date.slice(0, 4);
-      movieInfo.Plot = tmdbInfo.overview;
-      movieInfo.Title = tmdbInfo.title;
-      this.setState({info: movieInfo});
+      this.setInfo(tmdbInfo);
     }
+  },
+
+  setInfo(tmdbInfo) {
+    let movieInfo = this.state.info;
+    movieInfo.Title = tmdbInfo.title;
+    movieInfo.Year = tmdbInfo.release_date.slice(0, 4);
+    movieInfo.Poster = "https://image.tmdb.org/t/p/w300" + tmdbInfo.poster_path;
+    movieInfo.Plot = tmdbInfo.overview;
+    this.setState({info: movieInfo});
   },
 
   ratingClickHandler(rating) {
@@ -71,7 +76,6 @@ const MovieItem = React.createClass({
       return (
         <div>
           <div>Your Rating: {this.props.rating}</div>
-          <p>Internet Movie Database(IMDb): {this.state.info.imdbRating}</p>
         </div>
       );
     } else {

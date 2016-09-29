@@ -32,7 +32,7 @@ class Movie
     end
     #return statements
     if sim_norm == 0
-      p "User hasn't rated enough movies for the system to determine his/her preference"
+      puts "User hasn't rated enough movies for the system to determine his/her preference"
       return nil
     else
       return user.avg_rating + (score/sim_norm)

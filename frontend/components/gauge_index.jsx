@@ -22,7 +22,7 @@ Array.prototype.shuffle = function() {
 const GaugeIndex = React.createClass({
 
   getInitialState(){
-    return { gaugeMovies: {} };
+    return { gaugeMovies: {}, ratingCount: 0};
   },
 
   componentDidMount(){
@@ -48,10 +48,10 @@ const GaugeIndex = React.createClass({
     // Once we know that movies are in store, we will then randomly select 10
     let popularMovies = MovieStore.getPopularMovies().shuffle();
     let i = 0;
-    while (Object.keys(gaugeMovies).length < 10) {
+    while (Object.keys(gaugeMovies).length < 10 - MovieRatingStore.getNumberOfRated()) {
       let movieId = popularMovies[i].id;
       if (gaugeMovies[movieId] === undefined && !MovieStore.isMovieSkipped(movieId)
-        && popularMovies[i].year >= 1990) {
+        && popularMovies[i].year >= 1990 && !MovieRatingStore.hasRated(movieId)) {
         gaugeMovies[movieId] = popularMovies[i];
       }
       i += 1;
@@ -66,14 +66,14 @@ const GaugeIndex = React.createClass({
         delete gaugeMovies[movieId];
       }
     });
-    this.setState({gaugeMovies: gaugeMovies});
+    this.setState({gaugeMovies: gaugeMovies, ratingCount: MovieRatingStore.getNumberOfRated()});
   },
 
   //  Re-named to renderGaugeSet() -> It implies this set of movies is for measurement
   //  The idea is that as we improve our algorithm, we probably won't even need 10
   renderGaugeSet() {
     let movies = this.state.gaugeMovies;
-    return Object.keys(movies).map((movieId) => {
+    return Object.keys(movies).sort().map((movieId) => {
       let movie = movies[movieId];
       return (
         <MovieItem
@@ -84,14 +84,30 @@ const GaugeIndex = React.createClass({
     });
   },
 
+  renderDescription() {
+    let description = `These are some movies we think you have seen before.
+      If you have seen them, whether you like or dislike them, let us and give it a rating!
+      If not, click the skip button and we will give you more choices.
+      It will help our backend machine learning algorithm to learn your taste and preference`;
+    let reminder;
+    if (this.state.ratingCount === 0) {
+      reminder = "As soon as 10 movies are rated, the recommender system will get to work!";
+    } else {
+      reminder = `Rate ${10 - this.state.ratingCount} more movies`;
+    }
+    return (
+      <div>
+        <p>{description}</p>
+        <p>{reminder}</p>
+      </div>
+    );
+  },
+
   render() {
     return (
       <div>
         <h1>Popular Movies</h1>
-        <h4>
-          Here are some popular movies, if you have seen them, rate them! It will help our backend
-          machine learning algorithm to learn your taste and preference
-        </h4>
+        {this.renderDescription()}
         <div className="movie-index">{this.renderGaugeSet()}</div>
       </div>
     );
