@@ -41,7 +41,7 @@ const MovieRecommender = React.createClass({
     let cookies = JSON.parse(Cookies.get('consilium'));
     let ratedMoviesFromCookies;
     let recommendedMoviesFromCookies;
-    debugger;
+
     if (cookies.hasOwnProperty("rated") && cookies.hasOwnProperty("queue")){
       ratedMoviesFromCookies = cookies["rated"]
       recommendedMoviesFromCookies = cookies["queue"]
@@ -55,12 +55,6 @@ const MovieRecommender = React.createClass({
       recommendedMovies = Object.assign(recommendedMovies, recommendedMoviesFromCookies)
     }
     Cookies.set('consilium', { rated: ratedMovies, queue: recommendedMovies, expires: 365 });
-    console.log(Cookies.get('consilium'));
-=======
-    if (Object.keys(ratedMovies).length === 10) {
-      MovieActions.fetchRecommendedMovies(ratedMovies, queue);
-      this.setState({isRecommending: true});
-    }
   },
 
   renderIndex() {
@@ -79,7 +73,6 @@ const MovieRecommender = React.createClass({
         </div>
       );
     }
->>>>>>> master
   },
 
 //  Cookie format to be in { rated => { movieId : rating, movieId: rating, etc...} }
