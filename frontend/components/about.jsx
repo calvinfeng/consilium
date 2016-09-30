@@ -16,7 +16,7 @@ and outgoing data on client side. The machine learning algorithm is written in R
 Python. For SVD matrix factorization and machine learning, we peform computation offline
 and update the data set online periodically. The offline computation code is written in Python`;
 
-const knn = `There are two distinct algorithms under the hood that power Consilium;
+const knnIntro = `There are two distinct algorithms under the hood that power Consilium;
 they both belong to the class of collaborative filtering. The first one is a type of
 lazy learning algorithm, called k-Nearest-Neighbor. Here's the idea:` ;
 
@@ -27,6 +27,9 @@ as a second pair of eyes? You'd ask people who share similar taste and preferenc
 you because chance is, if they like something you will also like it. This is known as
 collaborative filtering`;
 
+const svdIntro = `The other algorithm we used is sparse matrix SVD (Singular Value Decomposition.)
+Imagine that movie rating is in fact a giant matrix, with rows being users and columns being
+movies. Every matrix element is a movie rating on movie j from user i.`;
 /* global katex */
 const About = React.createClass({
 
@@ -45,6 +48,68 @@ const About = React.createClass({
     simNorm += "\\sum_{i\\in I_{u}\\cap I_{v}}(r_{v,i} - \\bar{r}_v)^{2}}";
     this.renderKatex("sim-norm", simNorm);
 
+    let ratingMatrix = `R =
+    \\begin{bmatrix}
+    r_{user_{1},movie_{1}} & r_{user_{1}, movie_{2}} & r_{user_{1}, movie_{3}}
+    & ... & r_{user_{1}, movie_{m}}\\\\
+    r_{user_{2},movie_{1}} & r_{user_{2}, movie_{2}} & r_{user_{2}, movie_{3}}
+    & ... & r_{user_{2}, movie_{m}}\\\\
+    r_{user_{3},movie_{1}} & r_{user_{3}, movie_{2}} & r_{user_{3}, movie_{3}}
+    & ... & r_{user_{3}, movie_{m}}\\\\
+    ... & ... & ... & ... & ... \\\\
+    r_{user_{N}, movie_{1}} & r_{user_{N}, movie_{2}} & r_{user_{N}, movie_{3}}
+    & ... & r_{user_{N}, movie_{m}}
+    \\end{bmatrix}`;
+    this.renderKatex("rating-matrix", ratingMatrix);
+
+    let sparseMatrix = `R_{sparse} =
+    \\begin{bmatrix}
+    r_{1,1} & r_{1,2} & ??? & r_{1,4} & ??? \\\\
+    r_{2,1} & ??? & r_{2,3} & r_{2,4} & r_{2,5} \\\\
+    r_{3,1} & r_{3,2} & r_{3,3} & r_{3,4} & r_{3,5} \\\\
+    r_{4,1} & r_{4,2} & r_{4,3} & ??? & r_{4,5} \\\\
+    r_{5,1} & ??? & r_{5,3} & r_{5,4} & r_{5,5}
+    \\end{bmatrix}`;
+    this.renderKatex("sparse-matrix", sparseMatrix);
+
+    let decomposeMatrix = `R =
+    \\begin{bmatrix}
+    \\theta_{user_{1},1} & \\theta_{user_{1},2} & \\theta_{user_{1},3} &
+    \\theta_{user_{1},4} & \\theta_{user_{1},5}\\\\
+    \\theta_{user_{2},1} & \\theta_{user_{2},2} & \\theta_{user_{2},3} &
+    \\theta_{user_{2},4} & \\theta_{user_{2},5}\\\\
+    \\theta_{user_{3},1} & \\theta_{user_{3},2} & \\theta_{user_{3},3} &
+    \\theta_{user_{3},4} & \\theta_{user_{3},5}\\\\
+    \\theta_{user_{4},1} & \\theta_{user_{4},2} & \\theta_{user_{4},3} &
+    \\theta_{user_{4},4} & \\theta_{user_{4},5}\\\\
+    \\theta_{user_{5},1} & \\theta_{user_{5},2} & \\theta_{user_{5},3} &
+    \\theta_{user_{5},4} & \\theta_{user_{5},5}
+    \\end{bmatrix}
+    \\times
+    \\begin{bmatrix}
+    \\lambda_{1} & 0 & 0 & 0 & 0 \\\\
+    0 & \\lambda_{2} & 0 & 0 & 0 \\\\
+    0 & 0 & \\lambda_{3} & 0 & 0 \\\\
+    0 & 0 & 0 & \\lambda_{4} & 0 \\\\
+    0 & 0 & 0 & 0 & \\lambda_{5}
+    \\end{bmatrix}
+    \\times
+    \\begin{bmatrix}
+    f_{1, movie_{1}} & f_{1, movie_{2}} & f_{1, movie_{3}} & f_{1, movie_{4}} & f_{1, movie_{5}}\\\\
+    f_{2, movie_{1}} & f_{2, movie_{2}} & f_{2, movie_{3}} & f_{2, movie_{4}} & f_{2, movie_{5}}\\\\
+    f_{3, movie_{1}} & f_{3, movie_{2}} & f_{3, movie_{3}} & f_{3, movie_{4}} & f_{3, movie_{5}}\\\\
+    f_{4, movie_{1}} & f_{4, movie_{2}} & f_{4, movie_{3}} & f_{4, movie_{4}} & f_{4, movie_{5}}\\\\
+    f_{5, movie_{1}} & f_{5, movie_{2}} & f_{5, movie_{3}} & f_{5, movie_{4}} & f_{5, movie_{5}}
+    \\end{bmatrix}`;
+    this.renderKatex("decompose-matrix", decomposeMatrix);
+
+    let dimension = `N \\times M = (N \\times p)(p \\times f)(f \\times m)`;
+    this.renderKatex("dimension", dimension);
+
+    let linearCombo = `R_{i,j} =
+    \\theta_{i, 1}\\lambda_{1} f_{1, j} + \\theta_{i, 2}\\lambda_{2} f_{2, j} +
+    \\theta_{i, 3}\\lambda_{3} f_{3, j} + ... + \\theta_{i, n}\\lambda_{n} f_{n,j}`;
+    this.renderKatex("linear-combo", linearCombo);
   },
 
   renderKatex(elementId, mathExpression) {
@@ -66,7 +131,7 @@ const About = React.createClass({
 
         <section>
           <h3>k-Nearest-Neighbor</h3>
-          <p>{knn}</p>
+          <p>{knnIntro}</p>
           <blockquote>{knnIdea}</blockquote>
           <h4>Mathematical Formulation</h4>
           <p>
@@ -109,12 +174,60 @@ const About = React.createClass({
 
         <section>
           <h3>Sparse Matrix SVD</h3>
-        </section>
-
-
-      </article>
-    );
-  }
+          <p>{svdIntro}</p>
+          <blockquote>
+            <p id="rating-matrix"></p>
+          </blockquote>
+          <p>
+            However, the matrix is sparse, that is, many elements are missing. Not everyone
+            has seen every movie humankind has produced. It is the job of a recommender
+            system to fill in the missing values. Those missing values are in fact the predictions
+            of a machine learning model. If the prediction gives a high star rating to
+            R<sub>i,j</sub> then we recommend movie<sub>j</sub> to user<sub>i</sub>
+        </p>
+        <blockquote>
+          <p id="sparse-matrix"></p>
+        </blockquote>
+        <h4>Singular Value Decomposition</h4>
+        <p>
+          SVD is a very powerful dimensionality reduction technique in linear algebra.
+          The common use of SVD is to perform principal component analysis.
+          It dissects a matrix into sub-components and figures out which component
+          conveys the most information about the matrix and then drop all the unnecessary
+          information. Imagine we have 5 users and 5 movies, this is what a SVD
+          would look like:
+        </p>
+        <blockquote>
+          <p id="decompose-matrix"></p>
+          <p id="dimension"></p>
+          <p>
+            N is the number of users, p is the dimension of user preference, f is the dimension
+            of movie feature, and m is the number of movies
+          </p>
+        </blockquote>
+        <p>
+          What we have done here is factorized a matrix into subcomponents. Perhaps the more
+          intuitive way to see it is that we have factorized movie rating into a dot product
+          of user preference vector and movie feature vector.
+        </p>
+        <blockquote>
+          <p>
+            Essentially every movie rating is a linear combination of preference, feature,
+            and weights. (n: number of features)
+          </p>
+          <p id="linear-combo"></p>
+        </blockquote>
+        <p>
+          Some components are less important that others. So how do we tell? Given a completely
+          filled matrix, we can perform SVD on it directly and look at the weights. Most of
+          the time, the weights are concentrated in the top left corner of the scaling matrix in the
+          middle. But in our case, we cannot cause it is a sparse matrix, there are many missing
+          values. Well, here comes the holy grail of machine learning algorithm - gradient descent.
+        </p>
+      </section>
+    </article>
+  );
+}
 });
 
 module.exports = About;
