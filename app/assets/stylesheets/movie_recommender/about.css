@@ -12,6 +12,14 @@
   margin: 0px 1em 0px 1em;
 }
 
+#about-page-title {
+  margin-bottom: 20px
+}
+
+.page-container blockquote {
+  font-size: 1em;
+}
+
 .teammate-name {
   margin: 0px 0em 0px 0px;
 }

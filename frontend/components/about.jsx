@@ -1,21 +1,35 @@
 const React = require('react');
-const FormGroup = require('react-bootstrap').FormGroup;
-const FormControl = require('react-bootstrap').FormControl;
-const ControlLabel = require('react-bootstrap').ControlLabel;
-const HelpBlock = require('react-bootstrap').HelpBlock;
+const Gist = require('./gist.jsx');
+
+const introduction = `Consilium is a movie recommender system. It utilizes
+huge data set and user input to perform machine learning. The goal of
+Consilium is to learn user's preference and to provide accurate recommendations
+that are tailored specifically to user's taste. Users are asked to rate a couple
+of movies they have seen before. We called this the gauge set; we are trying to
+measure and perform learning on user's taste and preference. The gauge set
+will be sent to the backend and the server will perform learning.`;
+
+const techStack = `Consilium's backend runs on Ruby on Rails with PostgreSQL and
+Redis K-V store. Rails performs in-memory caching through its MemoryStore and on Redis server.
+The frontend is written in React.js using Flux architectural pattern for managing incoming
+and outgoing data on client side. The machine learning algorithm is written in Ruby and
+Python. For SVD matrix factorization and machine learning, we peform computation offline
+and update the data set online periodically. The offline computation code is written in Python`;
+
+const knn = `There are two distinct algorithms under the hood that power Consilium;
+they both belong to the class of collaborative filtering. The first one is a type of
+lazy learning algorithm, called k-Nearest-Neighbor. Here's the idea:` ;
+
+const knnIdea = `Imagine you are shopping for a pair of new shoes. There are many
+options and they are all seemingly trendy. You are having a hard time to decide
+which color and which style to go with. Question is, who do you seek for help
+as a second pair of eyes? You'd ask people who share similar taste and preference with
+you because chance is, if they like something you will also like it. This is known as
+collaborative filtering`;
 
 /* global katex */
 const About = React.createClass({
 
-  // contextTypes: {
-  //   router: React.PropTypes.object.isRequired
-  // },
-  //
-  // handleClick: function(event) {
-  //   event.preventDefault();
-  //   this.context.router.replace("/");
-  // },
-  
   componentDidMount() {
     let ratingAggregation = "r_{u,i} = \\bar{r}_{u} +k \\sum_{u' \\in N} sim(u, u') r_{u', i}";
     this.renderKatex("rating-prediction", ratingAggregation);
@@ -30,6 +44,7 @@ const About = React.createClass({
     let simNorm = "C = \\sqrt{\\sum_{i\\in I_{u}\\cap I_{v}}(r_{u,i} - \\bar{r}_u)^{2}";
     simNorm += "\\sum_{i\\in I_{u}\\cap I_{v}}(r_{v,i} - \\bar{r}_v)^{2}}";
     this.renderKatex("sim-norm", simNorm);
+
   },
 
   renderKatex(elementId, mathExpression) {
@@ -39,30 +54,65 @@ const About = React.createClass({
 
   render: function() {
     return (
-      <div className="page-container">
-        <h1>About Consilium</h1>
-        <p>
-          We have built a movie recommender system using Rails and React.js.
-          The backend does not use traditional relational database like PostgreSQL.
-          Instead it uses Redis as a key value store. Traditional relational database
-          depends heavily on joins and it becomes inefficient as the table gets
-          large.
-        </p>
-        <p>
-          The full data set has 250,000 users and 22 million ratings on 30,000 movies.
-          We use collaborative filtering to produce movie recommmendations. We implemented
-          a k-Nearest-Neighbor algorithm to compute movie rating predictions.
-        </p>
-        <p>Rating Prediction for User u on Item i</p>
-        <div id="rating-prediction"></div>
-        <p><strong>k</strong> is a normalization constant</p>
-        <div id="normalization"></div>
-        <p>We compute user similarity using Pearson coefficient</p>
-        <div id="user-sim"></div>
-        <p><strong>C</strong> is the correlation normalization constant</p>
-        <div id="sim-norm"></div>
+      <article className="page-container">
+        <h1 id="about-page-title">About Consilium</h1>
 
-      </div>
+        <section>
+          <h4>Brief Introduction</h4>
+          <p>{introduction}</p>
+          <h4>Tech Stack</h4>
+          <p>{techStack}</p>
+        </section>
+
+        <section>
+          <h3>k-Nearest-Neighbor</h3>
+          <p>{knn}</p>
+          <blockquote>{knnIdea}</blockquote>
+          <h4>Mathematical Formulation</h4>
+          <p>
+            First of all, we need to quantify how similar are the preferences
+            of two users. The metric we are using is Pearson coefficient. It gives
+            a value from -1 to 1, with 1 means two users are strongly positively
+            correlated while -1 means two users are strongly negatively correlated.
+          </p>
+          <blockquote>
+            <p>
+              I<sub>u</sub> is the set of movies that user <strong>u</strong> has seen and
+              I<sub>v</sub> is the set of movies that user <strong>v</strong> has seen. The notation
+              is saying that iterate through the set of movies that both users have seen.
+            </p>
+            <div id="user-sim"></div>
+            <p><strong>C</strong> is the correlation normalization constant</p>
+            <div id="sim-norm"></div>
+          </blockquote>
+          <Gist id="e537728e8f09973e531266aead0960f3"/>
+          <p>
+            Once we know how similar two users are, we then can select the most similar
+            users and use them as a reference for opinions. Similarity is serving
+            as a statistical weight. It allows us to compute the collaborative opinions
+            of users.
+          </p>
+          <blockquote>
+            <p>Rating Prediction for User u on Item i</p>
+            <div id="rating-prediction"></div>
+            <p><strong>k</strong> is a normalization constant</p>
+            <div id="normalization"></div>
+          </blockquote>
+          <Gist id="b6582806f01d6ec51d72b9d5408c214a"/>
+          <p>
+            This implementation does not take in a constant k number of neighbors.
+            It fluctuates depending on movie viewers size. We had trouble fitting
+            the whole data set in memory so this approach was to sacrifice accuracy
+            for speed.
+          </p>
+        </section>
+
+        <section>
+          <h3>Sparse Matrix SVD</h3>
+        </section>
+
+
+      </article>
     );
   }
 });
