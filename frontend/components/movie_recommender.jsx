@@ -41,7 +41,8 @@ const MovieRecommender = React.createClass({
   componentWillUnmount(){
     this.movieRatingListener.remove();
     this.movieStoreListener.remove();
-  }
+  },
+
   moviesOnChange() {
   },
 
