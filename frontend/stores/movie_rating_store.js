@@ -25,6 +25,10 @@ MovieRatingStore.getRatings = function() {
   return JSON.parse(JSON.stringify(_ratings));
 };
 
+MovieRatingStore.getNumberOfRated = function() {
+  return Object.keys(_ratings).length;
+};
+
 MovieRatingStore.hasRated = function(movieId) {
   if (_ratings[movieId]) {
     return true;

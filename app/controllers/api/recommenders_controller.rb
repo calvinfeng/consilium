@@ -1,5 +1,6 @@
 require 'set'
 class Api::RecommendersController < ApplicationController
+  
   def for_new_visitor
     #fetch movies for new visitors to rate
     @movies = Movie.movies_with_many_reviews
@@ -58,7 +59,7 @@ class Api::RecommendersController < ApplicationController
         calculated[id] = true
 
         if knn_prediction.nil?
-          p "kNN fails, can't find any similar users"
+          puts "System Log: kNN fails, can't find any similar users"
           if svd_prediction > user.avg_rating
             @movies << movie
           end
@@ -74,4 +75,5 @@ class Api::RecommendersController < ApplicationController
   def recommender_params
     params.require(:recommender)
   end
+
 end

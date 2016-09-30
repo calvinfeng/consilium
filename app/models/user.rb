@@ -92,7 +92,7 @@ class User
       end
     end
     # zero means no correlation due to statistical insignificance
-    return 0 if movies_seen_by_both.length < 5
+    return 0 if movies_seen_by_both.length < 3
 
     movies_seen_by_both.each do |movie_id|
       this_rating, other_rating = @ratings[movie_id], other_user.ratings[movie_id]
