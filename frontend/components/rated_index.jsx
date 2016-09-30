@@ -3,8 +3,22 @@ const MovieRatingStore = require('../stores/movie_rating_store');
 const MovieStore = require('../stores/movie_store');
 const MovieActions = require('../actions/movie_actions');
 const MovieItem = require('./movie_item');
+import * as Cookies from "js-cookie";
 
 const RatedIndex = React.createClass({
+  // getRatedMoviesFromCookies() {
+  //   let cookies = JSON.parse(Cookies.get('consilium'));
+  //   let ratedMovies = {};
+  //   let ratings = {};
+  //   if (cookies.hasOwnProperty("rated")) {
+  //     let ratedMoviesFromCookies = cookies["rated"];
+  //     Object.keys(ratedMoviesFromCookies).forEach( (movieId) => {
+  //       ratedMovies[movieId] = MovieStore.findMovie(movieId);
+  //       ratedMovies[movieId]["rating"] = ratedMoviesFromCookies[movieId];
+  //     });
+  //   }
+  //   return ratedMovies;
+  // },
 
   getInitialState() {
     return { ratedMovies: {} };

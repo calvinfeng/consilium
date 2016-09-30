@@ -6,6 +6,9 @@ const MovieInfoActions = require('../actions/movie_info_actions');
 const MovieRatingActions = require('../actions/movie_rating_actions');
 const Button = require('react-bootstrap').Button;
 //npm - https://github.com/dreyescat/react-rating
+import * as Cookies from "js-cookie";
+
+
 const ratingStyle = {
   color: "yellow",
   empty: 'fa fa-star-o fa-2x',
@@ -65,7 +68,26 @@ const MovieItem = React.createClass({
       movieId: this.props.movieId,
       rating: rating
     });
+    // this.addToCookie(this.state.info, rating);
   },
+
+  // addToCookie(movie,rating) {
+  //   let cookies = JSON.parse(Cookies.get('consilium'));
+  //   let ratedMoviesFromCookies = {};
+  //   let recommendedMoviesFromCookies = {};
+  //   let movieId = this.props.movieId;
+  //   let ratedMovie = { movieId: rating };
+  //
+  //   if (cookies.hasOwnProperty("rated") && cookies.hasOwnProperty("queue")){
+  //     ratedMoviesFromCookies = cookies["rated"];
+  //     recommendedMoviesFromCookies = cookies["queue"];
+  //     ratedMovie = Object.assign(ratedMovie, ratedMoviesFromCookies);
+  //   } else if (cookies.hasOwnProperty("rated")){
+  //     ratedMoviesFromCookies = cookies["rated"];
+  //     ratedMovie = Object.assign(ratedMovie, ratedMoviesFromCookies);
+  //   }
+  //   Cookies.set('consilium', { rated: ratedMovie, queue: recommendedMoviesFromCookies, expires: 365 });
+  // },
 
   skipClickHandler() {
     MovieActions.skipMovie(this.props.movieId);
