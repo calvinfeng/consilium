@@ -73,7 +73,7 @@ class Api::RecommendersController < ApplicationController
         knn_prediction = movie.knn_prediction_for(user)
         calculated[id] = true
 
-        puts "#{movie.title} => knn: #{knn_prediction}, svd: #{svd_prediction}"
+        puts "#{movie.title} => knn: #{knn_prediction}, svd: #{svd_prediction}, user_avg: #{user.avg_rating}"
         if knn_prediction.nil?
           if svd_prediction > user.avg_rating
             @movies << movie

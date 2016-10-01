@@ -1,4 +1,5 @@
 const React = require('react');
+const Loader = require('react-loader');
 const MovieItem = require('./movie_item');
 const MovieStore = require('../stores/movie_store');
 const MovieRatingStore = require('../stores/movie_rating_store');
@@ -8,7 +9,7 @@ const MovieInfoActions = require('../actions/movie_info_actions');
 const RecommendationIndex = React.createClass({
 
   getInitialState() {
-    return {recommendationOnDisplay: {}};
+    return {recommendationOnDisplay: {}, loaded: false};
   },
 
   componentDidMount() {
@@ -47,7 +48,7 @@ const RecommendationIndex = React.createClass({
         }
         i += 1;
       }
-      this.setState({recommendationOnDisplay: items});
+      this.setState({recommendationOnDisplay: items, loaded: true});
     }
   },
 
@@ -69,9 +70,11 @@ const RecommendationIndex = React.createClass({
     return (
       <div>
         <h1>Recommendations</h1>
-        <div className="movie-index">
-          {this.renderRecommendations()}
-        </div>
+        <Loader loaded={this.state.loaded}>
+          <div className="movie-index">
+            {this.renderRecommendations()}
+          </div>
+        </Loader>
       </div>
     );
   }

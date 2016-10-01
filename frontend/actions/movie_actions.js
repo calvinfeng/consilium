@@ -13,6 +13,13 @@ const MovieActions = {
     });
   },
 
+  markNotInterested(movieId) {
+    Dispatcher.dispatch({
+      actionType: MovieConstants.MARK_NOT_INTERESTED,
+      movieId: movieId
+    });
+  },
+
   fetchMovieByIds(idArray) {
     MovieApiUtil.fetchMovieByIds(idArray, this.receiveMovies);
   },

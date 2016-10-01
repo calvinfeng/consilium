@@ -82,8 +82,8 @@ const GaugeIndex = React.createClass({
 
   renderDescription() {
     let description = `These are some movies we think you have seen before.
-      If you have seen them, whether you like or dislike them, let us and give it a rating!
-      If not, click the skip button and we will give you more choices.
+      If you have seen them, whether you like or dislike them, let us know and give
+      them ratings! If not, click the skip button and we will give you more choices.
       It will help our backend machine learning algorithm to learn your taste and preference`;
     let reminder;
     if (this.state.ratingCount === 0) {

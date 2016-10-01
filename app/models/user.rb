@@ -79,7 +79,7 @@ class User
     @preferences.each do |pref|
       regularized_sum += pref**2
     end
-    return sq_error_sum + l*regularized_sum
+    return (sq_error_sum + l*regularized_sum)/@ratings.length
   end
 
   def sim(other_user)

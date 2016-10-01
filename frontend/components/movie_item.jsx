@@ -72,7 +72,7 @@ const MovieItem = React.createClass({
   },
 
   notInterestedHandler() {
-    MovieActions.markNotInterested(this.props.moveId);
+    MovieActions.markNotInterested(this.props.movieId);
   },
 
   renderRating() {
@@ -128,7 +128,10 @@ const MovieItem = React.createClass({
     render() {
       return (
         <div className="movie-item">
-          <h3 className="movie-title">{this.state.info.Title}({this.state.info.Year})</h3>
+          <h3 className="movie-title">
+            <strong>{this.state.info.Title}</strong>
+            ({this.state.info.Year})
+          </h3>
           <div className="movie-poster">
             <img src={this.state.info.Poster}/>
           </div>

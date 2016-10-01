@@ -26,6 +26,7 @@ const MovieRecommender = React.createClass({
 
   componentDidMount(){
     this.movieRatingListener = MovieRatingStore.addListener(this.ratingsOnChange);
+    this.movieStoreListener = MovieStore.addListener(this.moviesOnChange);
     if (this.state.isRecommending) {
       let cookies = JSON.parse(Cookies.get('consilium'));
       let movieRatings = cookies['ratings'];
@@ -38,21 +39,29 @@ const MovieRecommender = React.createClass({
 
   componentWillUnmount(){
     this.movieRatingListener.remove();
+    this.movieStoreListener.remove();
+  },
+
+  moviesOnChange() {
+    this.replenlishRecommendations();
   },
 
   ratingsOnChange() {
     let movieRatings = MovieRatingStore.getRatings();
     this.saveToCookie(movieRatings);
-    let recommendations = MovieStore.getRecommendedMovies();
-    if (Object.keys(movieRatings).length >= 10 &&
-      MovieStore.remainingRecommendationCount() < 10) {
-      MovieActions.fetchRecommendedMovies(movieRatings, recommendations);
+    this.replenlishRecommendations();
+  },
+
+  replenlishRecommendations() {
+    console.log(`Recommendations in store: ${MovieStore.remainingRecommendationCount()}`);
+    let movieRatings = MovieRatingStore.getRatings();
+    let notInterested = MovieStore.getNotInterestedMovies();
+    if (Object.keys(movieRatings).length >= 10 && MovieStore.remainingRecommendationCount() < 10) {
+      MovieActions.fetchRecommendedMovies(movieRatings, notInterested);
       if (!this.state.isRecommending) {
         this.setState({isRecommending: true});
       }
     }
-
-
   },
 
   saveToCookie(ratedMovies, recommendedMovies) {

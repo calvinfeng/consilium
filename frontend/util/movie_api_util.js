@@ -40,7 +40,7 @@ const MovieApiUtil = {
     $.ajax({
       url: "api/recommender/recommendations",
       dataType: "JSON",
-      method: "GET",
+      method: "POST",
       data: {
         recommender: {
           rated: ratedMovies,

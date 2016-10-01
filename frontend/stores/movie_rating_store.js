@@ -11,13 +11,13 @@ let _ratings = {};
 MovieRatingStore.__onDispatch = payload => {
   switch (payload.actionType) {
     case MovieConstants.MOVIE_RATING_RECEIVED:
-      MovieRatingStore.setRating(payload.ratingObj);
-      MovieRatingStore.__emitChange();
-      break;
+    MovieRatingStore.setRating(payload.ratingObj);
+    MovieRatingStore.__emitChange();
+    break;
     case MovieConstants.MOVIE_RATINGS_RECEIVED:
-      MovieRatingStore.setRatings(payload.ratings);
-      MovieRatingStore.__emitChange();
-      break;
+    MovieRatingStore.setRatings(payload.ratings);
+    MovieRatingStore.__emitChange();
+    break;
   }
 };
 
@@ -32,7 +32,6 @@ MovieRatingStore.setRatings = function(ratings) {
 };
 
 MovieRatingStore.getRatings = function() {
-  // return the copy of my private variable
   return JSON.parse(JSON.stringify(_ratings));
 };
 
