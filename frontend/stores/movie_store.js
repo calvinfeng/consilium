@@ -63,7 +63,6 @@ MovieStore.setPopularMovies = function(movies) {
 };
 
 MovieStore.setRecommendedMovies = function(movies) {
-  console.log(movies);
   movies.forEach( (movie) => {
     _recommendedMovies[movie.id] = movie;
   });
