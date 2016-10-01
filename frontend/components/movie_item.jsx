@@ -5,9 +5,6 @@ const MovieInfoStore = require('../stores/movie_info_store');
 const MovieInfoActions = require('../actions/movie_info_actions');
 const MovieRatingActions = require('../actions/movie_rating_actions');
 const Button = require('react-bootstrap').Button;
-//npm - https://github.com/dreyescat/react-rating
-import * as Cookies from "js-cookie";
-
 
 const ratingStyle = {
   color: "yellow",
@@ -74,11 +71,38 @@ const MovieItem = React.createClass({
     MovieActions.skipMovie(this.props.movieId);
   },
 
+  notInterestedHandler() {
+    MovieActions.markNotInterested(this.props.moveId);
+  },
+
   renderRating() {
     if (this.props.rated) {
       return (
         <div>
           <div>Your Rating: {this.props.rating}</div>
+        </div>
+      );
+    } else if (this.props.recommended) {
+      return (
+        <div style={{width: "100%"}}>
+          <div className="rating-toolbar">
+            <Rating
+              fractions={2}
+              onClick={this.rateClickHandler}
+              empty={'fa fa-star-o fa-3x'}
+              full={"fa fa-star fa-3x"}
+              color={"yellow"}
+              />
+          </div>
+          <div className="button-container">
+            <Button
+              bsSize="xsmall"
+              className="react-buttons"
+              onClick={this.notInterestedHandler}
+              bsStyle="primary">
+              Not Interested
+            </Button>
+          </div>
         </div>
       );
     } else {
@@ -92,30 +116,30 @@ const MovieItem = React.createClass({
             color={"yellow"}
             />
           <Button
+            className="react-buttons"
             onClick={this.skipClickHandler}
             bsStyle="danger">
             Skip
           </Button>
+        </div>);
+      }
+    },
+
+    render() {
+      return (
+        <div className="movie-item">
+          <h3 className="movie-title">{this.state.info.Title}({this.state.info.Year})</h3>
+          <div className="movie-poster">
+            <img src={this.state.info.Poster}/>
+          </div>
+          <div className="movie-plot">{this.state.info.Plot}</div>
+          <div className="movie-rating">
+            {this.renderRating()}
+          </div>
         </div>
       );
     }
-  },
 
-  render() {
-    return (
-      <div className="movie-item">
-        <h3 className="movie-title">{this.state.info.Title}({this.state.info.Year})</h3>
-        <div className="movie-poster">
-          <img src={this.state.info.Poster}/>
-        </div>
-        <div className="movie-plot">{this.state.info.Plot}</div>
-        <div className="movie-rating">
-          {this.renderRating()}
-        </div>
-      </div>
-    );
-  }
+  });
 
-});
-
-module.exports = MovieItem;
+  module.exports = MovieItem;

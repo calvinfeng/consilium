@@ -54,14 +54,14 @@ class Api::RecommendersController < ApplicationController
   end
 
   private
-  def generate_recommendations(user, queue, items_needed=21-queue.size)
+  def generate_recommendations(user, queue, items_needed=10)
     movie_attr = eval($redis.get('movies'))
     movie_ids = eval($redis.get('movie_ids'))
     features = eval($redis.get('features'))
     calculated = {}
     until @movies.size > items_needed
       id = movie_ids.sample
-      unless user.ratings[id] || queue[id] || calculated[id]
+      unless user.ratings[id] || queue[id] || calculated[id] || movie_attr[id][:viewers].length < 20
         movie = Movie.new(id,
         movie_attr[id][:title],
         movie_attr[id][:year],
@@ -73,8 +73,8 @@ class Api::RecommendersController < ApplicationController
         knn_prediction = movie.knn_prediction_for(user)
         calculated[id] = true
 
+        puts "#{movie.title} => knn: #{knn_prediction}, svd: #{svd_prediction}"
         if knn_prediction.nil?
-          puts "System Log: kNN fails, can't find any similar users"
           if svd_prediction > user.avg_rating
             @movies << movie
           end

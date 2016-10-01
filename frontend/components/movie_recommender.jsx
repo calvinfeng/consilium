@@ -38,28 +38,27 @@ const MovieRecommender = React.createClass({
 
   componentWillUnmount(){
     this.movieRatingListener.remove();
-    this.movieStoreListener.remove();
-  },
-
-  moviesOnChange() {
-
-
   },
 
   ratingsOnChange() {
     let movieRatings = MovieRatingStore.getRatings();
-    let recommendations = MovieStore.getRecommendedMovies();
-    if (Object.keys(movieRatings).length >= 10) {
-      //MovieActions.fetchRecommendedMovies(movieRatings, recommendations);
-      //this.setState({isRecommending: true});
-    }
     this.saveToCookie(movieRatings);
+    let recommendations = MovieStore.getRecommendedMovies();
+    if (Object.keys(movieRatings).length >= 10 &&
+      MovieStore.remainingRecommendationCount() < 10) {
+      MovieActions.fetchRecommendedMovies(movieRatings, recommendations);
+      if (!this.state.isRecommending) {
+        this.setState({isRecommending: true});
+      }
+    }
+
+
   },
 
   saveToCookie(ratedMovies, recommendedMovies) {
     Cookies.set('consilium',
       { ratings: ratedMovies },
-      { expires: 365}
+      { expires: 7}
     );
   },
 

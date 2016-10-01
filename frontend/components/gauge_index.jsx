@@ -36,7 +36,6 @@ const GaugeIndex = React.createClass({
     this.movieRatingStoreListener.remove();
   },
 
-  // It is unnecessary for the Index to hold 700ish movies because that's what the store is for.
   gaugeOnChange(){
     let gaugeMovies = this.state.gaugeMovies;
     Object.keys(gaugeMovies).forEach(function(movieId) {
@@ -45,7 +44,6 @@ const GaugeIndex = React.createClass({
       }
     });
 
-    // Once we know that movies are in store, we will then randomly select 10
     let popularMovies = MovieStore.getPopularMovies().shuffle();
     let i = 0;
     while (Object.keys(gaugeMovies).length < 10 - MovieRatingStore.getNumberOfRated()) {
@@ -69,8 +67,6 @@ const GaugeIndex = React.createClass({
     this.setState({gaugeMovies: gaugeMovies, ratingCount: MovieRatingStore.getNumberOfRated()});
   },
 
-  //  Re-named to renderGaugeSet() -> It implies this set of movies is for measurement
-  //  The idea is that as we improve our algorithm, we probably won't even need 10
   renderGaugeSet() {
     let movies = this.state.gaugeMovies;
     return Object.keys(movies).sort().map((movieId) => {

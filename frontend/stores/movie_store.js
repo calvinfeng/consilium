@@ -3,6 +3,7 @@ const Dispatcher = require('../dispatcher/dispatcher');
 const MovieConstants = require('../constants/movie_constants');
 const Store = require('flux/utils').Store;
 const MovieStore = new Store(Dispatcher);
+const MovieRatingStore = require('./movie_rating_store');
 
 // Distinction:
 // popularMovies are for new visitors
@@ -87,6 +88,16 @@ MovieStore.notInterested = function(movieId) {
   } else {
     return false;
   }
+};
+
+MovieStore.remainingRecommendationCount = function() {
+  let count = 0;
+  Object.keys(_recommendedMovies).forEach((movieId) => {
+    if (!this.notInterested(movieId) && !MovieRatingStore.hasRated(movieId)) {
+      count += 1;
+    }
+  });
+  return count;
 };
 
 MovieStore.findMovie = function(movieId) {

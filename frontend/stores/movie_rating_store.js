@@ -4,6 +4,7 @@ const Dispatcher = require('../dispatcher/dispatcher');
 const MovieConstants = require('../constants/movie_constants');
 const Store = require('flux/utils').Store;
 const MovieRatingStore = new Store(Dispatcher);
+const MovieStore = require('./movie_store');
 
 let _ratings = {};
 
