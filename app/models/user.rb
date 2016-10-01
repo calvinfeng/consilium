@@ -38,7 +38,6 @@ class User
         pref_copy[k] = pref_copy[k] - (learning_rate*derivative_j_wrt_preference(movie_features, k, deviations, regularized_factor))
       end
       @preferences = pref_copy
-      puts "Iteration: #{i} cost: #{self.cost_function(movie_features, regularized_factor)}"
     end
   end
 
