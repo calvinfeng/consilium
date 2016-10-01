@@ -12,6 +12,12 @@ const MovieRatingActions = {
     });
   },
 
+  submitMultipleRatingsToStore(ratings) {
+    Dispatcher.dispatch({
+      actionType: MovieConstants.MOVIE_RATINGS_RECEIVED,
+      ratings: ratings
+    });
+  }
 };
 
 module.exports = MovieRatingActions;

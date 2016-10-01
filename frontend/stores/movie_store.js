@@ -4,13 +4,23 @@ const MovieConstants = require('../constants/movie_constants');
 const Store = require('flux/utils').Store;
 const MovieStore = new Store(Dispatcher);
 
+// Distinction:
+// popularMovies are for new visitors
+// movies contain movie information for returned vistors
+// recommendedMovies are for both new and returned visitors
 let _popularMovies = {};
-let _recommendedMovies = {};
 let _skippedMovies = {};
+
+let _recommendedMovies = {};
 let _notInterestedMovies = {};
+let _movies = {};
 
 MovieStore.__onDispatch = payload => {
   switch (payload.actionType) {
+    case MovieConstants.MOVIES_RECEIVED:
+    MovieStore.setMovies(payload.movies);
+    MovieStore.__emitChange();
+    break;
     case MovieConstants.POPULAR_MOVIES_RECEIVED:
     MovieStore.setPopularMovies(payload.movies);
     MovieStore.__emitChange();
@@ -30,6 +40,12 @@ MovieStore.setSkippedMovie = function(movieId) {
   _skippedMovies[movieId] = true;
 };
 
+MovieStore.setMovies = function(movies) {
+  movies.forEach((movie) => {
+    _movies[movie.id] = movie;
+  });
+};
+
 MovieStore.setPopularMovies = function(movies) {
   _popularMovies = {};
   movies.forEach( (movie) => {
@@ -40,7 +56,6 @@ MovieStore.setPopularMovies = function(movies) {
 MovieStore.setRecommendedMovies = function(movies) {
   movies.forEach( (movie) => {
     _recommendedMovies[movie.id] = movie;
-    console.log(movie);
   });
 };
 
@@ -51,14 +66,6 @@ MovieStore.getPopularMovies = function(){
 };
 
 MovieStore.getRecommendedMovies = function(){
-  return Object.keys(_recommendedMovies).map ( (movieId) => {
-    return _recommendedMovies[movieId];
-  });
-};
-
-// Well the queue is the list of recommended movies that is currently being shown
-// to viewers, so we haven't defined that yet
-MovieStore.getQueue = function() {
   return JSON.parse(JSON.stringify(_recommendedMovies));
 };
 
@@ -87,6 +94,8 @@ MovieStore.findMovie = function(movieId) {
     return _popularMovies[movieId];
   } else if (_recommendedMovies[movieId]) {
     return _recommendedMovies[movieId];
+  } else if (_movies[movieId]) {
+    return _movies[movieId];
   } else {
     return undefined;
   }

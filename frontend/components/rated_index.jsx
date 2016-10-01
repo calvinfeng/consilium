@@ -6,38 +6,28 @@ const MovieItem = require('./movie_item');
 import * as Cookies from "js-cookie";
 
 const RatedIndex = React.createClass({
-  // getRatedMoviesFromCookies() {
-  //   let cookies = JSON.parse(Cookies.get('consilium'));
-  //   let ratedMovies = {};
-  //   let ratings = {};
-  //   if (cookies.hasOwnProperty("rated")) {
-  //     let ratedMoviesFromCookies = cookies["rated"];
-  //     Object.keys(ratedMoviesFromCookies).forEach( (movieId) => {
-  //       ratedMovies[movieId] = MovieStore.findMovie(movieId);
-  //       ratedMovies[movieId]["rating"] = ratedMoviesFromCookies[movieId];
-  //     });
-  //   }
-  //   return ratedMovies;
-  // },
-
   getInitialState() {
     return { ratedMovies: {} };
   },
 
   componentDidMount() {
     this.movieRatingStoreListener = MovieRatingStore.addListener(this.setRatedMovies);
+    this.movieStoreListener = MovieStore.addListener(this.setRatedMovies);
   },
 
   componentWillUnmount(){
     this.movieRatingStoreListener.remove();
+    this.movieStoreListener.remove();
   },
 
   setRatedMovies() {
     let ratings = MovieRatingStore.getRatings();
     let ratedMovies = {};
     Object.keys(ratings).forEach((movieId) => {
-      ratedMovies[movieId] = MovieStore.findMovie(movieId);
-      ratedMovies[movieId]["rating"] = ratings[movieId];
+      if (MovieStore.findMovie(movieId)) {
+        ratedMovies[movieId] = MovieStore.findMovie(movieId);
+        ratedMovies[movieId]["rating"] = ratings[movieId];
+      }
     });
     this.setState({ratedMovies: ratedMovies});
   },

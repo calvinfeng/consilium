@@ -13,6 +13,10 @@ const MovieActions = {
     });
   },
 
+  fetchMovieByIds(idArray) {
+    MovieApiUtil.fetchMovieByIds(idArray, this.receiveMovies);
+  },
+
   fetchPopularMovies() {
     MovieApiUtil.fetchPopularMovies(
       MovieActions.receivePopularMovies);
@@ -24,6 +28,13 @@ const MovieActions = {
       queuedMovies,
       MovieActions.receiveRecommendedMovies
     );
+  },
+
+  receiveMovies(movies) {
+    Dispatcher.dispatch({
+      actionType: MovieConstants.MOVIES_RECEIVED,
+      movies: movies
+    });
   },
 
   receiveRecommendedMovies(movies) {

@@ -7,6 +7,23 @@ const apiKey = "2afddf218bfb5d06ef460cc103af69bc";
 
 const MovieApiUtil = {
 
+  fetchMovieByIds(idArray, success) {
+    $.ajax({
+      url: "api/recommender/movies_by_ids",
+      dataType: "JSON",
+      method: "GET",
+      data: {
+        recommender: {
+          movieIds: idArray
+        }
+      },
+      success,
+      fail(xhr) {
+        console.log(xhr);
+      }
+    });
+  },
+
   fetchPopularMovies(success) {
     $.ajax({
       url: "api/recommender/new_visitor",

@@ -13,11 +13,21 @@ MovieRatingStore.__onDispatch = payload => {
       MovieRatingStore.setRating(payload.ratingObj);
       MovieRatingStore.__emitChange();
       break;
+    case MovieConstants.MOVIE_RATINGS_RECEIVED:
+      MovieRatingStore.setRatings(payload.ratings);
+      MovieRatingStore.__emitChange();
+      break;
   }
 };
 
 MovieRatingStore.setRating = function(ratingObj) {
   _ratings[ratingObj.movieId] = ratingObj.rating;
+};
+
+MovieRatingStore.setRatings = function(ratings) {
+  Object.keys(ratings).forEach((movieId) =>{
+    _ratings[movieId] = ratings[movieId];
+  });
 };
 
 MovieRatingStore.getRatings = function() {

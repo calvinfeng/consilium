@@ -24,12 +24,12 @@ const RecommendationIndex = React.createClass({
 
   renderRecommendations() {
     let recommendedMovies = MovieStore.getRecommendedMovies();
-    if (recommendedMovies.length > 5) {
+    let ids = Object.keys(recommendedMovies);
+    if (ids.length > 5) {
       let i = 0, recommendationItems = [];
       while (recommendationItems.length < 5) {
-        if (!(MovieStore.notInterested(recommendedMovies[i].id) ||
-        MovieRatingStore.hasRated(recommendedMovies[i].id))) {
-          let movie = recommendedMovies[i];
+        if (!MovieStore.notInterested(ids[i]) && !MovieRatingStore.hasRated(ids[i])) {
+          let movie = recommendedMovies[ids[i]];
           recommendationItems.push(
             <MovieItem
               key={movie.id}

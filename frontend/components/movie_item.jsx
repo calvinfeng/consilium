@@ -63,31 +63,12 @@ const MovieItem = React.createClass({
     this.setState({info: movieInfo});
   },
 
-  ratingClickHandler(rating) {
+  rateClickHandler(rating) {
     MovieRatingActions.submitRatingToStore({
       movieId: this.props.movieId,
       rating: rating
     });
-    // this.addToCookie(this.state.info, rating);
   },
-
-  // addToCookie(movie,rating) {
-  //   let cookies = JSON.parse(Cookies.get('consilium'));
-  //   let ratedMoviesFromCookies = {};
-  //   let recommendedMoviesFromCookies = {};
-  //   let movieId = this.props.movieId;
-  //   let ratedMovie = { movieId: rating };
-  //
-  //   if (cookies.hasOwnProperty("rated") && cookies.hasOwnProperty("queue")){
-  //     ratedMoviesFromCookies = cookies["rated"];
-  //     recommendedMoviesFromCookies = cookies["queue"];
-  //     ratedMovie = Object.assign(ratedMovie, ratedMoviesFromCookies);
-  //   } else if (cookies.hasOwnProperty("rated")){
-  //     ratedMoviesFromCookies = cookies["rated"];
-  //     ratedMovie = Object.assign(ratedMovie, ratedMoviesFromCookies);
-  //   }
-  //   Cookies.set('consilium', { rated: ratedMovie, queue: recommendedMoviesFromCookies, expires: 365 });
-  // },
 
   skipClickHandler() {
     MovieActions.skipMovie(this.props.movieId);
@@ -105,7 +86,7 @@ const MovieItem = React.createClass({
         <div className="rating-toolbar">
           <Rating
             fractions={2}
-            onClick={this.ratingClickHandler}
+            onClick={this.rateClickHandler}
             empty={'fa fa-star-o fa-3x'}
             full={"fa fa-star fa-3x"}
             color={"yellow"}
