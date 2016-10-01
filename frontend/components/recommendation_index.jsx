@@ -5,6 +5,9 @@ const MovieStore = require('../stores/movie_store');
 const MovieRatingStore = require('../stores/movie_rating_store');
 const MovieActions = require('../actions/movie_actions');
 const MovieInfoActions = require('../actions/movie_info_actions');
+const Cookies = require('js-cookie');
+const Button = require('react-bootstrap').Button;
+
 
 const RecommendationIndex = React.createClass({
 
@@ -66,10 +69,21 @@ const RecommendationIndex = React.createClass({
     });
   },
 
+  deleteCookies() {
+    Cookies.remove('consilium');
+  },
+
   render() {
     return (
       <div>
         <h1>Recommendations</h1>
+        <Button
+          bsSize="xsmall"
+          className="react-buttons"
+          onClick={this.deleteCookies}
+          bsStyle="primary">
+          Delete My History
+        </Button>
         <Loader loaded={this.state.loaded}>
           <div className="movie-index">
             {this.renderRecommendations()}
