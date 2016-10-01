@@ -30,6 +30,16 @@ collaborative filtering`;
 const svdIntro = `The other algorithm we used is sparse matrix SVD (Singular Value Decomposition.)
 Imagine that movie rating is in fact a giant matrix, with rows being users and columns being
 movies. Every matrix element is a movie rating on movie j from user i.`;
+
+const principalComponents = ` Some components are less important that others.
+How do we tell? Given a completely filled matrix, we can perform SVD on it directly and
+look at the weights. The weights are generally concentrated in the top left corner of the
+scaling matrix in the middle. This is because there are many redundant information in the
+full vector space. We can in fact summarize those information using less space and less component,
+which means less features. In fact, this is the fundamental idea of principal component
+analysis (PCA.) Standard SVD does not work on a sparse matrix so we need function
+optimization technique to come to rescue.`;
+
 /* global katex */
 const About = React.createClass({
 
@@ -110,6 +120,27 @@ const About = React.createClass({
     \\theta_{i, 1}\\lambda_{1} f_{1, j} + \\theta_{i, 2}\\lambda_{2} f_{2, j} +
     \\theta_{i, 3}\\lambda_{3} f_{3, j} + ... + \\theta_{i, n}\\lambda_{n} f_{n,j}`;
     this.renderKatex("linear-combo", linearCombo);
+
+    let costFunction = `J(f^{(1)}, f^{(2)}, f^{(3)}, ..., f^{(m)},
+    \\theta^{(1)}, \\theta^{(2)}, \\theta^{(3)}, ..., \\theta^{(N)}) =
+    \\frac{1}{2}\\sum_{i, j \\in R} (\\theta^{(j)}f^{(i)} - r^{(i,j)})^{2} +
+    \\frac{\\lambda}{2}\\sum_{i}^{m}\\sum_{k}^{n} (f_{k}^{(i)})^{2} +
+    \\frac{\\lambda}{2}\\sum_{j}^{N}\\sum_{k}^{n} (\\theta_{k}^{(j)})^{2}`;
+    this.renderKatex("cost-function", costFunction);
+
+    let objective = `Objective:\\,minimize\\,J\\,with\\,respect\\,to\\:\\Theta,\\:F`;
+    this.renderKatex("objective", objective);
+
+    let bigTheta = `\\Theta = {\\theta^{(1)}, \\theta^{(2)}, \\theta^{(3)}, ..., \\theta^{(N)}} \\:
+    F = {f^{(1)}, f^{(2)}, f^{(3)}, ..., f^{(m)}}`;
+    this.renderKatex("big-theta", bigTheta);
+
+    let djDf = `f_{k}^{(i)} := f_{k}^{(i)} - \\alpha \\frac{\\partial J}{\\partial f_{k}^{(i)}}`;
+    this.renderKatex("dj-df", djDf);
+
+    let djDtheta = `\\theta_{k}^{(i)} := \\theta_{k}^{(i)} -
+    \\alpha \\frac{\\partial J}{\\partial \\theta_{k}^{(i)}}`;
+    this.renderKatex("dj-dtheta", djDtheta);
   },
 
   renderKatex(elementId, mathExpression) {
@@ -218,12 +249,21 @@ const About = React.createClass({
           <p id="linear-combo"></p>
         </blockquote>
         <p>
-          Some components are less important that others. So how do we tell? Given a completely
-          filled matrix, we can perform SVD on it directly and look at the weights. Most of
-          the time, the weights are concentrated in the top left corner of the scaling matrix in the
-          middle. But in our case, we cannot cause it is a sparse matrix, there are many missing
-          values. Well, here comes the holy grail of machine learning algorithm - gradient descent.
+          {principalComponents}
         </p>
+        <blockquote>
+          <p id="cost-function"></p>
+          <p id="objective"></p>
+          <p id="big-theta"></p>
+        </blockquote>
+        <p>
+          {`We perform gradient descent on cost function and effectively learning preference
+          and feature vectors for every user and movie in our database.`}
+        </p>
+        <blockquote>
+          <p id="dj-df"></p>
+          <p id="dj-dtheta"></p>
+        </blockquote>
       </section>
     </article>
   );

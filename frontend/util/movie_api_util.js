@@ -1,6 +1,5 @@
 "use strict";
 
-
 const omdbUrl = "https://www.omdbapi.com/";
 const tmdbUrl = "https://api.themoviedb.org/3/movie/";
 const apiKey = "2afddf218bfb5d06ef460cc103af69bc";
@@ -11,7 +10,7 @@ const MovieApiUtil = {
     $.ajax({
       url: "api/recommender/movies_by_ids",
       dataType: "JSON",
-      method: "GET",
+      method: "POST",
       data: {
         recommender: {
           movieIds: idArray
