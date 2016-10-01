@@ -16,8 +16,8 @@ const RecommendationIndex = React.createClass({
   },
 
   componentDidMount() {
-    this.movieStoreListener = MovieStore.addListener(this.recommendationsOnChange);
-    this.movieRatingStoreListener = MovieRatingStore.addListener(this.updateRecommendationSet);
+    this.movieStoreListener = MovieStore.addListener(this.__onChange);
+    this.movieRatingStoreListener = MovieRatingStore.addListener(this.__onChange);
   },
 
   componentWillUnmount() {
@@ -25,34 +25,31 @@ const RecommendationIndex = React.createClass({
     this.movieRatingStoreListener.remove();
   },
 
-  updateRecommendationSet() {
-    if (MovieStore.remainingRecommendationCount() >= 5) {
-      let recommendedMovies = MovieStore.getRecommendedMovies();
-      let ids = Object.keys(recommendedMovies).sort();
-      let i = 0, items = {};
-      while (Object.keys(items).length < 5) {
-        if (!MovieStore.notInterested(ids[i]) && !MovieRatingStore.hasRated(ids[i])) {
-          items[ids[i]] = recommendedMovies[ids[i]];
-        }
-        i += 1;
-      }
-      this.setState({recommendationOnDisplay: items});
+  // onChange handles when ratings are submitted, or when user indicates he/she isn't interested
+  // in a particular movie
+  __onChange() {
+    let displayItems = this.generateDisplayItems(5);
+    let loadStatus = false;
+    if (Object.keys(displayItems).length !== 0) {
+      loadStatus = true;
     }
+    this.setState({recommendationOnDisplay: displayItems, loaded: loadStatus});
   },
 
-  recommendationsOnChange() {
+  generateDisplayItems(itemCount) {
+    let items = {};
     if (MovieStore.remainingRecommendationCount() >= 5) {
       let recommendedMovies = MovieStore.getRecommendedMovies();
       let ids = Object.keys(recommendedMovies).sort();
-      let i = 0, items = {};
+      let i = 0;
       while (Object.keys(items).length < 5) {
         if (!MovieStore.notInterested(ids[i]) && !MovieRatingStore.hasRated(ids[i])) {
           items[ids[i]] = recommendedMovies[ids[i]];
         }
         i += 1;
       }
-      this.setState({recommendationOnDisplay: items, loaded: true});
     }
+    return items;
   },
 
   renderRecommendations() {

@@ -75,16 +75,45 @@ const MovieItem = React.createClass({
     MovieActions.markNotInterested(this.props.movieId);
   },
 
-  renderRating() {
+  renderInterface() {
     if (this.props.rated) {
       return (
-        <div>
+        <div className="user-rating">
           <div>Your Rating: {this.props.rating}</div>
         </div>
       );
     } else if (this.props.recommended) {
       return (
-        <div style={{width: "100%"}}>
+        <div>
+          <div className="movie-plot">{this.state.info.Plot}</div>
+          <div className="movie-rating">
+            <div style={{width: "100%"}}>
+              <div className="rating-toolbar">
+                <Rating
+                  fractions={2}
+                  onClick={this.rateClickHandler}
+                  empty={'fa fa-star-o fa-3x'}
+                  full={"fa fa-star fa-3x"}
+                  color={"yellow"}
+                  />
+              </div>
+              <div className="button-container">
+                <Button
+                  bsSize="xsmall"
+                  className="react-buttons"
+                  onClick={this.notInterestedHandler}
+                  bsStyle="primary">
+                  Not Interested
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div className="movie-plot">{this.state.info.Plot}</div>
           <div className="rating-toolbar">
             <Rating
               fractions={2}
@@ -93,34 +122,13 @@ const MovieItem = React.createClass({
               full={"fa fa-star fa-3x"}
               color={"yellow"}
               />
-          </div>
-          <div className="button-container">
             <Button
-              bsSize="xsmall"
               className="react-buttons"
-              onClick={this.notInterestedHandler}
-              bsStyle="primary">
-              Not Interested
+              onClick={this.skipClickHandler}
+              bsStyle="danger">
+              Skip
             </Button>
           </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="rating-toolbar">
-          <Rating
-            fractions={2}
-            onClick={this.rateClickHandler}
-            empty={'fa fa-star-o fa-3x'}
-            full={"fa fa-star fa-3x"}
-            color={"yellow"}
-            />
-          <Button
-            className="react-buttons"
-            onClick={this.skipClickHandler}
-            bsStyle="danger">
-            Skip
-          </Button>
         </div>);
       }
     },
@@ -135,10 +143,7 @@ const MovieItem = React.createClass({
           <div className="movie-poster">
             <img src={this.state.info.Poster}/>
           </div>
-          <div className="movie-plot">{this.state.info.Plot}</div>
-          <div className="movie-rating">
-            {this.renderRating()}
-          </div>
+          {this.renderInterface()}
         </div>
       );
     }

@@ -69,6 +69,12 @@
   padding: 1em 1em 1em 1em;
 }
 
+.user-rating {
+  display: flex;
+  font-size: 1em;
+  justify-content: center;
+}
+
 .rating-toolbar {
   display: flex;
   flex-direction: row;
