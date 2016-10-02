@@ -55,11 +55,22 @@ const MovieRecommender = React.createClass({
 
   moviesOnChange() {
     this.replenlishRecommendations();
+    this.checkState();
   },
 
   ratingsOnChange() {
     this.saveToCookie(MovieRatingStore.getRatings());
     this.replenlishRecommendations();
+    this.checkState();
+  },
+
+  checkState() {
+    let movieRatings = MovieRatingStore.getRatings();
+    if (Object.keys(movieRatings).length < 10) {
+      this.setState({isRecommending: false});
+    } else if (Object.keys(movieRatings).length >= 10 && MovieStore.remainingRecommendationCount() !== 0) {
+      this.setState({isRecommending: true});
+    }
   },
 
   replenlishRecommendations() {
@@ -67,12 +78,6 @@ const MovieRecommender = React.createClass({
     if (MovieStore.remainingRecommendationCount() < 10 && Object.keys(movieRatings).length >= 10) {
       let notInterested = MovieStore.getNotInterestedMovies();
       MovieActions.fetchRecommendedMovies(movieRatings, notInterested);
-    }
-
-    if (Object.keys(movieRatings).length < 10) {
-      this.setState({isRecommending: false});
-    } else if (Object.keys(movieRatings).length >= 10 && MovieStore.remainingRecommendationCount() !== 0) {
-      this.setState({isRecommending: true});
     }
   },
 
@@ -110,7 +115,7 @@ const MovieRecommender = React.createClass({
           <div className="logo-bar">
             <img
               id="tmdb-logo"
-              style={{marginRight: "5px", height:"0"}}
+              style={{marginRight: "5px", height:"0", width: "126"}}
               src={tmdbLogo}>
             </img>
           </div>
