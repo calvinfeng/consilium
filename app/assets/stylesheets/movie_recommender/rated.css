@@ -1,9 +1,9 @@
 .rated-header {
   display: flex;
   align-items: center;
-  padding: 10px;
 }
 
 .rated-header > h1 {
   margin: 0;
+  margin-right: 10px;
 }
