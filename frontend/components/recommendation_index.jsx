@@ -15,6 +15,7 @@ const RecommendationIndex = React.createClass({
   componentDidMount() {
     this.movieStoreListener = MovieStore.addListener(this.__onChange);
     this.movieRatingStoreListener = MovieRatingStore.addListener(this.__onChange);
+    this.__onChange();
   },
 
   componentWillUnmount() {

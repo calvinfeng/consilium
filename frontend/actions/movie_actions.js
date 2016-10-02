@@ -6,6 +6,12 @@ const MovieApiUtil = require('../util/movie_api_util');
 
 const MovieActions = {
 
+  clearRecommendations() {
+    Dispatcher.dispatch({
+      actionType: MovieConstants.RECOMMENDATIONS_DELETED
+    });
+  },
+
   skipMovie(movieId) {
     Dispatcher.dispatch({
       actionType: MovieConstants.SKIP_MOVIE,

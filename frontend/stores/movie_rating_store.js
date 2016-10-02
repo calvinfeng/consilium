@@ -19,7 +19,7 @@ MovieRatingStore.__onDispatch = payload => {
     MovieRatingStore.__emitChange();
     break;
     case MovieConstants.MOVIE_RATINGS_DELETED:
-    MovieRatingStore.removeRatingHistory(payload.ratings);
+    MovieRatingStore.removeRatingHistory();
     MovieRatingStore.__emitChange();
     break;
   }

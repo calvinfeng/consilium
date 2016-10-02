@@ -19,10 +19,9 @@ const MovieRatingActions = {
     });
   },
 
-  clearRatingHistoryFromStore(ratings) {
+  clearRatingHistoryFromStore() {
     Dispatcher.dispatch({
       actionType: MovieConstants.MOVIE_RATINGS_DELETED,
-      ratings: ratings
     });
   }
 

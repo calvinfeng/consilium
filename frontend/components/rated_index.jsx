@@ -9,7 +9,7 @@ const Button = require('react-bootstrap').Button;
 
 const RatedIndex = React.createClass({
   getInitialState() {
-    return { ratedMovies: {} };
+    return { ratedMovies: {}, buttonDisable: true};
   },
 
   componentDidMount() {
@@ -31,7 +31,13 @@ const RatedIndex = React.createClass({
         ratedMovies[movieId]["rating"] = ratings[movieId];
       }
     });
-    this.setState({ratedMovies: ratedMovies});
+    let shouldButtonDisable;
+    if (Object.keys(ratings).length > 0) {
+      shouldButtonDisable = false;
+    } else {
+      shouldButtonDisable = true;
+    }
+    this.setState({ratedMovies: ratedMovies, buttonDisable: shouldButtonDisable});
   },
 
   renderRatedMovies() {
@@ -51,11 +57,10 @@ const RatedIndex = React.createClass({
   },
 
   deleteCookies() {
-    MovieRatingActions.clearRatingHistoryFromStore({});
-    this.setState({ ratedMovies: {} });
     Cookies.set("consilium, {}");
-    // set cookies to empty first in case the user never rated any movies but decide to clear their cookies anyway.
     Cookies.remove("consilium");
+    MovieRatingActions.clearRatingHistoryFromStore();
+    MovieActions.clearRecommendations();
   },
 
   render() {
@@ -63,6 +68,7 @@ const RatedIndex = React.createClass({
       <div>
         <div className="rated-header"><h1>Rated Movies</h1>
         <Button
+          disabled={this.state.buttonDisable}
           bsSize="xsmall"
           id="rated-header-button"
           className="react-buttons"

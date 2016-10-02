@@ -41,8 +41,11 @@ const MovieRecommender = React.createClass({
     } else if(Cookies.get('consilium')) {
       Cookies.remove('consilium');
     }
-    $(".logo-bar").hide();
-    $(".logo-bar").fadeIn("slow");
+    $("#tmdb-logo").animate({
+      height: "50px",
+      marginTop: "5px",
+      marginBottom: "5px"
+    }, 1000);
   },
 
   componentWillUnmount(){
@@ -55,20 +58,21 @@ const MovieRecommender = React.createClass({
   },
 
   ratingsOnChange() {
-    let movieRatings = MovieRatingStore.getRatings();
-    this.saveToCookie(movieRatings);
+    this.saveToCookie(MovieRatingStore.getRatings());
     this.replenlishRecommendations();
   },
 
   replenlishRecommendations() {
-    console.log(`Recommendations in store: ${MovieStore.remainingRecommendationCount()}`);
     let movieRatings = MovieRatingStore.getRatings();
-    let notInterested = MovieStore.getNotInterestedMovies();
-    if (Object.keys(movieRatings).length >= 10 && MovieStore.remainingRecommendationCount() < 10) {
+    if (MovieStore.remainingRecommendationCount() < 10 && Object.keys(movieRatings).length >= 10) {
+      let notInterested = MovieStore.getNotInterestedMovies();
       MovieActions.fetchRecommendedMovies(movieRatings, notInterested);
-      if (!this.state.isRecommending) {
-        this.setState({isRecommending: true});
-      }
+    }
+
+    if (Object.keys(movieRatings).length < 10) {
+      this.setState({isRecommending: false});
+    } else if (Object.keys(movieRatings).length >= 10 && MovieStore.remainingRecommendationCount() !== 0) {
+      this.setState({isRecommending: true});
     }
   },
 
@@ -98,14 +102,15 @@ const MovieRecommender = React.createClass({
   },
 
   render() {
-    let movieToolTip = <Tooltip id="tooltip">Movie posters provided by TMDb</Tooltip>
+    let movieToolTip = <Tooltip id="tooltip">Movie posters provided by TMDb</Tooltip>;
     return (
       <div style={{width: '100%'}}>
         {this.renderIndexes()}
         <OverlayTrigger placement="top" overlay={movieToolTip}>
           <div className="logo-bar">
             <img
-              style={{marginRight: "5px", height:"50", marginTop: "5px", marginBottom: "5px"}}
+              id="tmdb-logo"
+              style={{marginRight: "5px", height:"0"}}
               src={tmdbLogo}>
             </img>
           </div>

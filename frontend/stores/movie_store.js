@@ -30,6 +30,9 @@ MovieStore.__onDispatch = payload => {
     MovieStore.setRecommendedMovies(payload.movies);
     MovieStore.__emitChange();
     break;
+    case MovieConstants.RECOMMENDATIONS_DELETED:
+    MovieStore.clearRecommendedMovies();
+    MovieStore.__emitChange();
     case MovieConstants.SKIP_MOVIE:
     MovieStore.setSkippedMovie(payload.movieId);
     MovieStore.__emitChange();
@@ -39,6 +42,12 @@ MovieStore.__onDispatch = payload => {
     MovieStore.__emitChange();
     break;
   }
+};
+
+MovieStore.clearRecommendedMovies = function() {
+  _recommendedMovies = {};
+  _notInterestedMovies = {};
+  _skippedMovies = {};
 };
 
 MovieStore.setNotInterestedMovie = function(movieId) {
