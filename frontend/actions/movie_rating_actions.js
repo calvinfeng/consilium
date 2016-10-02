@@ -17,7 +17,17 @@ const MovieRatingActions = {
       actionType: MovieConstants.MOVIE_RATINGS_RECEIVED,
       ratings: ratings
     });
+  },
+
+  clearRatingHistoryFromStore(ratings) {
+    Dispatcher.dispatch({
+      actionType: MovieConstants.MOVIE_RATINGS_DELETED,
+      ratings: ratings
+    });
   }
+
 };
+
+
 
 module.exports = MovieRatingActions;

@@ -25,13 +25,6 @@ const NavigationBar = React.createClass({
   menuClickHandle: function(selectedKey) {
   },
 
-  deleteCookies: function() {
-    Cookies.set("consilium, {}");
-    // set cookies to empty first in case the user never rated any movies
-    // but decide to clear their cookies anyway.
-    Cookies.remove("consilium");
-  },
-
   render: function() {
     return (
       <div>

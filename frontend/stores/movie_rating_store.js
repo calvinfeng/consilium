@@ -18,6 +18,10 @@ MovieRatingStore.__onDispatch = payload => {
     MovieRatingStore.setRatings(payload.ratings);
     MovieRatingStore.__emitChange();
     break;
+    case MovieConstants.MOVIE_RATINGS_DELETED:
+    MovieRatingStore.removeRatingHistory(payload.ratings);
+    MovieRatingStore.__emitChange();
+    break;
   }
 };
 
@@ -45,6 +49,10 @@ MovieRatingStore.hasRated = function(movieId) {
   } else {
     return false;
   }
+};
+
+MovieRatingStore.removeRatingHistory = function() {
+  _ratings = {};
 };
 
 module.exports = MovieRatingStore;
