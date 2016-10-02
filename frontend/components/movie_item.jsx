@@ -5,9 +5,6 @@ const MovieInfoStore = require('../stores/movie_info_store');
 const MovieInfoActions = require('../actions/movie_info_actions');
 const MovieRatingActions = require('../actions/movie_rating_actions');
 const Button = require('react-bootstrap').Button;
-const Tooltip = require('react-bootstrap').Tooltip;
-const OverlayTrigger = require('react-bootstrap').OverlayTrigger;
-// import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 const ratingStyle = {
   color: "yellow",
@@ -137,20 +134,15 @@ const MovieItem = React.createClass({
     },
 
     render() {
-      let movieToolTip = <Tooltip id="tooltip">Movie information is provided by TMDb</Tooltip>
-
       return (
         <div className="movie-item">
-
           <h3 className="movie-title">
             <strong>{this.state.info.Title}</strong>
             ({this.state.info.Year})
           </h3>
-          <OverlayTrigger placement="top" overlay={movieToolTip}>
           <div className="movie-poster">
             <img src={this.state.info.Poster}/>
           </div>
-          </OverlayTrigger>
           {this.renderInterface()}
         </div>
       );
