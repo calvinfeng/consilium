@@ -40,6 +40,8 @@ which means less features. In fact, this is the fundamental idea of principal co
 analysis (PCA.) Standard SVD does not work on a sparse matrix so we need function
 optimization technique to come to rescue.`;
 
+const groupLensLogo = `https://grouplens.org/assets/img/logo-161.png`;
+
 /* global katex */
 const About = React.createClass({
 
@@ -50,8 +52,8 @@ const About = React.createClass({
     let kFactor = "k = (\\sum_{u' \\in N} \\left | sim(u, u') \\right |)^{-1}";
     this.renderKatex("normalization", kFactor);
 
-    let simCoeff = "sim(u, v) = C^{-1}\\sum_{i\\in I_{u} \\cap I_{v}}(r_{u, i} - \\bar{r}_u)";
-    simCoeff += "\\sum_{i\\in I_{u}\\cap I_{v}}(r_{v,i} - \\bar{r}_v)";
+    let simCoeff = `sim(u, v) = C^{-1}\\sum_{i\\in I_{u} \\cap I_{v}}(r_{u, i} - \\bar{r}_u)
+    (r_{v,i} - \\bar{r}_v)`;
     this.renderKatex("user-sim", simCoeff);
 
     let simNorm = "C = \\sqrt{\\sum_{i\\in I_{u}\\cap I_{v}}(r_{u,i} - \\bar{r}_u)^{2}";
@@ -141,6 +143,34 @@ const About = React.createClass({
     let djDtheta = `\\theta_{k}^{(i)} := \\theta_{k}^{(i)} -
     \\alpha \\frac{\\partial J}{\\partial \\theta_{k}^{(i)}}`;
     this.renderKatex("dj-dtheta", djDtheta);
+
+    let prediction = `R_{prediction} = \\Theta\\Lambda F^{T} =
+    \\begin{bmatrix}
+    \\lambda_{1}\\theta_{user_{1},1} & \\lambda_{2}\\theta_{user_{1},2} &
+    \\lambda_{3}\\theta_{user_{1},3} & \\lambda_{4}\\theta_{user_{1},4} &
+    \\lambda_{5}\\theta_{user_{1},5}\\\\
+    \\lambda_{1}\\theta_{user_{2},1} & \\lambda_{2}\\theta_{user_{2},2} &
+    \\lambda_{3}\\theta_{user_{2},3} & \\lambda_{4}\\theta_{user_{2},4} &
+    \\lambda_{5}\\theta_{user_{2},5}\\\\
+    \\lambda_{1}\\theta_{user_{3},1} & \\lambda_{2}\\theta_{user_{3},2} &
+    \\lambda_{3}\\theta_{user_{3},3} & \\lambda_{3}\\theta_{user_{3},4} &
+    \\lambda_{5}\\theta_{user_{3},5}\\\\
+    \\lambda_{1}\\theta_{user_{4},1} & \\lambda_{2}\\theta_{user_{4},2} &
+    \\lambda_{3}\\theta_{user_{4},3} & \\lambda_{4}\\theta_{user_{4},4} &
+    \\lambda_{5}\\theta_{user_{4},5}\\\\
+    \\lambda_{1}\\theta_{user_{5},1} & \\lambda_{2}\\theta_{user_{5},2} &
+    \\lambda_{3}\\theta_{user_{5},3} & \\lambda_{4}\\theta_{user_{5},4} &
+    \\lambda_{5}\\theta_{user_{5},5}
+    \\end{bmatrix}
+    \\times
+    \\begin{bmatrix}
+    f_{1, movie_{1}} & f_{1, movie_{2}} & f_{1, movie_{3}} & f_{1, movie_{4}} & f_{1, movie_{5}}\\\\
+    f_{2, movie_{1}} & f_{2, movie_{2}} & f_{2, movie_{3}} & f_{2, movie_{4}} & f_{2, movie_{5}}\\\\
+    f_{3, movie_{1}} & f_{3, movie_{2}} & f_{3, movie_{3}} & f_{3, movie_{4}} & f_{3, movie_{5}}\\\\
+    f_{4, movie_{1}} & f_{4, movie_{2}} & f_{4, movie_{3}} & f_{4, movie_{4}} & f_{4, movie_{5}}\\\\
+    f_{5, movie_{1}} & f_{5, movie_{2}} & f_{5, movie_{3}} & f_{5, movie_{4}} & f_{5, movie_{5}}
+    \\end{bmatrix}`;
+    this.renderKatex("prediction", prediction);
   },
 
   renderKatex(elementId, mathExpression) {
@@ -150,124 +180,140 @@ const About = React.createClass({
 
   render: function() {
     return (
-      <article className="page-container">
-        <h1 id="about-page-title">About Consilium</h1>
+      <div style={{width: "100%"}}>
+        <article className="page-container">
+          <h1 id="about-page-title">About Consilium</h1>
 
-        <section>
-          <h4>Brief Introduction</h4>
-          <p>{introduction}</p>
-          <h4>Tech Stack</h4>
-          <p>{techStack}</p>
-        </section>
+          <section>
+            <h4>Brief Introduction</h4>
+            <p>{introduction}</p>
+            <h4>Tech Stack</h4>
+            <p>{techStack}</p>
+          </section>
 
-        <section>
-          <h3>k-Nearest-Neighbor</h3>
-          <p>{knnIntro}</p>
-          <blockquote>{knnIdea}</blockquote>
-          <h4>Mathematical Formulation</h4>
+          <section>
+            <h3>k-Nearest-Neighbor</h3>
+            <p>{knnIntro}</p>
+            <blockquote>{knnIdea}</blockquote>
+            <h4>Mathematical Formulation</h4>
+            <p>
+              First of all, we need to quantify how similar are the preferences
+              of two users. The metric we are using is Pearson coefficient. It gives
+              a value from -1 to 1, with 1 means two users are strongly positively
+              correlated while -1 means two users are strongly negatively correlated.
+            </p>
+            <blockquote>
+              <p>
+                I<sub>u</sub> is the set of movies that user <strong>u</strong> has seen and
+                I<sub>v</sub> is the set of movies that user <strong>v</strong> has seen.
+                The notation is saying that iterate through the set of movies that
+                both users have seen.
+              </p>
+              <div id="user-sim"></div>
+              <p><strong>C</strong> is the correlation normalization constant</p>
+              <div id="sim-norm"></div>
+            </blockquote>
+            <Gist id="e537728e8f09973e531266aead0960f3"/>
+            <p>
+              Once we know how similar two users are, we then can select the most similar
+              users and use them as a reference for opinions. Similarity is serving
+              as a statistical weight. It allows us to compute the collaborative opinions
+              of users.
+            </p>
+            <blockquote>
+              <p>Rating Prediction for User u on Item i</p>
+              <div id="rating-prediction"></div>
+              <p><strong>k</strong> is a normalization constant</p>
+              <div id="normalization"></div>
+            </blockquote>
+            <Gist id="b6582806f01d6ec51d72b9d5408c214a"/>
+            <p>
+              This implementation does not take in a constant k number of neighbors.
+              It fluctuates depending on movie viewers size. We had trouble fitting
+              the whole data set in memory so this approach was to sacrifice accuracy
+              for speed.
+            </p>
+          </section>
+
+          <section>
+            <h3>Sparse Matrix SVD</h3>
+            <p>{svdIntro}</p>
+            <blockquote>
+              <p id="rating-matrix"></p>
+            </blockquote>
+            <p>
+              However, the matrix is sparse, that is, many elements are missing. Not everyone
+              has seen every movie humankind has produced. It is the job of a recommender
+              system to fill in the missing values. Those missing values are in fact the predictions
+              of a machine learning model. If the prediction gives a high star rating to
+              R<sub>i,j</sub> then we recommend movie<sub>j</sub> to user<sub>i</sub>
+          </p>
+          <blockquote>
+            <p id="sparse-matrix"></p>
+          </blockquote>
+          <h4>Singular Value Decomposition</h4>
           <p>
-            First of all, we need to quantify how similar are the preferences
-            of two users. The metric we are using is Pearson coefficient. It gives
-            a value from -1 to 1, with 1 means two users are strongly positively
-            correlated while -1 means two users are strongly negatively correlated.
+            SVD is a very powerful dimensionality reduction technique in linear algebra.
+            The common use of SVD is to perform principal component analysis.
+            It dissects a matrix into sub-components and figures out which component
+            conveys the most information about the matrix and then drop all the unnecessary
+            information. Imagine we have 5 users and 5 movies, this is what a SVD
+            would look like:
+          </p>
+          <blockquote>
+            <p id="decompose-matrix"></p>
+            <p id="dimension"></p>
+            <p>
+              N is the number of users, p is the dimension of user preference, f is the dimension
+              of movie feature, and m is the number of movies
+            </p>
+          </blockquote>
+          <p>
+            What we have done here is factorized a matrix into subcomponents. Perhaps the more
+            intuitive way to see it is that we have factorized movie rating into a dot product
+            of user preference vector and movie feature vector.
           </p>
           <blockquote>
             <p>
-              I<sub>u</sub> is the set of movies that user <strong>u</strong> has seen and
-              I<sub>v</sub> is the set of movies that user <strong>v</strong> has seen. The notation
-              is saying that iterate through the set of movies that both users have seen.
+              Essentially every movie rating is a linear combination of preference, feature,
+              and weights. (n: number of features)
             </p>
-            <div id="user-sim"></div>
-            <p><strong>C</strong> is the correlation normalization constant</p>
-            <div id="sim-norm"></div>
+            <p id="linear-combo"></p>
           </blockquote>
-          <Gist id="e537728e8f09973e531266aead0960f3"/>
           <p>
-            Once we know how similar two users are, we then can select the most similar
-            users and use them as a reference for opinions. Similarity is serving
-            as a statistical weight. It allows us to compute the collaborative opinions
-            of users.
+            {principalComponents}
           </p>
           <blockquote>
-            <p>Rating Prediction for User u on Item i</p>
-            <div id="rating-prediction"></div>
-            <p><strong>k</strong> is a normalization constant</p>
-            <div id="normalization"></div>
-          </blockquote>
-          <Gist id="b6582806f01d6ec51d72b9d5408c214a"/>
-          <p>
-            This implementation does not take in a constant k number of neighbors.
-            It fluctuates depending on movie viewers size. We had trouble fitting
-            the whole data set in memory so this approach was to sacrifice accuracy
-            for speed.
-          </p>
-        </section>
-
-        <section>
-          <h3>Sparse Matrix SVD</h3>
-          <p>{svdIntro}</p>
-          <blockquote>
-            <p id="rating-matrix"></p>
+            <p id="cost-function"></p>
+            <p id="objective"></p>
+            <p id="big-theta"></p>
           </blockquote>
           <p>
-            However, the matrix is sparse, that is, many elements are missing. Not everyone
-            has seen every movie humankind has produced. It is the job of a recommender
-            system to fill in the missing values. Those missing values are in fact the predictions
-            of a machine learning model. If the prediction gives a high star rating to
-            R<sub>i,j</sub> then we recommend movie<sub>j</sub> to user<sub>i</sub>
-        </p>
-        <blockquote>
-          <p id="sparse-matrix"></p>
-        </blockquote>
-        <h4>Singular Value Decomposition</h4>
-        <p>
-          SVD is a very powerful dimensionality reduction technique in linear algebra.
-          The common use of SVD is to perform principal component analysis.
-          It dissects a matrix into sub-components and figures out which component
-          conveys the most information about the matrix and then drop all the unnecessary
-          information. Imagine we have 5 users and 5 movies, this is what a SVD
-          would look like:
-        </p>
-        <blockquote>
-          <p id="decompose-matrix"></p>
-          <p id="dimension"></p>
-          <p>
-            N is the number of users, p is the dimension of user preference, f is the dimension
-            of movie feature, and m is the number of movies
-          </p>
-        </blockquote>
-        <p>
-          What we have done here is factorized a matrix into subcomponents. Perhaps the more
-          intuitive way to see it is that we have factorized movie rating into a dot product
-          of user preference vector and movie feature vector.
-        </p>
-        <blockquote>
-          <p>
-            Essentially every movie rating is a linear combination of preference, feature,
-            and weights. (n: number of features)
-          </p>
-          <p id="linear-combo"></p>
-        </blockquote>
-        <p>
-          {principalComponents}
-        </p>
-        <blockquote>
-          <p id="cost-function"></p>
-          <p id="objective"></p>
-          <p id="big-theta"></p>
-        </blockquote>
-        <p>
-          {`We perform gradient descent on cost function and effectively learning preference
-          and feature vectors for every user and movie in our database.`}
-        </p>
-        <blockquote>
-          <p id="dj-df"></p>
-          <p id="dj-dtheta"></p>
-        </blockquote>
-      </section>
-    </article>
-  );
-}
+            {`We perform gradient descent on cost function, effectively learning preference
+              and feature vectors simultaneously for every user and movie in our database.`}
+            </p>
+            <blockquote>
+              <p id="dj-df"></p>
+              <p id="dj-dtheta"></p>
+            </blockquote>
+            <p>
+              As we perform gradient descent, eigenvalues or characteristic values of the
+              preference and feature matrix will be absorbed by the two matrices. Using
+              5 people 5 movies example above, we should expect a prediction matrix like this:
+            </p>
+            <p id="prediction"></p>
+          </section>
+        </article>
+        <div className="logo-bar">
+          <img
+            style={{cursor: "pointer", marginRight: "2em", height:"25",
+              marginTop: "1em", marginBottom: "1em"}}
+            src={groupLensLogo}>
+          </img>
+        </div>
+      </div>
+    );
+  }
 });
 
 module.exports = About;
