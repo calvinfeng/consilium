@@ -98,7 +98,7 @@ const MovieRecommender = React.createClass({
   },
 
   render() {
-    let movieToolTip = <Tooltip id="tooltip">Movie information is provided by TMDb</Tooltip>
+    let movieToolTip = <Tooltip id="tooltip">Movie posters provided by TMDb</Tooltip>
     return (
       <div style={{width: '100%'}}>
         {this.renderIndexes()}
