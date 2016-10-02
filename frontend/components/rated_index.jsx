@@ -1,9 +1,11 @@
 const React = require('react');
 const MovieRatingStore = require('../stores/movie_rating_store');
+const MovieRatingActions = require('../actions/movie_rating_actions');
 const MovieStore = require('../stores/movie_store');
 const MovieActions = require('../actions/movie_actions');
 const MovieItem = require('./movie_item');
-import * as Cookies from "js-cookie";
+const Cookies = require('js-cookie');
+const Button = require('react-bootstrap').Button;
 
 const RatedIndex = React.createClass({
   getInitialState() {
@@ -48,10 +50,27 @@ const RatedIndex = React.createClass({
     });
   },
 
+  deleteCookies() {
+    MovieRatingActions.clearRatingHistoryFromStore({});
+    this.setState({ ratedMovies: {} });
+    Cookies.set("consilium, {}");
+    // set cookies to empty first in case the user never rated any movies but decide to clear their cookies anyway.
+    Cookies.remove("consilium");
+  },
+
   render() {
     return (
       <div>
-        <h1>Rated Movies</h1>
+        <div className="rated-header"><h1>Rated Movies</h1>
+        <Button
+          bsSize="xsmall"
+          id="rated-header-button"
+          className="react-buttons"
+          onClick={this.deleteCookies}
+          bsStyle="primary">
+          Delete My History
+        </Button>
+        </div>
         <div className="movie-index">
           {this.renderRatedMovies()}
         </div>

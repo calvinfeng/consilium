@@ -25,25 +25,11 @@ const NavigationBar = React.createClass({
   menuClickHandle: function(selectedKey) {
   },
 
-  deleteCookies: function() {
-    Cookies.set("consilium, {}");
-    // set cookies to empty first in case the user never rated any movies but decide to clear their cookies anyway.
-    Cookies.remove("consilium");
-  },
-
   render: function() {
     return (
       <div>
         <Nav bsStyle="tabs" activeKey={this.state.activeKey} onSelect={this.tabSelect}>
-          <NavItem eventKey={1}>Movie Recommender
-          <Button
-            bsSize="small"
-            className="react-buttons"
-            onClick={this.deleteCookies}
-            bsStyle="danger">
-            Delete Cookies
-          </Button>
-          </NavItem>
+          <NavItem eventKey={1}>Movie Recommender</NavItem>
           <NavItem eventKey={2}>About</NavItem>
           <NavDropdown eventKey={3} id="nav-dropdown" title="Our Team">
             <MenuItem href="https://www.linkedin.com/in/calvin-feng">
