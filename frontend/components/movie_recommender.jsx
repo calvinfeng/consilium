@@ -9,6 +9,9 @@ const MovieActions = require('../actions/movie_actions');
 const MovieRatingStore = require('../stores/movie_rating_store');
 const MovieRatingActions = require('../actions/movie_rating_actions');
 
+const Tooltip = require('react-bootstrap').Tooltip;
+const OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+
 const tmdbLogo = `https://www.themoviedb.org/assets/9b3f9c24d9fd5f297ae433eb33d93514
 /images/v4/logos/408x161-powered-by-rectangle-green.png`;
 
@@ -95,15 +98,18 @@ const MovieRecommender = React.createClass({
   },
 
   render() {
+    let movieToolTip = <Tooltip id="tooltip">Movie posters provided by TMDb</Tooltip>
     return (
       <div style={{width: '100%'}}>
         {this.renderIndexes()}
-        <div className="logo-bar">
-          <img
-            style={{marginRight: "5px", height:"50", marginTop: "5px", marginBottom: "5px"}}
-            src={tmdbLogo}>
-          </img>
-        </div>
+        <OverlayTrigger placement="top" overlay={movieToolTip}>
+          <div className="logo-bar">
+            <img
+              style={{marginRight: "5px", height:"50", marginTop: "5px", marginBottom: "5px"}}
+              src={tmdbLogo}>
+            </img>
+          </div>
+        </OverlayTrigger>
       </div>
     );
   }
