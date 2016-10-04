@@ -14,31 +14,26 @@ class Api::RecommendersController < ApplicationController
     movie_ids.each do |movie_id|
       id = movie_id.to_i
       @movies << Movie.new(id,
-        movie_attr[id][:title],
-        movie_attr[id][:year],
-        movie_attr[id][:viewers],
-        movie_attr[id][:avg_rating],
-        movie_attr[id][:imdb_id],
-        nil)
+      movie_attr[id][:title],
+      movie_attr[id][:year],
+      movie_attr[id][:viewers],
+      movie_attr[id][:avg_rating],
+      movie_attr[id][:imdb_id],
+      nil)
     end
     render "api/recommender/movies.json.jbuilder"
   end
 
   def recommendations
     @movies = []
-    scores = Set.new
     rated = Hash.new
     recommender_params[:rated].each do |key, val|
       rating = val.to_f
-      scores.add(rating)
       rated[key.to_i] = rating
     end
     messages = []
-    if rated.size < 6
-      messages << "Need at least 6 ratings to calculate"
-      render :json => { :errors => messages }, :status => 422
-    elsif scores.size == 1
-      messages << "Please don't give same exact rating to all movies"
+    if rated.size < 5
+      messages << "Need at least 5 ratings to calculate"
       render :json => { :errors => messages }, :status => 422
     else
       queue = Hash.new
@@ -69,15 +64,13 @@ class Api::RecommendersController < ApplicationController
         movie_attr[id][:avg_rating],
         movie_attr[id][:imdb_id],
         features[id])
+        # Using k-Nearest Neighbor and SVD to generate predictions
         svd_prediction = movie.svd_prediction_for(user)
         knn_prediction = movie.knn_prediction_for(user)
         calculated[id] = true
-
         puts "#{movie.title} => knn: #{knn_prediction}, svd: #{svd_prediction}, user_avg: #{user.avg_rating}"
         if knn_prediction.nil?
-          if svd_prediction > user.avg_rating
-            @movies << movie
-          end
+          @movies << movie if svd_prediction > user.avg_rating
         else
           if svd_prediction > user.avg_rating && knn_prediction > user.avg_rating
             @movies << movie

@@ -21,7 +21,7 @@ const MovieItem = React.createClass({
         Title: "Loading...",
         Year: "....",
         Plot: "Loading...",
-        Poster: "http://cdn.mirs.com/images/tranzit/loading.gif"
+        Poster: "https://cdn.mirs.com/images/tranzit/loading.gif"
       }
     };
   },
