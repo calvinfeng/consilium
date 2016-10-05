@@ -21,7 +21,7 @@ const MovieItem = React.createClass({
         Title: "Loading...",
         Year: "....",
         Plot: "Loading...",
-        Poster: "http://cdn.mirs.com/images/tranzit/loading.gif"
+        Poster: "https://cdn.mirs.com/images/tranzit/loading.gif"
       }
     };
   },
@@ -79,7 +79,7 @@ const MovieItem = React.createClass({
     if (this.props.rated) {
       return (
         <div className="user-rating">
-          <div>Your Rating: {this.props.rating}</div>
+          <div>Your Rating: <strong>{this.props.rating}</strong></div>
         </div>
       );
     } else if (this.props.recommended) {

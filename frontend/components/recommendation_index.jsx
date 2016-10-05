@@ -69,7 +69,7 @@ const RecommendationIndex = React.createClass({
       <div>
         <h1>Recommendations</h1>
         <Loader loaded={this.state.loaded}>
-          <div className="movie-index">
+          <div className="recommendation-index">
             {this.renderRecommendations()}
           </div>
         </Loader>

@@ -6,6 +6,7 @@ const Store = require('flux/utils').Store;
 const MovieInfoStore = new Store(Dispatcher);
 
 let _movieInfo = {};
+let _poster = {};
 
 MovieInfoStore.__onDispatch = payload => {
   switch (payload.actionType) {
@@ -18,11 +19,17 @@ MovieInfoStore.__onDispatch = payload => {
 
 MovieInfoStore.setMovieInfo = function(movie) {
   _movieInfo[movie.imdb_id] = movie;
+  _poster[movie.imdb_id] = "https://image.tmdb.org/t/p/w300" + movie.poster_path;
 };
 
 MovieInfoStore.getMovieInfo = function(imdbId){
   return _movieInfo[imdbId];
 };
+
+MovieInfoStore.getPoster = function(imdbId) {
+  return _poster[imdbId];
+};
+
 
 
 module.exports = MovieInfoStore;
