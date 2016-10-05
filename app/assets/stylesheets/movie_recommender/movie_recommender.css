@@ -16,13 +16,18 @@
   padding: 1em 1em 1em 1em;
 }
 
-.movie-index {
+.gauge-index {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.rated-index {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;;
-  padding-left: 30px;
-  padding-right: 30px;
 }
 
 .recommendation-index {
@@ -30,15 +35,13 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  padding-left: 30px;
-  padding-right: 30px;
 }
 
 .movie-item {
   /*display: inline-block;*/
   display: flex;
   flex-direction: column;
-  margin: 1em 1em 1em 1em;
+  margin: 5px 5px 5px 5px;
   width: 302px;
   border: 1px solid black;
   border-radius: 8px;
@@ -108,6 +111,11 @@
   margin: 0;
   /*margin-left: 5px;
   margin-right: 5px;*/
+}
+
+.rated-header {
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .top-bar {

@@ -77,7 +77,7 @@ const RatedIndex = React.createClass({
           Delete My History
         </Button>
         </div>
-        <div className="movie-index">
+        <div className="rated-index">
           {this.renderRatedMovies()}
         </div>
       </div>

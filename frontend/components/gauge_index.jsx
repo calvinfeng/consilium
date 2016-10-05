@@ -109,7 +109,7 @@ const GaugeIndex = React.createClass({
         <PosterSlider movies={this.state.gaugeMovies}/>
         <h1>Popular Movies</h1>
         {this.renderDescription()}
-        <div className="movie-index">{this.renderGaugeSet()}</div>
+        <div className="gauge-index">{this.renderGaugeSet()}</div>
       </div>
     );
   }

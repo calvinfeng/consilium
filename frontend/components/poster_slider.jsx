@@ -43,11 +43,12 @@ const PosterSlider = React.createClass({
   renderItems() {
     let ids = Object.keys(this.props.movies);
     let carouselItems = [];
+    let numberPerRow = 4;
     for (let i = 0; i < ids.length; i++) {
-      if (i%5 === 0) {
+      if (i%numberPerRow === 0) {
         let j = i;
         let imgs = [];
-        while (j < i + 5 && j < ids.length) {
+        while (j < i + numberPerRow && j < ids.length) {
           imgs.push(<img src={this.state.moviePosters[ids[j]]} key={ids[j]}></img>);
           j += 1;
         }

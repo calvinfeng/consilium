@@ -26,7 +26,7 @@ const RecommendationIndex = React.createClass({
   // onChange handles when ratings are submitted, or when user indicates he/she isn't interested
   // in a particular movie
   __onChange() {
-    let displayItems = this.generateDisplayItems(5);
+    let displayItems = this.generateDisplayItems(4);
     let loadStatus = false;
     if (Object.keys(displayItems).length !== 0) {
       loadStatus = true;
@@ -36,11 +36,11 @@ const RecommendationIndex = React.createClass({
 
   generateDisplayItems(itemCount) {
     let items = {};
-    if (MovieStore.remainingRecommendationCount() >= 5) {
+    if (MovieStore.remainingRecommendationCount() >= itemCount) {
       let recommendedMovies = MovieStore.getRecommendedMovies();
       let ids = Object.keys(recommendedMovies).sort();
       let i = 0;
-      while (Object.keys(items).length < 5) {
+      while (Object.keys(items).length < itemCount) {
         if (!MovieStore.notInterested(ids[i]) && !MovieRatingStore.hasRated(ids[i])) {
           items[ids[i]] = recommendedMovies[ids[i]];
         }
