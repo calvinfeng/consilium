@@ -1,3 +1,9 @@
+.item-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .loader {
   left: 50%;
   top: 30%;
@@ -15,6 +21,15 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.recommendation-index {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   padding-left: 30px;
   padding-right: 30px;
 }
