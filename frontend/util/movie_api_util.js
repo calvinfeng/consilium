@@ -56,6 +56,23 @@ const MovieApiUtil = {
   getMovieInfo(imdbId, success) {
     $.ajax({
       url: tmdbUrl + imdbId,
+      dataType: "JSON",
+      method: "GET",
+      data: {
+        api_key: apiKey
+      },
+      success,
+      fail(xhr) {
+        console.log(xhr);
+      }
+    });
+  },
+
+  fetchMovieTrailer(imdbId, success) {
+    $.ajax({
+      url: `https://api.themoviedb.org/3/movie/${imdbId}/videos`,
+      dataType: "JSON",
+      method: "GET",
       data: {
         api_key: apiKey
       },
@@ -65,22 +82,6 @@ const MovieApiUtil = {
       }
     });
   }
-
-
-  // getMovieInfo(imdbId, success) {
-  //   $.ajax({
-  //     url: "https://www.omdbapi.com/",
-  //     dataType: "JSON",
-  //     method: "GET",
-  //     data: {
-  //       i: imdbId, plot: 'short'
-  //     },
-  //     success,
-  //     fail(xhr) {
-  //       console.log(xhr);
-  //     }
-  //   });
-  // }
 };
 
 module.exports = MovieApiUtil;

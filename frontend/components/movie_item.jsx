@@ -4,6 +4,8 @@ const Rating = require('react-rating');
 const MovieInfoStore = require('../stores/movie_info_store');
 const MovieInfoActions = require('../actions/movie_info_actions');
 const MovieRatingActions = require('../actions/movie_rating_actions');
+const TrailerActions = require('../actions/trailer_actions');
+const MovieActions = require('../actions/movie_actions');
 const Button = require('react-bootstrap').Button;
 
 const ratingStyle = {
@@ -22,7 +24,8 @@ const MovieItem = React.createClass({
         Year: "....",
         Plot: "Loading...",
         Poster: "https://cdn.mirs.com/images/tranzit/loading.gif"
-      }
+      },
+      infoReceived: false
     };
   },
 
@@ -57,7 +60,11 @@ const MovieItem = React.createClass({
     movieInfo.Year = tmdbInfo.release_date.slice(0, 4);
     movieInfo.Poster = "https://image.tmdb.org/t/p/w300" + tmdbInfo.poster_path;
     movieInfo.Plot = tmdbInfo.overview;
-    this.setState({info: movieInfo});
+    if (this.props.recommended && !this.state.infoReceived) {
+      //Only fetch when info is first time received
+      TrailerActions.fetchMovieTrailer(this.props.imdbId);
+    }
+    this.setState({info: movieInfo, infoReceived: true});
   },
 
   rateClickHandler(rating) {
@@ -78,13 +85,21 @@ const MovieItem = React.createClass({
   renderInterface() {
     if (this.props.rated) {
       return (
-        <div className="user-rating">
-          <div>Your Rating: <strong>{this.props.rating}</strong></div>
+        <div>
+          <div className="movie-poster">
+            <img src={this.state.info.Poster}/>
+          </div>
+          <div className="user-rating">
+            <div>Your Rating: <strong>{this.props.rating}</strong></div>
+          </div>
         </div>
       );
     } else if (this.props.recommended) {
       return (
         <div>
+          <div className="movie-poster">
+            <img src={this.state.info.Poster}/>
+          </div>
           <div className="movie-plot">{this.state.info.Plot}</div>
           <div className="movie-rating">
             <div style={{width: "100%"}}>
@@ -113,6 +128,9 @@ const MovieItem = React.createClass({
     } else {
       return (
         <div>
+          <div className="movie-poster">
+            <img src={this.state.info.Poster}/>
+          </div>
           <div className="movie-plot">{this.state.info.Plot}</div>
           <div className="rating-toolbar">
             <Rating
@@ -140,9 +158,6 @@ const MovieItem = React.createClass({
             <strong>{this.state.info.Title}</strong>
             ({this.state.info.Year})
           </h3>
-          <div className="movie-poster">
-            <img src={this.state.info.Poster}/>
-          </div>
           {this.renderInterface()}
         </div>
       );

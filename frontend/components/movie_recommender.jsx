@@ -45,7 +45,7 @@ const MovieRecommender = React.createClass({
       height: "50px",
       marginTop: "5px",
       marginBottom: "5px"
-    }, 1000);
+    }, 500);
   },
 
   componentWillUnmount(){
@@ -107,7 +107,7 @@ const MovieRecommender = React.createClass({
   },
 
   render() {
-    let movieToolTip = <Tooltip id="tooltip">Movie posters provided by TMDb</Tooltip>;
+    let movieToolTip = <Tooltip id="tooltip">Movie posters and trailers provided by TMDb</Tooltip>;
     return (
       <div style={{width: '100%'}}>
         {this.renderIndexes()}
