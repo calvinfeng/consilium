@@ -22,21 +22,32 @@ MovieStore.__onDispatch = payload => {
     MovieStore.setMovies(payload.movies);
     MovieStore.__emitChange();
     break;
+
     case MovieConstants.POPULAR_MOVIES_RECEIVED:
     MovieStore.setPopularMovies(payload.movies);
     MovieStore.__emitChange();
     break;
+
     case MovieConstants.RECOMMENDED_MOVIES_RECEIVED:
     MovieStore.setRecommendedMovies(payload.movies);
     MovieStore.__emitChange();
     break;
+
     case MovieConstants.RECOMMENDATIONS_DELETED:
     MovieStore.clearRecommendedMovies();
     MovieStore.__emitChange();
+    break;
+
     case MovieConstants.SKIP_MOVIE:
     MovieStore.setSkippedMovie(payload.movieId);
     MovieStore.__emitChange();
     break;
+
+    case MovieConstants.SKIP_BATCH_MOVIES:
+    MovieStore.setSkippedMovies(payload.movieIds);
+    MovieStore.__emitChange();
+    break;
+
     case MovieConstants.MARK_NOT_INTERESTED:
     MovieStore.setNotInterestedMovie(payload.movieId);
     MovieStore.__emitChange();
@@ -56,6 +67,12 @@ MovieStore.setNotInterestedMovie = function(movieId) {
 
 MovieStore.setSkippedMovie = function(movieId) {
   _skippedMovies[movieId] = true;
+};
+
+MovieStore.setSkippedMovies = function(movieIds) {
+  for (let i = 0; i < movieIds.length; i++) {
+    _skippedMovies[movieIds[i]] = true;
+  }
 };
 
 MovieStore.setMovies = function(movies) {

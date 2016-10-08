@@ -43,10 +43,6 @@ const MovieItem = React.createClass({
     this.movieInfoListener.remove();
   },
 
-  // let omdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
-  // if (omdbInfo.Poster === undefined || omdbInfo.Poster === "N/A") {
-  //   omdbInfo.Poster = "https://upload.wikimedia.org/wikipedia/en/d/dc/Academy_Award_trophy.jpg";
-  // }
   receiveMovieInfo() {
     if (MovieInfoStore.getMovieInfo(this.props.imdbId)) {
       let tmdbInfo = MovieInfoStore.getMovieInfo(this.props.imdbId);
@@ -72,10 +68,6 @@ const MovieItem = React.createClass({
       movieId: this.props.movieId,
       rating: rating
     });
-  },
-
-  skipClickHandler() {
-    MovieActions.skipMovie(this.props.movieId);
   },
 
   notInterestedHandler() {
@@ -140,12 +132,6 @@ const MovieItem = React.createClass({
               full={"fa fa-star fa-3x"}
               color={"yellow"}
               />
-            <Button
-              className="react-buttons"
-              onClick={this.skipClickHandler}
-              bsStyle="danger">
-              Skip
-            </Button>
           </div>
         </div>);
       }

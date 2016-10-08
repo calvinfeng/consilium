@@ -31,7 +31,11 @@ const RecommendationIndex = React.createClass({
     let loadStatus = false;
     if (Object.keys(displayItems).length !== 0) {
       loadStatus = true;
-      TrailerStore.clearTrailers();
+      $("#tmdb-logo").animate({
+        height: "50px",
+        marginTop: "5px",
+        marginBottom: "5px"
+      }, 500);
     }
     this.setState({recommendationOnDisplay: displayItems, loaded: loadStatus});
   },
@@ -67,9 +71,13 @@ const RecommendationIndex = React.createClass({
   },
 
   render() {
+    let displayItems = this.state.recommendationOnDisplay;
+    let imdbIds = Object.keys(displayItems).map((movieId) => {
+      return displayItems[movieId].imdbId;
+    });
     return (
       <div>
-        <Trailer/>
+        <Trailer imdbIds={imdbIds}/>
         <h1>Recommendations</h1>
         <Loader loaded={this.state.loaded}>
           <div className="recommendation-index">

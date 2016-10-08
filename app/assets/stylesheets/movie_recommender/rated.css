@@ -1,9 +1,18 @@
 .rated-header {
   display: flex;
   align-items: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .rated-header > h1 {
   margin: 0;
   margin-right: 10px;
+}
+
+.rated-index {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;;
 }

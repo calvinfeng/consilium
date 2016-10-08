@@ -4,6 +4,7 @@ const PosterSlider = require('./poster_slider');
 const MovieStore = require('../stores/movie_store');
 const MovieRatingStore = require('../stores/movie_rating_store');
 const MovieActions = require('../actions/movie_actions');
+const Button = require('react-bootstrap').Button;
 
 Array.prototype.shuffle = function() {
   let i = this.length, j, temp;
@@ -11,10 +12,10 @@ Array.prototype.shuffle = function() {
     return this;
   }
   while ( --i ) {
-     j = Math.floor( Math.random() * ( i + 1 ) );
-     temp = this[i];
-     this[i] = this[j];
-     this[j] = temp;
+    j = Math.floor( Math.random() * ( i + 1 ) );
+    temp = this[i];
+    this[i] = this[j];
+    this[j] = temp;
   }
   return this;
 };
@@ -26,8 +27,8 @@ const GaugeIndex = React.createClass({
   },
 
   componentDidMount(){
-    this.movieStoreListener = MovieStore.addListener(this.gaugeOnChange);
-    this.movieRatingStoreListener = MovieRatingStore.addListener(this.updateGaugeSet);
+    this.movieStoreListener = MovieStore.addListener(this.resetGauge);
+    this.movieRatingStoreListener = MovieRatingStore.addListener(this.updateGauge);
     MovieActions.fetchPopularMovies();
   },
 
@@ -36,29 +37,38 @@ const GaugeIndex = React.createClass({
     this.movieRatingStoreListener.remove();
   },
 
-  gaugeOnChange(){
+  skipAll() {
+    MovieActions.skipMovies(Object.keys(this.state.gaugeMovies));
+  },
+
+  resetGauge(){
     let gaugeMovies = this.state.gaugeMovies;
-    Object.keys(gaugeMovies).forEach(function(movieId) {
-      if (MovieStore.isMovieSkipped(movieId) && gaugeMovies[movieId]) {
+    let keys = Object.keys(gaugeMovies);
+    for (let i = 0; i < keys.length; i++) {
+      let movieId = keys[i];
+      if (MovieStore.isMovieSkipped(movieId)) {
         delete gaugeMovies[movieId];
       }
-    });
-
+    }
     let popularMovies = MovieStore.getPopularMovies().shuffle();
     let i = 0;
-    //MovieRatingStore.getNumberOfRated()
     while (Object.keys(gaugeMovies).length < 20 ) {
       let movieId = popularMovies[i].id;
-      if (gaugeMovies[movieId] === undefined && !MovieStore.isMovieSkipped(movieId)
-        && popularMovies[i].year >= 1990 && !MovieRatingStore.hasRated(movieId)) {
+      if (!MovieStore.isMovieSkipped(movieId) && popularMovies[i].year >= 1990 &&
+        !MovieRatingStore.hasRated(movieId)) {
         gaugeMovies[movieId] = popularMovies[i];
       }
       i += 1;
     }
+    $("#tmdb-logo").animate({
+      height: "50px",
+      marginTop: "5px",
+      marginBottom: "5px"
+    }, 500);
     this.setState({gaugeMovies: gaugeMovies});
   },
 
-  updateGaugeSet() {
+  updateGauge() {
     let gaugeMovies = this.state.gaugeMovies;
     Object.keys(gaugeMovies).forEach((movieId) => {
       if (MovieRatingStore.hasRated(movieId)) {
@@ -83,9 +93,9 @@ const GaugeIndex = React.createClass({
 
   renderDescription() {
     let description = `These are some movies we think you have seen before.
-      If you have seen them, whether you like or dislike them, let us know and give
-      them ratings! If not, click the skip button and we will give you more choices.
-      It will help our backend machine learning algorithm to learn your taste and preference`;
+    If you have seen them, whether you like or dislike them, let us know and give
+    them ratings! If not, click the skip button and we will give you more choices.
+    It will help our backend machine learning algorithm to learn your taste and preference`;
     if (this.state.ratingCount === 0) {
       return (
         <div>
@@ -107,7 +117,16 @@ const GaugeIndex = React.createClass({
     return (
       <div>
         <PosterSlider movies={this.state.gaugeMovies}/>
-        <h1>Popular Movies</h1>
+        <div className="gauge-header">
+          <h1>Popular Movies</h1>
+          <Button
+            id="skip-button"
+            className="react-buttons"
+            onClick={this.skipAll}
+            bsStyle="danger">
+            More movies
+          </Button>
+        </div>
         {this.renderDescription()}
         <div className="gauge-index">{this.renderGaugeSet()}</div>
       </div>

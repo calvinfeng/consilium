@@ -67,21 +67,6 @@ const MovieApiUtil = {
       }
     });
   },
-
-  fetchMovieTrailer(imdbId, success) {
-    $.ajax({
-      url: `https://api.themoviedb.org/3/movie/${imdbId}/videos`,
-      dataType: "JSON",
-      method: "GET",
-      data: {
-        api_key: apiKey
-      },
-      success,
-      fail(xhr) {
-        console.log(xhr);
-      }
-    });
-  }
 };
 
 module.exports = MovieApiUtil;

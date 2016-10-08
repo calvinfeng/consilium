@@ -14,7 +14,7 @@ const Trailer = React.createClass({
   },
 
   __onChange() {
-    let src = TrailerStore.getTrailerByIncrement();
+    let src = TrailerStore.getRandomTrailer(this.props.imdbIds);
     if (src === undefined) {
       this.setState({trailerSrc: src, videoFound: false});
     } else {

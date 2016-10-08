@@ -19,6 +19,13 @@ const MovieActions = {
     });
   },
 
+  skipMovies(movieIds) {
+    Dispatcher.dispatch({
+      actionType: MovieConstants.SKIP_BATCH_MOVIES,
+      movieIds: movieIds
+    });
+  },
+
   markNotInterested(movieId) {
     Dispatcher.dispatch({
       actionType: MovieConstants.MARK_NOT_INTERESTED,

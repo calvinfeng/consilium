@@ -66,16 +66,17 @@ const RatedIndex = React.createClass({
   render() {
     return (
       <div>
-        <div className="rated-header"><h1>Rated Movies</h1>
-        <Button
-          disabled={this.state.buttonDisable}
-          bsSize="xsmall"
-          id="rated-header-button"
-          className="react-buttons"
-          onClick={this.deleteCookies}
-          bsStyle="primary">
-          Delete My History
-        </Button>
+        <div className="rated-header">
+          <h1>Rated Movies</h1>
+          <Button
+            disabled={this.state.buttonDisable}
+            bsSize="xsmall"
+            id="rated-header-button"
+            className="react-buttons"
+            onClick={this.deleteCookies}
+            bsStyle="primary">
+            Delete My History
+          </Button>
         </div>
         <div className="rated-index">
           {this.renderRatedMovies()}

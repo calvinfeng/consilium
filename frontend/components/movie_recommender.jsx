@@ -41,11 +41,6 @@ const MovieRecommender = React.createClass({
     } else if(Cookies.get('consilium')) {
       Cookies.remove('consilium');
     }
-    $("#tmdb-logo").animate({
-      height: "50px",
-      marginTop: "5px",
-      marginBottom: "5px"
-    }, 500);
   },
 
   componentWillUnmount(){
