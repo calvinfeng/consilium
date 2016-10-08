@@ -67,7 +67,7 @@ const PosterSlider = React.createClass({
   render() {
     if (this.postersReady()) {
       return (
-        <Carousel>
+        <Carousel interval={3000} style={{backgroundColor: "transparent"}}>
           {this.renderItems()}
         </Carousel>
       );
