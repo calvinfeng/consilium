@@ -1,11 +1,14 @@
 const React = require('react');
-const MovieRatingStore = require('../stores/movie_rating_store');
-const MovieRatingActions = require('../actions/movie_rating_actions');
-const MovieStore = require('../stores/movie_store');
-const MovieActions = require('../actions/movie_actions');
-const MovieItem = require('./movie_item');
+//Components
 const Cookies = require('js-cookie');
+const MovieItem = require('./movie_item');
 const Button = require('react-bootstrap').Button;
+//Stores
+const MovieRatingStore = require('../stores/movie_rating_store');
+const MovieStore = require('../stores/movie_store');
+//Actions
+const MovieRatingActions = require('../actions/movie_rating_actions');
+const MovieActions = require('../actions/movie_actions');
 
 const RatedIndex = React.createClass({
   getInitialState() {

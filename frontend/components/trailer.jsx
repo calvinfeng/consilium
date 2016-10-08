@@ -1,7 +1,7 @@
 const React = require('react');
-const TrailerStore = require('../stores/trailer_store');
 const ReactPlayer = require('react-player');
 const Loader = require('react-loader');
+const TrailerStore = require('../stores/trailer_store');
 
 const Trailer = React.createClass({
 

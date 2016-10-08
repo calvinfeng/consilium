@@ -18,6 +18,13 @@
   text-align: center;
   vertical-align: center;
   margin: 0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.movie-title:hover {
+  background: #f7f7f7;
+  cursor: pointer;
 }
 
 .movie-plot {

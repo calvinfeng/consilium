@@ -1,12 +1,16 @@
 const React = require('react');
+//Components
+const Trailer = require('./trailer');
 const Loader = require('react-loader');
 const MovieItem = require('./movie_item');
-const Trailer = require('./trailer');
+//Stores
+const TrailerStore = require('../stores/trailer_store');
 const MovieStore = require('../stores/movie_store');
 const MovieRatingStore = require('../stores/movie_rating_store');
+//Actions
 const MovieActions = require('../actions/movie_actions');
 const MovieInfoActions = require('../actions/movie_info_actions');
-const TrailerStore = require('../stores/trailer_store');
+
 const RecommendationIndex = React.createClass({
 
   getInitialState() {

@@ -1,7 +1,7 @@
 const React = require('react');
-const MovieInfoStore = require('../stores/movie_info_store');
 const Carousel = require('react-bootstrap').Carousel;
 const CarouselItem = require('react-bootstrap').CarouselItem;
+const MovieInfoStore = require('../stores/movie_info_store');
 
 const PosterSlider = React.createClass({
 

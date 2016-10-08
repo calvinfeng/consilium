@@ -1,16 +1,18 @@
 const React = require('react');
-const Loader = require('react-loader');
-const Cookies = require('js-cookie');
+//Components
 const GaugeIndex = require('./gauge_index');
 const RatedIndex = require('./rated_index');
 const RecommendationIndex = require('./recommendation_index');
-const MovieStore = require('../stores/movie_store');
-const MovieActions = require('../actions/movie_actions');
-const MovieRatingStore = require('../stores/movie_rating_store');
-const MovieRatingActions = require('../actions/movie_rating_actions');
-
+const Cookies = require('js-cookie');
+const Loader = require('react-loader');
 const Tooltip = require('react-bootstrap').Tooltip;
 const OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+//Actions
+const MovieActions = require('../actions/movie_actions');
+const MovieRatingActions = require('../actions/movie_rating_actions');
+//Stores
+const MovieRatingStore = require('../stores/movie_rating_store');
+const MovieStore = require('../stores/movie_store');
 
 const tmdbLogo = `https://www.themoviedb.org/assets/9b3f9c24d9fd5f297ae433eb33d93514
 /images/v4/logos/408x161-powered-by-rectangle-green.png`;
@@ -78,43 +80,43 @@ const MovieRecommender = React.createClass({
 
   saveToCookie(ratedMovies, recommendedMovies) {
     Cookies.set('consilium',
-      { ratings: ratedMovies },
-      { expires: 7}
+    { ratings: ratedMovies },
+    { expires: 7}
+  );
+},
+
+renderIndexes() {
+  if (this.state.isRecommending) {
+    return (
+      <div className="recommender">
+        <RecommendationIndex/>
+        <RatedIndex/>
+      </div>
     );
-  },
+  } else {
+    return (
+      <div className="recommender">
+        <GaugeIndex/>
+        <RatedIndex/>
+      </div>
+    );
+  }
+},
 
-  renderIndexes() {
-    if (this.state.isRecommending) {
-      return (
-        <div className="recommender">
-          <RecommendationIndex/>
-          <RatedIndex/>
-        </div>
-      );
-    } else {
-      return (
-        <div className="recommender">
-          <GaugeIndex/>
-          <RatedIndex/>
-        </div>
-      );
-    }
-  },
-
-  render() {
-    let movieToolTip = <Tooltip id="tooltip">Movie posters and trailers provided by TMDb</Tooltip>;
+render() {
+  let movieToolTip = <Tooltip id="tooltip">Movie posters and trailers provided by TMDb</Tooltip>;
     return (
       <div style={{width: '100%'}}>
         {this.renderIndexes()}
-        <OverlayTrigger placement="top" overlay={movieToolTip}>
-          <div className="logo-bar">
+        <div className="logo-bar">
+          <OverlayTrigger placement="top" overlay={movieToolTip}>
             <img
               id="tmdb-logo"
               style={{marginRight: "5px", height:"0", width: "126"}}
               src={tmdbLogo}>
             </img>
-          </div>
-        </OverlayTrigger>
+          </OverlayTrigger>
+        </div>
       </div>
     );
   }

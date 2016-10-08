@@ -1,12 +1,17 @@
 const React = require('react');
+// Components
 const Loader = require('react-loader');
 const Rating = require('react-rating');
-const MovieInfoStore = require('../stores/movie_info_store');
+const Button = require('react-bootstrap').Button;
+const OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+const Popover = require('react-bootstrap').Popover;
+// Actions
 const MovieInfoActions = require('../actions/movie_info_actions');
 const MovieRatingActions = require('../actions/movie_rating_actions');
 const TrailerActions = require('../actions/trailer_actions');
 const MovieActions = require('../actions/movie_actions');
-const Button = require('react-bootstrap').Button;
+// Store
+const MovieInfoStore = require('../stores/movie_info_store');
 
 const ratingStyle = {
   color: "yellow",
@@ -123,7 +128,6 @@ const MovieItem = React.createClass({
           <div className="movie-poster">
             <img src={this.state.info.Poster}/>
           </div>
-          <div className="movie-plot">{this.state.info.Plot}</div>
           <div className="rating-toolbar">
             <Rating
               fractions={2}
@@ -138,12 +142,19 @@ const MovieItem = React.createClass({
     },
 
     render() {
+      let popover = (
+        <Popover id="popover-trigger-click-root-close" title="Overview">
+          {this.state.info.Plot}
+        </Popover>
+      );
       return (
         <div className="movie-item">
-          <h3 className="movie-title">
-            <strong>{this.state.info.Title}</strong>
-            ({this.state.info.Year})
-          </h3>
+          <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
+            <h3 className="movie-title">
+              <strong>{this.state.info.Title}</strong>
+              ({this.state.info.Year})
+            </h3>
+          </OverlayTrigger>
           {this.renderInterface()}
         </div>
       );

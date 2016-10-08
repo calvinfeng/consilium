@@ -1,10 +1,13 @@
 const React = require('react');
-const MovieItem = require('./movie_item');
+//Components
 const PosterSlider = require('./poster_slider');
+const MovieItem = require('./movie_item');
+const Button = require('react-bootstrap').Button;
+//Actions
+const MovieActions = require('../actions/movie_actions');
+//Stores
 const MovieStore = require('../stores/movie_store');
 const MovieRatingStore = require('../stores/movie_rating_store');
-const MovieActions = require('../actions/movie_actions');
-const Button = require('react-bootstrap').Button;
 
 Array.prototype.shuffle = function() {
   let i = this.length, j, temp;
@@ -39,6 +42,10 @@ const GaugeIndex = React.createClass({
 
   skipAll() {
     MovieActions.skipMovies(Object.keys(this.state.gaugeMovies));
+    this.setState({skipDisable: true});
+    setTimeout(function() {
+      this.setState({skipDisable: false});
+    }.bind(this), 5000);
   },
 
   resetGauge(){
@@ -120,6 +127,7 @@ const GaugeIndex = React.createClass({
         <div className="gauge-header">
           <h1>Popular Movies</h1>
           <Button
+            disabled={this.state.skipDisable}
             id="skip-button"
             className="react-buttons"
             onClick={this.skipAll}
