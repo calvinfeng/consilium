@@ -2,6 +2,7 @@ const React = require('react');
 //Components
 const PosterSlider = require('./poster_slider');
 const MovieItem = require('./movie_item');
+const ProgressBar = require('react-bootstrap').ProgressBar;
 const Button = require('react-bootstrap').Button;
 //Actions
 const MovieActions = require('../actions/movie_actions');
@@ -128,14 +129,16 @@ const GaugeIndex = React.createClass({
           <h1>Popular Movies</h1>
           <Button
             disabled={this.state.skipDisable}
+            bsSize="xsmall"
             id="skip-button"
             className="react-buttons"
             onClick={this.skipAll}
-            bsStyle="danger">
-            More movies
+            bsStyle="primary">
+            More Movies
           </Button>
         </div>
         {this.renderDescription()}
+        <ProgressBar now={100*this.state.ratingCount/10}/>
         <div className="gauge-index">{this.renderGaugeSet()}</div>
       </div>
     );

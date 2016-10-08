@@ -77,7 +77,7 @@ const RatedIndex = React.createClass({
             id="rated-header-button"
             className="react-buttons"
             onClick={this.deleteCookies}
-            bsStyle="primary">
+            bsStyle="danger">
             Delete My History
           </Button>
         </div>
