@@ -12,17 +12,18 @@ import { createStore, applyMiddleware }           from 'redux';
 import { IndexRoute, hashHistory, Router, Route } from 'react-router';
 
 // Consilium imports
-import RecommenderContainer             from './components/RecommenderContainer';
+import Recommender                      from './components/Recommender';
 import About                            from './components/About';
-import NavigationBar                    from './components/NavigationBar';
+import Navigation                       from './components/Navigation';
 
-import Reducer                          from './reducers/index'; // This is the root reducer
+// Root reducer
+import Reducer                          from './reducers/index';
 
 class Consilium extends React.Component {
     render() {
         return (
             <div>
-                <NavigationBar />
+                <Navigation />
                 {this.props.children}
             </div>
         );
@@ -35,7 +36,7 @@ const Routes = (
     <Provider store={reduxStore}>
         <Router history={hashHistory}>
             <Route path="/" component={Consilium}>
-                <IndexRoute component={RecommenderContainer}/>
+                <IndexRoute component={Recommender}/>
                 <Route path="/about" component={About} />
             </Route>
         </Router>
