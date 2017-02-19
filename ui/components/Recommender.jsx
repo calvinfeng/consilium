@@ -20,10 +20,6 @@ class Recommender extends React.Component {
         };
     }
 
-    componentDidMount() {
-        this.props.dispatchTrainingMoviesFetch();
-    }
-
     componentWillReceiveProps(nextProps) {
         let isRecommending = false;
 
@@ -49,7 +45,9 @@ class Recommender extends React.Component {
         } else {
             return (
                 <div className="recommender">
-                    <TrainingSet />
+                    <TrainingSet
+                        dispatchTrainingMoviesFetch={this.props.dispatchTrainingMoviesFetch}
+                        trainingMovies={this.props.trainingMovies} />
                     <RatingRecord />
                 </div>
             );
