@@ -1,17 +1,18 @@
 'use strict';
 
+// Copyright 2017 Consilium
 // Author(s): Calvin Feng
 
 // Thirdparty imports
 import React                                      from 'react';
 import ReactDOM                                   from 'react-dom';
-import thunkMiddleware                            from 'redux-thunk';
+import thunk                                      from 'redux-thunk';
 import { Provider }                               from 'react-redux';
 import { createStore, applyMiddleware }           from 'redux';
 import { IndexRoute, hashHistory, Router, Route } from 'react-router';
 
 // Consilium imports
-import MovieRecommender                 from './components/MovieRecommender';
+import RecommenderContainer             from './components/RecommenderContainer';
 import About                            from './components/About';
 import NavigationBar                    from './components/NavigationBar';
 
@@ -28,13 +29,13 @@ class Consilium extends React.Component {
     }
 }
 
-const reduxStore = createStore(Reducer, applyMiddleware(thunkMiddleware));
+const reduxStore = createStore(Reducer, applyMiddleware(thunk));
 
 const Routes = (
     <Provider store={reduxStore}>
         <Router history={hashHistory}>
             <Route path="/" component={Consilium}>
-                <IndexRoute component={MovieRecommender}/>
+                <IndexRoute component={RecommenderContainer}/>
                 <Route path="/about" component={About} />
             </Route>
         </Router>
