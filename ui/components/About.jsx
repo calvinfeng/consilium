@@ -5,7 +5,11 @@ import React       from 'react';
 class About extends React.Component {
 
     render() {
-        return <h1>Hello World, this is About Page</h1>;
+        return (
+            <div className="about-container">
+                <h1 className="title">Hello World, this is About Page</h1>
+            </div>
+        );
     }
 
 }
