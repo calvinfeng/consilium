@@ -5,13 +5,19 @@ import { TRAINING_MOVIES_FETCH_FAIL }    from '../../actions/movies';
 
 // Key Actions - Create, Update, Delete, Fetch
 export function trainingMoviesReducer(state = {}, action) {
-    let nextState = {};
     switch (action.type) {
         case TRAINING_MOVIES_FETCH_SUCCESS:
-            return nextState;
+            const movieList = action.data;
+
+            const trainingMovies = {};
+            movieList.forEach((movie) => {
+                trainingMovies[movie.id] = movie;
+            });
+
+            return Object.assign({}, state, { trainingMovies });
         case TRAINING_MOVIES_FETCH_FAIL:
-            return nextState;
+            return state;
         default:
-            return nextState;
+            return {};
     }
 }
