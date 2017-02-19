@@ -12,10 +12,6 @@
   z-index: 9999;
 }
 
-.recommender {
-  padding: 1em 1em 1em 1em;
-}
-
 .recommendation-index {
   display: flex;
   flex-direction: row;
