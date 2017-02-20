@@ -24,7 +24,6 @@ const trainingMoviesFetchFail = (error) => {
 };
 
 export const trainingMoviesFetch = () => (dispatch) => {
-    // TODO: Rename new_visitor to training_movies
     return request
         .get('api/recommender/training_movies')
         .then((res) => {
@@ -38,21 +37,29 @@ export const trainingMoviesFetch = () => (dispatch) => {
 export const RECOMMENDED_MOVIES_FETCH_SUCCESS = 'RECOMMENDED_MOVIES_FETCH_SUCCESS';
 export const RECOMMENDED_MOVIES_FETCH_FAIL = 'RECOMMENDED_MOVIES_FETCH_FAIL';
 
-const recommendedMoviesFetchSuccess = (data) => {
+const recommendedMoviesFetchSuccess = (movies) => {
     return {
         type: RECOMMENDED_MOVIES_FETCH_SUCCESS,
-        data
+        movies
     };
-}
+};
 
 const recommendedMoviesFetchFail = (error) => {
     return {
         type: RECOMMENDED_MOVIES_FETCH_FAIL,
         error
     };
-}
+};
 
 export const recommendedMoviesFetch = (movieRatings) => (dispatch) => {
     return request
-        .get('api/recommender/')
-}
+        .post('api/recommender/recommended_movies', {
+            movie_ratings: movieRatings
+        })
+        .then((res) => {
+            dispatch(recommendedMoviesFetchSuccess(res.data));
+        })
+        .catch((error) => {
+            dispatch(recommendedMoviesFetchFail(error));
+        });
+};
