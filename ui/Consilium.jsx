@@ -36,7 +36,7 @@ const Routes = (
     <Provider store={reduxStore}>
         <Router history={hashHistory}>
             <Route path="/" component={Consilium}>
-                <IndexRoute component={Recommender}/>
+                <IndexRoute component={Recommender} />
                 <Route path="/about" component={About} />
             </Route>
         </Router>
@@ -44,5 +44,5 @@ const Routes = (
 );
 
 document.addEventListener("DOMContentLoaded", function(){
-  ReactDOM.render(Routes, document.getElementById("application"));
+    ReactDOM.render(Routes, document.getElementById("application"));
 });

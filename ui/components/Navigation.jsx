@@ -23,9 +23,9 @@ class Navigation extends React.Component {
     handleSelectTab(selectedKey) {
         this.setState({ activeKey: selectedKey });
         if (selectedKey === 1) {
-            hashHistory.push("/");
+            hashHistory.push('/');
         } else if (selectedKey === 2) {
-            hashHistory.push("/about");
+            hashHistory.push('/about');
         }
     }
 
@@ -39,15 +39,15 @@ class Navigation extends React.Component {
                     <NavItem eventKey={2}>About</NavItem>
                     <NavDropdown eventKey={3} id="nav-dropdown" title="Our Team">
                         <MenuItem href="https://www.linkedin.com/in/calvin-feng">
-                            <i className="fa fa-linkedin-square" aria-hidden="true"></i>
+                            <i className="fa fa-linkedin-square" aria-hidden="true" />
                             &nbsp;Calvin Feng
                         </MenuItem>
                         <MenuItem href="https://www.linkedin.com/in/steven-cheong-55404bbb">
-                            <i className="fa fa-linkedin-square" aria-hidden="true"></i>
+                            <i className="fa fa-linkedin-square" aria-hidden="true" />
                             &nbsp;Steven Cheong
                         </MenuItem>
                         <MenuItem href="https://www.linkedin.com/in/veronica-chau">
-                            <i className="fa fa-linkedin-square" aria-hidden="true"></i>
+                            <i className="fa fa-linkedin-square" aria-hidden="true" />
                             &nbsp;Veronica Chau
                         </MenuItem>
                     </NavDropdown>

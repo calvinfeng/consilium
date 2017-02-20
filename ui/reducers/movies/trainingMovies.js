@@ -1,10 +1,13 @@
+'use strict';
+
+// Copyright 2017 Consilium
+// Author(s): Calvin Feng
 
 import { TRAINING_MOVIES_FETCH_SUCCESS } from '../../actions/movies';
 import { TRAINING_MOVIES_FETCH_FAIL }    from '../../actions/movies';
 
-
 // Key Actions - Create, Update, Delete, Fetch
-export function trainingMoviesReducer(state = {}, action) {
+export default function trainingMoviesReducer(state = {}, action) {
     switch (action.type) {
 
         case TRAINING_MOVIES_FETCH_SUCCESS:
@@ -21,6 +24,6 @@ export function trainingMoviesReducer(state = {}, action) {
             return state;
 
         default:
-            return {};
+            return state;
     }
 }
