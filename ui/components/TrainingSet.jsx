@@ -74,14 +74,13 @@ class TrainingSet extends React.Component {
     render() {
         const progressPercentage = (100 * this.state.ratingCount) / 10;
         return (
-            <div>
+            <div className="training-set-container">
                 <PosterSlider movies={this.props.trainingMovies} />
-                <div className="gauge-header">
+                <div className="training-set-header">
                     <h1>Popular Movies</h1>
                     <Button
-                        disabled={this.state.skipDisable}
+                        disabled={this.state.isMovieSetLoading}
                         bsSize="xsmall"
-                        id="skip-button"
                         className="react-buttons"
                         onClick={this.skipAll}
                         bsStyle="primary">
@@ -90,7 +89,7 @@ class TrainingSet extends React.Component {
                 </div>
                 {this.description}
                 <ProgressBar now={progressPercentage} />
-                <div className="gauge-index">
+                <div className="training-set">
                     {this.trainingSet}
                 </div>
             </div>

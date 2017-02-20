@@ -1,0 +1,21 @@
+.rating-record-container {
+
+    .header {
+        display: flex;
+        align-items: center;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        h1 {
+            margin: 0;
+            margin-right: 10px;
+        }
+    }
+
+    .rating-record {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;;
+    }
+    
+}
