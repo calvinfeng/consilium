@@ -7,9 +7,11 @@ import React                       from 'react';
 import { connect }                 from 'react-redux';
 
 import { trainingMoviesFetch }     from '../actions/movies';
+import { movieRatingRecord }       from '../actions/ratings';
 
-import RatingRecord                 from './RatingRecord';
+import RatingRecord                from './RatingRecord';
 import TrainingSet                 from './TrainingSet';
+import Recommendation              from './Recommendation';
 
 class Recommender extends React.Component {
 
@@ -23,11 +25,17 @@ class Recommender extends React.Component {
     componentWillReceiveProps(nextProps) {
         let isRecommending = false;
 
-        if (nextProps.recommendedMovies ) {
+        if (
+            nextProps.recommendedMovies
+            && Object.keys(nextProps.recommendedMovies).length >= 10
+        ) {
             isRecommending = true;
         }
 
-        if (nextProps.ratedMovies && Object.keys(nextProps.ratedMovies).length >= 10) {
+        if (
+            nextProps.movieRatings
+            && Object.keys(nextProps.movieRatings).length >= 10
+        ) {
             isRecommending = true;
         }
 
@@ -42,16 +50,18 @@ class Recommender extends React.Component {
                     <RatingRecord />
                 </div>
             );
-        } else {
-            return (
-                <div className="recommender">
-                    <TrainingSet
-                        dispatchTrainingMoviesFetch={this.props.dispatchTrainingMoviesFetch}
-                        trainingMovies={this.props.trainingMovies} />
-                    <RatingRecord />
-                </div>
-            );
         }
+        return (
+            <div className="recommender">
+                <TrainingSet
+                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
+                    dispatchTrainingMoviesFetch={this.props.dispatchTrainingMoviesFetch}
+                    trainingMovies={this.props.trainingMovies}
+                    movieRatings={this.props.movieRatings}
+                    movieDetails={this.props.movieDetails} />
+                <RatingRecord />
+            </div>
+        );
     }
 
     render() {
@@ -64,15 +74,35 @@ class Recommender extends React.Component {
 
 }
 
+/* eslint-disable */
+Recommender.propTypes = {
+    trainingMovies: React.PropTypes.object,
+    recommendedMovies: React.PropTypes.object,
+    movieRatings: React.PropTypes.object,
+    movieDetails: React.PropTypes.object,
+    dispatchTrainingMoviesFetch: React.PropTypes.func.isRequired,
+    dispatchMovieRatingRecord: React.PropTypes.func.isRequired
+};
+/* eslint-enable */
+
+Recommender.defaultProps = {
+    trainingMovies: {},
+    recommendedMovies: {},
+    movieRatings: {},
+    movieDetails: {}
+};
+
 const mapReduxStateToProps = (state) => {
     return {
-        trainingMovies: state.trainingMovies
+        trainingMovies: state.trainingMovies,
+        movieRatings: state.movieRatings
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatchTrainingMoviesFetch: () => dispatch(trainingMoviesFetch())
+        dispatchTrainingMoviesFetch: () => dispatch(trainingMoviesFetch()),
+        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating))
     };
 };
 

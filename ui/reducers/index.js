@@ -3,8 +3,10 @@
 import { combineReducers } from 'redux';
 
 // Consilium imports
-import { trainingMoviesReducer } from './movies/trainingMovies';
+import trainingMoviesReducer from './movies/trainingMovies';
+import ratingsReducer        from './users/ratings';
 
 export default combineReducers({
-    trainingMovies: trainingMoviesReducer
+    trainingMovies: trainingMoviesReducer,
+    movieRatings: ratingsReducer
 });
