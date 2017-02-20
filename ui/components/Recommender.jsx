@@ -15,6 +15,8 @@ import RatingRecord                from './RatingRecord';
 import TrainingSet                 from './TrainingSet';
 import Recommendation              from './Recommendation';
 
+// Recommender is the only connected component, it's the ultimate parent for all
+// redux state information
 class Recommender extends React.Component {
 
     constructor(props) {

@@ -21,7 +21,6 @@ class MovieItem extends React.Component {
     }
 
     componentDidMount() {
-        console.log('Mounted');
         this.props.dispatchMovieDetailFetch(this.props.imdbId);
     }
 
@@ -33,12 +32,12 @@ class MovieItem extends React.Component {
 
     }
 
-    // 
+    //
     get interface() {
         if (this.props.rating) {
             return (
                 <div>
-                    <div className="movie-poster">
+                    <div className="poster">
                         <img
                             src={this.props.detail.poster}
                             alt="Movie Poster" />
@@ -53,13 +52,13 @@ class MovieItem extends React.Component {
         if (this.props.isRecommendation) {
             return (
                 <div>
-                    <div className="movie-poster">
+                    <div className="poster">
                         src={this.props.detail.poster}
                     </div>
-                    <div className="movie-plot">{this.props.detail.plot}</div>
-                    <div className="movie-rating">
+                    <div className="plot">{this.props.detail.plot}</div>
+                    <div className="rating">
                         <div style={{ width: '100%' }}>
-                            <div className="rating-toolbar">
+                            <div className="star-toolbar-container">
                                 <Rating
                                     fractions={2}
                                     onClick={this.handleRatingClick}
@@ -84,17 +83,19 @@ class MovieItem extends React.Component {
 
         return (
             <div>
-                <div className="movie-poster">
+                <div className="poster">
                     <img src={this.props.detail.poster}
                         alt="Movie Poster" />
                 </div>
-                <div className="rating-toolbar">
-                    <Rating
-                        fractions={2}
-                        onClick={this.handleRatingClick}
-                        empty={'fa fa-star-o fa-3x'}
-                        full={'fa fa-star fa-3x'}
-                        color={'yellow'} />
+                <div className="rating">
+                    <div className="star-toolbar-container">
+                        <Rating
+                            fractions={2}
+                            onClick={this.handleRatingClick}
+                            empty={'fa fa-star-o fa-3x'}
+                            full={'fa fa-star fa-3x'}
+                            color={'yellow'} />
+                    </div>
                 </div>
             </div>
         );
@@ -109,7 +110,7 @@ class MovieItem extends React.Component {
         return (
             <div className="movie-item">
                 <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
-                    <h3 className="movie-title">
+                    <h3 className="title">
                         <strong>{this.props.detail.title}</strong>
                         ({this.props.detail.year})
                     </h3>
