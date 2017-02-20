@@ -26,7 +26,7 @@ const trainingMoviesFetchFail = (error) => {
 export const trainingMoviesFetch = () => (dispatch) => {
     // TODO: Rename new_visitor to training_movies
     return request
-        .get('api/recommender/new_visitor')
+        .get('api/recommender/training_movies')
         .then((res) => {
             dispatch(trainingMoviesFetchSuccess(res.data));
         })
