@@ -1,4 +1,5 @@
 require 'set'
+
 class Api::RecommendersController < ApplicationController
 
     # Eventually go toward Rails CRUD Conventions
@@ -26,7 +27,7 @@ class Api::RecommendersController < ApplicationController
         render "api/recommender/movies.json.jbuilder"
     end
 
-    def recommendations
+    def recommended_movies_index
         @movies = []
         rated = Hash.new
         recommender_params[:rated].each do |key, val|
