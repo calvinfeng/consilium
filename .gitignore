@@ -10,6 +10,9 @@
 # Ignore node modules
 node_modules
 
+# Ignore byebug history
+*.byebug_history
+
 # Ignore bundle
 bundle.js
 bundle.js.map
@@ -24,3 +27,6 @@ dump.rdb
 
 # Ignore application configuration
 # /config/application.yml
+
+# Ignore DS Store
+*.DS_Store
