@@ -30,7 +30,7 @@ class Api::RecommendersController < ApplicationController
     def recommended_movies_index
         @movies = []
         rated = Hash.new
-        recommender_params[:rated].each do |key, val|
+        recommender_params[:movie_ratings].each do |key, val|
             rating = val.to_f
             rated[key.to_i] = rating
         end
@@ -40,8 +40,8 @@ class Api::RecommendersController < ApplicationController
             render :json => { :errors => messages }, :status => 422
         else
             queue = Hash.new
-            unless recommender_params[:queue].nil?
-                recommender_params[:queue].each do |key, val|
+            unless recommender_params[:queued_recommendations].nil?
+                recommender_params[:queued_recommendations].each do |key, val|
                     queue[key.to_i] = val
                 end
             end
