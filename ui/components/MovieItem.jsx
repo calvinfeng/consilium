@@ -8,12 +8,6 @@ import Loader                              from 'react-loader';
 import Rating                              from 'react-rating';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 
-const ratingStyle = {
-    color: 'yellow',
-    empty: 'fa fa-star-o fa-2x',
-    full: 'fa fa-star fa-2x'
-};
-
 class MovieItem extends React.Component {
 
     constructor(props) {
@@ -26,6 +20,11 @@ class MovieItem extends React.Component {
         this.handleSkip = this.handleSkip.bind(this);
     }
 
+    componentDidMount() {
+        console.log('Mounted');
+        this.props.dispatchMovieDetailFetch(this.props.imdbId);
+    }
+
     handleRatingClick(rating) {
         this.props.dispatchMovieRatingRecord(this.props.movieId, rating);
     }
@@ -34,7 +33,7 @@ class MovieItem extends React.Component {
 
     }
 
-    // https://image.tmdb.org/t/p/w300${this.props.detail.poster}
+    // 
     get interface() {
         if (this.props.rating) {
             return (
@@ -131,13 +130,16 @@ MovieItem.defaultProps = {
     }
 };
 
+/* eslint-disable */
 MovieItem.propTypes = {
+    rating: React.PropTypes.number,
+    detail: React.PropTypes.object,
+    isRecommendation: React.PropTypes.bool.isRequired,
     movieId: React.PropTypes.number.isRequired,
     imdbId: React.PropTypes.string.isRequired,
-    isRecommendation: React.PropTypes.bool.isRequired,
     dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
-    detail: React.PropTypes.object,
-    rating: React.PropTypes.number
+    dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
 };
+/* eslint-enable */
 
 export default MovieItem;
