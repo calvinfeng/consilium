@@ -60,12 +60,13 @@ class TrainingSet extends React.Component {
             const movie = movies[movieId];
             return (
                 <MovieItem
+                    isRecommendation={false}
                     key={movie.id}
                     movieId={movie.id}
                     imdbId={movie.imdbId}
-                    detail={this.props.movieDetails[movie.id]}
-                    isRecommendation={false}
-                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord} />
+                    detail={this.props.movieDetails[movie.imdbId]}
+                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
+                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch} />
             );
         });
     }
@@ -103,7 +104,8 @@ TrainingSet.propTypes = {
     trainingMovies: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
     dispatchTrainingMoviesFetch: React.PropTypes.func.isRequired,
-    dispatchMovieRatingRecord: React.PropTypes.func.isRequired
+    dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
+    dispatchMovieDetailFetch: React.PropTypes.func.isRequired
 };
 /* eslint-enable */
 

@@ -7,7 +7,9 @@ import React                       from 'react';
 import { connect }                 from 'react-redux';
 
 import { trainingMoviesFetch }     from '../actions/movies';
+import { movieDetailFetch }        from '../actions/movieDetails';
 import { movieRatingRecord }       from '../actions/ratings';
+
 
 import RatingRecord                from './RatingRecord';
 import TrainingSet                 from './TrainingSet';
@@ -56,6 +58,7 @@ class Recommender extends React.Component {
                 <TrainingSet
                     dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
                     dispatchTrainingMoviesFetch={this.props.dispatchTrainingMoviesFetch}
+                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
                     trainingMovies={this.props.trainingMovies}
                     movieRatings={this.props.movieRatings}
                     movieDetails={this.props.movieDetails} />
@@ -81,7 +84,8 @@ Recommender.propTypes = {
     movieRatings: React.PropTypes.object,
     movieDetails: React.PropTypes.object,
     dispatchTrainingMoviesFetch: React.PropTypes.func.isRequired,
-    dispatchMovieRatingRecord: React.PropTypes.func.isRequired
+    dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
+    dispatchMovieDetailFetch: React.PropTypes.func.isRequired
 };
 /* eslint-enable */
 
@@ -95,14 +99,16 @@ Recommender.defaultProps = {
 const mapReduxStateToProps = (state) => {
     return {
         trainingMovies: state.trainingMovies,
-        movieRatings: state.movieRatings
+        movieRatings: state.movieRatings,
+        movieDetails: state.movieDetails
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         dispatchTrainingMoviesFetch: () => dispatch(trainingMoviesFetch()),
-        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating))
+        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating)),
+        dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId))
     };
 };
 
