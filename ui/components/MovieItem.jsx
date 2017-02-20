@@ -8,12 +8,6 @@ import Loader                              from 'react-loader';
 import Rating                              from 'react-rating';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 
-const ratingStyle = {
-    color: 'yellow',
-    empty: 'fa fa-star-o fa-2x',
-    full: 'fa fa-star fa-2x'
-};
-
 class MovieItem extends React.Component {
 
     constructor(props) {
@@ -26,6 +20,10 @@ class MovieItem extends React.Component {
         this.handleSkip = this.handleSkip.bind(this);
     }
 
+    componentDidMount() {
+        this.props.dispatchMovieDetailFetch(this.props.imdbId);
+    }
+
     handleRatingClick(rating) {
         this.props.dispatchMovieRatingRecord(this.props.movieId, rating);
     }
@@ -34,12 +32,12 @@ class MovieItem extends React.Component {
 
     }
 
-    // https://image.tmdb.org/t/p/w300${this.props.detail.poster}
+    //
     get interface() {
         if (this.props.rating) {
             return (
                 <div>
-                    <div className="movie-poster">
+                    <div className="poster">
                         <img
                             src={this.props.detail.poster}
                             alt="Movie Poster" />
@@ -54,13 +52,13 @@ class MovieItem extends React.Component {
         if (this.props.isRecommendation) {
             return (
                 <div>
-                    <div className="movie-poster">
+                    <div className="poster">
                         src={this.props.detail.poster}
                     </div>
-                    <div className="movie-plot">{this.props.detail.plot}</div>
-                    <div className="movie-rating">
+                    <div className="plot">{this.props.detail.plot}</div>
+                    <div className="rating">
                         <div style={{ width: '100%' }}>
-                            <div className="rating-toolbar">
+                            <div className="star-toolbar-container">
                                 <Rating
                                     fractions={2}
                                     onClick={this.handleRatingClick}
@@ -85,17 +83,19 @@ class MovieItem extends React.Component {
 
         return (
             <div>
-                <div className="movie-poster">
+                <div className="poster">
                     <img src={this.props.detail.poster}
                         alt="Movie Poster" />
                 </div>
-                <div className="rating-toolbar">
-                    <Rating
-                        fractions={2}
-                        onClick={this.handleRatingClick}
-                        empty={'fa fa-star-o fa-3x'}
-                        full={'fa fa-star fa-3x'}
-                        color={'yellow'} />
+                <div className="rating">
+                    <div className="star-toolbar-container">
+                        <Rating
+                            fractions={2}
+                            onClick={this.handleRatingClick}
+                            empty={'fa fa-star-o fa-3x'}
+                            full={'fa fa-star fa-3x'}
+                            color={'yellow'} />
+                    </div>
                 </div>
             </div>
         );
@@ -110,7 +110,7 @@ class MovieItem extends React.Component {
         return (
             <div className="movie-item">
                 <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
-                    <h3 className="movie-title">
+                    <h3 className="title">
                         <strong>{this.props.detail.title}</strong>
                         ({this.props.detail.year})
                     </h3>
@@ -131,13 +131,16 @@ MovieItem.defaultProps = {
     }
 };
 
+/* eslint-disable */
 MovieItem.propTypes = {
+    rating: React.PropTypes.number,
+    detail: React.PropTypes.object,
+    isRecommendation: React.PropTypes.bool.isRequired,
     movieId: React.PropTypes.number.isRequired,
     imdbId: React.PropTypes.string.isRequired,
-    isRecommendation: React.PropTypes.bool.isRequired,
     dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
-    detail: React.PropTypes.object,
-    rating: React.PropTypes.number
+    dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
 };
+/* eslint-enable */
 
 export default MovieItem;

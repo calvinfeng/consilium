@@ -60,12 +60,13 @@ class TrainingSet extends React.Component {
             const movie = movies[movieId];
             return (
                 <MovieItem
+                    isRecommendation={false}
                     key={movie.id}
                     movieId={movie.id}
                     imdbId={movie.imdbId}
-                    detail={this.props.movieDetails[movie.id]}
-                    isRecommendation={false}
-                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord} />
+                    detail={this.props.movieDetails[movie.imdbId]}
+                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
+                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch} />
             );
         });
     }
@@ -73,14 +74,13 @@ class TrainingSet extends React.Component {
     render() {
         const progressPercentage = (100 * this.state.ratingCount) / 10;
         return (
-            <div>
+            <div className="training-set-container">
                 <PosterSlider movies={this.props.trainingMovies} />
-                <div className="gauge-header">
+                <div className="training-set-header">
                     <h1>Popular Movies</h1>
                     <Button
-                        disabled={this.state.skipDisable}
+                        disabled={this.state.isMovieSetLoading}
                         bsSize="xsmall"
-                        id="skip-button"
                         className="react-buttons"
                         onClick={this.skipAll}
                         bsStyle="primary">
@@ -89,7 +89,7 @@ class TrainingSet extends React.Component {
                 </div>
                 {this.description}
                 <ProgressBar now={progressPercentage} />
-                <div className="gauge-index">
+                <div className="training-set">
                     {this.trainingSet}
                 </div>
             </div>
@@ -103,7 +103,8 @@ TrainingSet.propTypes = {
     trainingMovies: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
     dispatchTrainingMoviesFetch: React.PropTypes.func.isRequired,
-    dispatchMovieRatingRecord: React.PropTypes.func.isRequired
+    dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
+    dispatchMovieDetailFetch: React.PropTypes.func.isRequired
 };
 /* eslint-enable */
 
