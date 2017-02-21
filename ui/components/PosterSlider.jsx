@@ -9,8 +9,8 @@ class PosterSlider extends React.Component {
 
     render() {
         return (
-            <div className="about-container">
-                <h1 className="title">Hello World, this is PosterSlider Page</h1>
+            <div className="poster-slider-container">
+                <h1 className="title">Poster slider is coming soon!</h1>
             </div>
         );
     }

@@ -1,3 +1,7 @@
+'use strict';
+
+// Copyright 2017 Consilium
+// Author(s): Calvin Feng
 
 // Thirdparty imports
 import { combineReducers }      from 'redux';

@@ -58,17 +58,19 @@ are computed off-line with some Python scripts. Now the next natural move is to 
 keep things in a database. So here's the new schema for the upcoming back-end design
 
 #### `HistoricalUser`
+
 We will introduce a ActiveRecord model that is responsible for holding historical data from
 the giant data set from MovieLens. `HistoricalUser` has many movies through association
 
-| column name | key | data type | note     |
-|------------ |-----|-----------|----------|
-| id          | PK  | Integer   | Provided |
-| preference  |     | Arrays    |          |
+| column name | key | data type | note             |
+|------------ |-----|-----------|------------------|
+| id          | PK  | Integer   | Provided         |
+| preference  |     | Arrays    | Offline computed |
 
 `HistoricalUser` has many `Rating`s in our ActiveRecord associations
 
 #### `Rating`
+
 This is basically a join table with two foreign keys, pointing to `HistoricalUser` / `User`
 and `Movie`
 
@@ -81,17 +83,21 @@ and `Movie`
 
 
 #### `Movie`
+
 `Movie` has many ratings and many viewers through the `Rating` association
-| column name | key | data type | note     |
-|-------------|-----|-----------|----------|
-| id          | PK  | Integer   | Provided |
-| title       |     | String    |          |
-| year        |     | Integer   |          |
-| imdb_rating |     | Float     |          |
-| imdb_id     |     | String    |          |
-| feature     |     | Arrays    |          |
+
+| column name | key | data type | note               |
+|-------------|-----|-----------|--------------------|
+| id          | PK  | Integer   | Provided           |
+| title       |     | String    |                    |
+| year        |     | Integer   |                    |
+| imdb_rating |     | Float     |                    |
+| imdb_id     |     | String    |                    |
+| feature     |     | Arrays    | Offline computed   |
+
 
 #### `User`
+
 This is a model for active user who login to our system through FB authentication.
 We will use Facebook ID as the primary key for this table. The detailed design will
 come later as we implement the actual FB authentication system on the front-end.

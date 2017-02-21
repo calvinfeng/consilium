@@ -8,7 +8,15 @@ import React       from 'react';
 class RatingRecord extends React.Component {
 
     render() {
-        return <h1>RatingRecord</h1>;
+        return (
+            <div className="rating-record-container">
+                <div className="header">
+                    <h1>Rating record is coming soon!</h1>
+                </div>
+                <div className="rating-record">
+                </div>
+            </div>
+        );
     }
 
 }
