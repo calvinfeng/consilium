@@ -28,6 +28,7 @@ class TrainingSet extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+
     }
 
     get description() {
