@@ -28,7 +28,7 @@ app. For local host development, make sure to use
 ```
 $redis = Redis.new(:host => 'localhost', :port => 6379)
 ```
-and comment out the other line because that one is for deployment to Heroku
+and comment out the other line, because that one is for deployment to Heroku
 
 ### Redis instance on Heroku
 Redis URL can be found by running
@@ -50,6 +50,48 @@ $ rails s
 ```
 Don't forget webpack!
 
-## Regression
-The first step of this project is to use gradient descent to fit linear/quadratic
-functions to univariate/multivariate data set.
+## Database Design
+### New Design
+Currently Consilium doesn't really have a database, it stores a giant hash map in Redis cache
+which contains all the necessary information for SVD matrix factorization algorithm. The values
+are computed off-line with some Python scripts. Now the next natural move is to actually
+keep things in a database. So here's the new schema for the upcoming back-end design
+
+#### `HistoricalUser`
+We will introduce a ActiveRecord model that is responsible for holding historical data from
+the giant data set from MovieLens. `HistoricalUser` has many movies through association
+
+| column name | key | data type | note     |
+|------------ |-----|-----------|----------|
+| id          | PK  | Integer   | Provided |
+| preference  |     | Arrays    |          |
+
+`HistoricalUser` has many `Rating`s in our ActiveRecord associations
+
+#### `Rating`
+This is basically a join table with two foreign keys, pointing to `HistoricalUser` / `User`
+and `Movie`
+
+| column name | key | data type | note             |
+|-------------|-----|-----------|------------------|
+| id          | PK  | Integer   | Auto-incremented |
+| user_id     | FK  | Integer   |                  |
+| movie_id    | FK  | Integer   |                  |
+| value       |     | Float     |                  |
+
+
+#### `Movie`
+`Movie` has many ratings and many viewers through the `Rating` association
+| column name | key | data type | note     |
+|-------------|-----|-----------|----------|
+| id          | PK  | Integer   | Provided |
+| title       |     | String    |          |
+| year        |     | Integer   |          |
+| imdb_rating |     | Float     |          |
+| imdb_id     |     | String    |          |
+| feature     |     | Arrays    |          |
+
+#### `User`
+This is a model for active user who login to our system through FB authentication.
+We will use Facebook ID as the primary key for this table. The detailed design will
+come later as we implement the actual FB authentication system on the front-end.
