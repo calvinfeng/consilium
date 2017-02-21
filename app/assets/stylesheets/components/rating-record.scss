@@ -1,3 +1,4 @@
+
 .rating-record-container {
 
     .header {
@@ -5,7 +6,9 @@
         align-items: center;
         margin-top: 1em;
         margin-bottom: 1em;
+        background: rgba(200,200,200, 0.2);
         h1 {
+            font-size: 20px;
             margin: 0;
             margin-right: 10px;
         }
@@ -17,5 +20,4 @@
         flex-wrap: wrap;
         justify-content: flex-start;;
     }
-    
 }

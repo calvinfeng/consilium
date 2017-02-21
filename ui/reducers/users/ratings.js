@@ -21,6 +21,6 @@ export default function ratingsReducer(state = {}, action) {
             return newState;
 
         default:
-            return {};
+            return state;
     }
 }
