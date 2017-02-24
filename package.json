@@ -38,6 +38,7 @@
     "react-router": "^2.5.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
+    "spin": "0.0.1",
     "webpack": "^1.13.2"
   },
   "engines": {

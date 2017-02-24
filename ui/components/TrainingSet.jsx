@@ -18,7 +18,7 @@ class TrainingSet extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            trainingMovies: {},
+            trainingMoviesOnDisplay: {},
             ratingCount: 0
         };
     }
@@ -28,7 +28,16 @@ class TrainingSet extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        if (Object.keys(this.state.trainingMoviesOnDisplay).length === 0) {
+            const movies = nextProps.trainingMovies;
+            const trainingMoviesOnDisplay = {};
+            _.shuffle(Object.keys(movies)).slice(0, 10).forEach((movieId) => {
+                const movie = movies[movieId];
+                trainingMoviesOnDisplay[movieId] = movie;
+            });
 
+            this.setState({ trainingMoviesOnDisplay });
+        }
     }
 
     get description() {
@@ -56,8 +65,8 @@ class TrainingSet extends React.Component {
     }
 
     get trainingSet() {
-        const movies = this.props.trainingMovies;
-        return Object.keys(movies).sort().slice(0, 10).map((movieId) => {
+        const movies = this.state.trainingMoviesOnDisplay;
+        return Object.keys(movies).sort().map((movieId) => {
             const movie = movies[movieId];
             return (
                 <MovieItem
@@ -65,7 +74,7 @@ class TrainingSet extends React.Component {
                     key={movie.id}
                     movieId={movie.id}
                     imdbId={movie.imdbId}
-                    detail={this.props.movieDetails[movie.imdbId]}
+                    movieDetail={this.props.movieDetails[movie.imdbId]}
                     dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
                     dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch} />
             );
@@ -91,7 +100,7 @@ class TrainingSet extends React.Component {
                 {this.description}
                 <ProgressBar now={progressPercentage} />
                 <div className="training-set">
-                    {this.trainingSet}
+                    { this.trainingSet }
                 </div>
             </div>
         );

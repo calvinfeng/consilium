@@ -4,7 +4,7 @@
 // Author(s): Calvin Feng
 
 import React                               from 'react';
-import Loader                              from 'react-loader';
+import Spinner                             from 'spin';
 import Rating                              from 'react-rating';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 
@@ -12,15 +12,19 @@ class MovieItem extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            detailReceived: false
-        };
-
         this.handleRatingClick = this.handleRatingClick.bind(this);
         this.handleSkip = this.handleSkip.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.movieDetail.isDefaultProp) {
+            // this.spinner.stop();
+        }
+    }
+
     componentDidMount() {
+        this.spinner = new Spinner().spin();
+        document.getElementById(this.props.movieId).appendChild(this.spinner.el);
         this.props.dispatchMovieDetailFetch(this.props.imdbId);
     }
 
@@ -29,17 +33,18 @@ class MovieItem extends React.Component {
     }
 
     handleSkip() {
-
+        // this.props.dispatchMovieSkip(this.props.movieId);
     }
 
-    //
     get interface() {
         if (this.props.rating) {
             return (
                 <div>
+                    <div className="spinner-container" id={this.props.movieId} />
                     <div className="poster">
                         <img
-                            src={this.props.detail.poster}
+                            id={this.props.movieId}
+                            src={this.props.movieDetail.poster}
                             alt="Movie Poster" />
                     </div>
                     <div className="user-rating">
@@ -52,10 +57,13 @@ class MovieItem extends React.Component {
         if (this.props.isRecommendation) {
             return (
                 <div>
+                    <div className="spinner-container" id={this.props.movieId} />
                     <div className="poster">
-                        src={this.props.detail.poster}
+                        <img
+                            src={this.props.movieDetail.poster}
+                            alt="Movie Poster" />
                     </div>
-                    <div className="plot">{this.props.detail.plot}</div>
+                    <div className="plot">{this.props.movieDetail.plot}</div>
                     <div className="rating">
                         <div style={{ width: '100%' }}>
                             <div className="star-toolbar-container">
@@ -83,8 +91,10 @@ class MovieItem extends React.Component {
 
         return (
             <div>
+                <div className="spinner-container" id={this.props.movieId} />
                 <div className="poster">
-                    <img src={this.props.detail.poster}
+                    <img
+                        src={this.props.movieDetail.poster}
                         alt="Movie Poster" />
                 </div>
                 <div className="rating">
@@ -104,15 +114,15 @@ class MovieItem extends React.Component {
     render() {
         const popover = (
             <Popover id="popover-trigger-click-root-close" title="Overview">
-                {this.props.detail.plot}
+                {this.props.movieDetail.plot}
             </Popover>
         );
         return (
             <div className="movie-item">
                 <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
                     <h3 className="title">
-                        <strong>{this.props.detail.title}</strong>
-                        ({this.props.detail.year})
+                        <strong>{this.props.movieDetail.title}</strong>
+                        ({this.props.movieDetail.year})
                     </h3>
                 </OverlayTrigger>
                 {this.interface}
@@ -123,7 +133,8 @@ class MovieItem extends React.Component {
 
 MovieItem.defaultProps = {
     rating: undefined,
-    detail: {
+    movieDetail: {
+        isDefaultProp: true,
         title: 'Loading...',
         year: '....',
         plot: 'Loading...',
@@ -134,12 +145,12 @@ MovieItem.defaultProps = {
 /* eslint-disable */
 MovieItem.propTypes = {
     rating: React.PropTypes.number,
-    detail: React.PropTypes.object,
+    movieDetail: React.PropTypes.object,
     isRecommendation: React.PropTypes.bool.isRequired,
     movieId: React.PropTypes.number.isRequired,
     imdbId: React.PropTypes.string.isRequired,
     dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
-    dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
+    dispatchMovieDetailFetch: React.PropTypes.func.isRequired
 };
 /* eslint-enable */
 
