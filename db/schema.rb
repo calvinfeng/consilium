@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20170319025623) do
 
   create_table "movies", force: :cascade do |t|
     t.string   "title",                    null: false
-    t.integer  "year",                     null: false
+    t.integer  "year"
     t.float    "imdb_rating"
     t.string   "imdb_id"
     t.float    "feature",     default: [],              array: true

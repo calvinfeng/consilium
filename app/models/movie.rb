@@ -1,7 +1,5 @@
 class Movie < ActiveRecord::Base
     
-    attr_accessor :title, :year, :imdb_id, :imdb_rating, :feature
-
     validates :title, presence: true
     validates :year, length: { minimum: 4, allow_nil: true }
     validates :imdb_id, uniqueness: true
