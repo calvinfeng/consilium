@@ -46,24 +46,27 @@ csv.each do |row|
     movies[movie_id][:feature] = feature_array
 end
 
+puts 'Movie information has been loaded'
 movies.each do |id, movie|
     Movie.create!(id: id, title: movie[:title], year: movie[:year], imdb_id: movie[:imdb_id], feature: movie[:feature])
 end
+puts 'Movies have been inserted into database'
 
 # Load historical users and historical ratings
-# csv = CSV.parse(File.read('db/csv/20k-users/training_ratings.csv'), :headers => true)
-#
-# historical_users = Set.new
-#
-# csv.each do |row|
-#     user_id = row['userId'].to_i
-#     movie_id = row['movieId'].to_i
-#     rating = row['rating'].to_f
-#
-#     if !historical_users.include?(user_id)
-#         HistoricalUser.create!(id: user_id)
-#         historical_users << user_id
-#     end
-#
-#     HistoricalRating.create!(historical_user_id: user_id, movie_id: movie_id, value: rating)
-# end
+csv = CSV.parse(File.read('db/csv/20k-users/training_ratings.csv'), :headers => true)
+
+historical_users = Set.new
+
+puts 'User information has been loaded'
+csv.each do |row|
+    user_id = row['userId'].to_i
+    movie_id = row['movieId'].to_i
+    rating = row['rating'].to_f
+
+    if !historical_users.include?(user_id)
+        HistoricalUser.create!(id: user_id)
+        historical_users << user_id
+    end
+
+    HistoricalRating.create!(historical_user_id: user_id, movie_id: movie_id, value: rating)
+end
