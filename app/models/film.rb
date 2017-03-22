@@ -3,7 +3,7 @@
 # The purpose of this model class is to perform business logic; the core logic
 # of the recommender system.
 # ==============================================================================
-class Movie
+class Film
   attr_reader :id, :title, :year, :viewers, :avg_rating, :imdb_id, :features
 
   def initialize(movie_id, title, year, viewers, avg_rating, imdb_id, features)
@@ -56,7 +56,7 @@ class Movie
       movies_hash = eval($redis.get('movies_with_many_reviews'))
       features = eval($redis.get("features"))
       movies_hash.each do |id, info|
-        gauge_set << Movie.new(id, info[:title], info[:year], info[:viewers],
+        gauge_set << Film.new(id, info[:title], info[:year], info[:viewers],
         info[:avg_rating], info[:imdb_id], features[id])
       end
       Rails.cache.write("gauge_set", gauge_set)

@@ -6,6 +6,13 @@ Rails.application.routes.draw do
   get 'api/recommender/training_movies', :to => 'api/recommenders#training_movies_index'
   post 'api/recommender/recommended_movies', :to => 'api/recommenders#recommended_movies_index'
   post 'api/recommender/movies_by_ids', :to => 'api/recommenders#get_movies_by_ids'
+
+  namespace :api, defaults: { format: :json } do
+      resources :movies, only:[:index, :show]
+  end
+
+  post 'api/movies/recommendations', :to => 'api/movies#fetch_recommendations'
+  get  'api/movies/trainings', :to => 'api/movies#fetch_trainings'
 end
 
 # This is so fucking wrong, using POST to get data, just because GET doesn't support large params

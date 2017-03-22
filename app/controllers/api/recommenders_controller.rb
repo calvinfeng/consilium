@@ -16,7 +16,7 @@ class Api::RecommendersController < ApplicationController
         @movies = []
         movie_ids.each do |movie_id|
             id = movie_id.to_i
-            @movies << Movie.new(id,
+            @movies << Film.new(id,
             movie_attr[id][:title],
             movie_attr[id][:year],
             movie_attr[id][:viewers],
@@ -50,7 +50,7 @@ class Api::RecommendersController < ApplicationController
             render "api/recommender/movies.json.jbuilder"
         end
     end
-
+    # Moving toward using ActiveRecord Model Movie
     private
     def generate_recommendations(user, queue, items_needed=10)
         movie_attr = eval($redis.get('movies'))
@@ -60,7 +60,7 @@ class Api::RecommendersController < ApplicationController
         until @movies.size > items_needed
             id = movie_ids.sample
             unless user.ratings[id] || queue[id] || calculated[id] || movie_attr[id][:viewers].length < 20
-                movie = Movie.new(id,
+                movie = Film.new(id,
                 movie_attr[id][:title],
                 movie_attr[id][:year],
                 movie_attr[id][:viewers],

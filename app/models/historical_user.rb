@@ -8,4 +8,12 @@ class HistoricalUser < ActiveRecord::Base
     through: :ratings,
     class_name: "Movie"
 
+    def average_rating
+        sum = 0
+        self.ratings do | rating |
+            sum += rating.value
+        end
+        sum / self.ratings.count
+    end
+
 end
