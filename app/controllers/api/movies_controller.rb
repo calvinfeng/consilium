@@ -23,4 +23,14 @@ class Api::MoviesController < ApplicationController
         end
     end
 
+    def generate_recommendations
+
+
+    end
+
+    def fetch_popular
+        @movies = Movie.find(eval($redis.get("popular_movie_ids")))
+        render 'api/movies/popular_movies.json.jbuilder'
+    end
+
 end

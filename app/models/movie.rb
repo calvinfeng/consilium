@@ -14,11 +14,43 @@ class Movie < ActiveRecord::Base
     class_name: "HistoricalUser"
 
     def average_rating
+        return @average_rating unless @average_rating.nil?
         sum = 0
         self.ratings.each do | rating |
             sum += rating.value
         end
-        sum / self.ratings.count
+        @average_rating = sum / self.ratings.count
+        return @average_rating
+    end
+
+    # Generate prediction using incremental SVD algorithm
+    def svd_prediction_for(user)
+      predicted_rating = 0
+      self.feature.each_with_index do |feature_k, k|
+        predicted_rating += (feature_k * user.preference[k])
+      end
+      predicted_rating
+    end
+
+    def knn_prediction_for(user)
+        movie_rating_map = Rails.cache.read("movie_rating_map")
+        score = 0
+        sim_norm = 0
+        # Instead of using k neighbors, this function is using all neighbors
+        self.reviewers.each do |reviewer|
+            sim = user.sim(reviewer)
+            if sim >= 0.5
+                reviewer_rating = movie_rating_map[self.id][:ratings][reviewer.id]
+                score += sim * (reviewer_rating - reviewer.avg_rating)
+                sim_norm += sim.abs
+            end
+        end
+
+        if sim_norm == 0
+            return nil
+        else
+            return user.avg_rating + (score/sim_norm)
+        end
     end
 
 end
