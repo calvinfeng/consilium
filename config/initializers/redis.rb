@@ -1,6 +1,6 @@
 require 'csv'
-require 'byebug'
 # Heroku's new approach to Redis
+
 # $redis = Redis.new(url: ENV["REDIS_URL"])
 
 # This no longer works
@@ -41,6 +41,7 @@ def load_movies()
     return load_ratings(movies)
 end
 
+puts "\nLoading data into redis...\n"
 movie_map = load_movies()
 
 $redis.set('movie_rating_map', movie_map)

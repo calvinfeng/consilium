@@ -3,18 +3,15 @@
 # The purpose of this model class is to perform business logic; the core logic
 # of the recommender system.
 # ==============================================================================
+
+require 'byebug'
+
 class User
-    attr_reader :id, :ratings, :average_rating, :preferences
-    def initialize(user_id, movie_ratings)
-        @id = user_id
+    attr_reader :ratings, :average_rating, :preferences
+    def initialize(movie_ratings)
         @ratings = movie_ratings
         @average_rating = compute_avg_rating
-        # This indicates that we need to generate a preference, because this is a new user
-        if user_id.nil?
-            compute_preferences
-        else
-            @preference = nil
-        end
+        @preference = nil
     end
 
     def compute_avg_rating
@@ -104,15 +101,13 @@ class User
     #     return user_correlation/(Math.sqrt(this_variance)*Math.sqrt(other_variance))
     # end
 
-    def sim(historical_user)
-        movie_rating_map = eval($redis.get("movie_rating_map"))
-
+    def sim(historical_user, movie_rating_map)
         correlation = 0
         user_variance, historical_user_variance = 0, 0
         data_count = 0
         @ratings.each do |movie_id, rating|
-            if movie_rating_map[movie_id][:rating][historical_user.id]
-                user_rating, historical_user_rating = @ratings[movie_id], movie_rating_map[movie_id][:rating][historical_user.id]
+            if movie_rating_map[movie_id][:ratings][historical_user.id]
+                user_rating, historical_user_rating = @ratings[movie_id], movie_rating_map[movie_id][:ratings][historical_user.id]
                 correlation += (user_rating - @average_rating) * (historical_user_rating - historical_user.average_rating)
                 user_variance += (user_rating - @average_rating)**2
                 historical_user_variance += (historical_user_rating - historical_user.average_rating)**2

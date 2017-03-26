@@ -33,15 +33,15 @@ class Movie < ActiveRecord::Base
     end
 
     def knn_prediction_for(user)
-        movie_rating_map = Rails.cache.read("movie_rating_map")
+        movie_rating_map = eval($redis.get('movie_rating_map'))
         score = 0
         sim_norm = 0
         # Instead of using k neighbors, this function is using all neighbors
         self.reviewers.each do |reviewer|
-            sim = user.sim(reviewer)
+            sim = user.sim(reviewer, movie_rating_map)
             if sim >= 0.5
                 reviewer_rating = movie_rating_map[self.id][:ratings][reviewer.id]
-                score += sim * (reviewer_rating - reviewer.avg_rating)
+                score += sim * (reviewer_rating - reviewer.average_rating)
                 sim_norm += sim.abs
             end
         end
@@ -49,7 +49,7 @@ class Movie < ActiveRecord::Base
         if sim_norm == 0
             return nil
         else
-            return user.avg_rating + (score/sim_norm)
+            return user.average_rating + (score / sim_norm)
         end
     end
 

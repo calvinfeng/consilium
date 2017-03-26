@@ -12,12 +12,11 @@ class HistoricalUser < ActiveRecord::Base
         return @average_rating unless @average_rating.nil?
 
         sum = 0
-        self.ratings do | rating |
+        self.ratings.each do | rating |
             sum += rating.value
         end
-        @average_rating = sum / self.ratings.count
 
+        @average_rating = sum / self.ratings.count
         return @average_rating
     end
-
 end

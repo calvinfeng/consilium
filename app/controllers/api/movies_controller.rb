@@ -24,8 +24,13 @@ class Api::MoviesController < ApplicationController
     end
 
     def generate_recommendations
-
-
+        ratings = Hash.new
+        recommender_params[:movie_ratings].each do |movie_id, rating|
+            ratings[movie_id] = rating.to_f
+        end
+        # Just fetching random movies
+        @movies = Movie.first(10)
+        render 'api/movies/popular_movies.json.jbuilder'
     end
 
     def fetch_popular
@@ -33,4 +38,8 @@ class Api::MoviesController < ApplicationController
         render 'api/movies/popular_movies.json.jbuilder'
     end
 
+    private
+    def recommender_params
+        params.require(:recommender)
+    end
 end
