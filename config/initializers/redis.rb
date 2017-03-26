@@ -41,18 +41,18 @@ def load_movies()
     return load_ratings(movies)
 end
 
-puts "\nLoading data into redis...\n"
+puts "\nLoading data into redis...\n\n"
 movie_map = load_movies()
 
 $redis.set('movie_rating_map', movie_map)
 
 # Cache ID's of those movies with plenty historical ratings
-popular_movie_ids = []
+most_viewed_movie_ids = []
 
 movie_map.each do |movie_id, info|
     if info[:ratings] && info[:ratings].length > 450
-        popular_movie_ids << movie_id
+        most_viewed_movie_ids << movie_id
     end
 end
 
-$redis.set('popular_movie_ids', popular_movie_ids)
+$redis.set('most_viewed_movie_ids', most_viewed_movie_ids)

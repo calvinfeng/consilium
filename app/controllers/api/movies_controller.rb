@@ -30,12 +30,12 @@ class Api::MoviesController < ApplicationController
         end
         # Just fetching random movies
         @movies = Movie.first(10)
-        render 'api/movies/popular_movies.json.jbuilder'
+        render 'api/movies/recommendation.json.jbuilder'
     end
 
-    def fetch_popular
-        @movies = Movie.find(eval($redis.get("popular_movie_ids")))
-        render 'api/movies/popular_movies.json.jbuilder'
+    def fetch_most_viewed
+        @movies = Movie.find(eval($redis.get("most_viewed_movie_ids")))
+        render 'api/movies/most_viewed.json.jbuilder'
     end
 
     private

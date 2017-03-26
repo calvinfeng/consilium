@@ -3,34 +3,35 @@
 // Copyright 2017 Consilium
 // Author(s): Calvin Feng
 
+/* global XSRF_TOKEN */
 // Thirdparty imports
 import request    from 'axios';
 
-export const TRAINING_MOVIES_FETCH_SUCCESS = 'TRAINING_MOVIES_FETCH_SUCCESS';
-export const TRAINING_MOVIES_FETCH_FAIL = 'TRAINING_MOVIES_FETCH_FAIL';
+export const MOST_VIEWED_MOVIES_FETCH_SUCCESS = 'MOST_VIEWED_MOVIES_FETCH_SUCCESS';
+export const MOST_VIEWED_MOVIES_FETCH_FAIL = 'MOST_VIEWED_MOVIES_FETCH_FAIL';
 
-const trainingMoviesFetchSuccess = (movies) => {
+const mostViewedMoviesFetchSuccess = (movies) => {
     return {
-        type: TRAINING_MOVIES_FETCH_SUCCESS,
+        type: MOST_VIEWED_MOVIES_FETCH_SUCCESS,
         movies
     };
 };
 
-const trainingMoviesFetchFail = (error) => {
+const mostViewedMoviesFetchFail = (error) => {
     return {
-        type: TRAINING_MOVIES_FETCH_FAIL,
+        type: MOST_VIEWED_MOVIES_FETCH_FAIL,
         error
     };
 };
 
-export const trainingMoviesFetch = () => (dispatch) => {
+export const mostViewedMoviesFetch = () => (dispatch) => {
     return request
-        .get('api/recommender/training_movies')
+        .get('api/movies/most_viewed')
         .then((res) => {
-            dispatch(trainingMoviesFetchSuccess(res.data));
+            dispatch(mostViewedMoviesFetchSuccess(res.data));
         })
         .catch((error) => {
-            dispatch(trainingMoviesFetchFail(error));
+            dispatch(mostViewedMoviesFetchFail(error));
         });
 };
 
@@ -56,7 +57,7 @@ export const recommendedMoviesFetch = (movieRatings) => (dispatch) => {
     const config = {
         headers:
         {
-            'X-CSRF-Token': window.xsrf_token
+            'X-CSRF-Token': XSRF_TOKEN
         }
     };
     return request

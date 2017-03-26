@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   end
 
   post 'api/movies/recommendations', :to => 'api/movies#generate_recommendations'
-  get  'api/movies/popular', :to => 'api/movies#fetch_popular'
+  get  'api/movies/most_viewed', :to => 'api/movies#fetch_most_viewed'
 end
 
 # This is so fucking wrong, using POST to get data, just because GET doesn't support large params

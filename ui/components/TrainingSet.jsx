@@ -18,25 +18,25 @@ class TrainingSet extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            trainingMoviesOnDisplay: {},
+            displayingMovies: {},
             ratingCount: 0
         };
     }
 
     componentDidMount() {
-        this.props.dispatchTrainingMoviesFetch();
+        this.props.dispatchMostViewedMoviesFetch();
     }
 
     componentWillReceiveProps(nextProps) {
-        if (Object.keys(this.state.trainingMoviesOnDisplay).length === 0) {
-            const movies = nextProps.trainingMovies;
-            const trainingMoviesOnDisplay = {};
+        if (Object.keys(this.state.displayingMovies).length === 0) {
+            const movies = nextProps.mostViewedMovies;
+            const displayingMovies = {};
             _.shuffle(Object.keys(movies)).slice(0, 10).forEach((movieId) => {
                 const movie = movies[movieId];
-                trainingMoviesOnDisplay[movieId] = movie;
+                displayingMovies[movieId] = movie;
             });
 
-            this.setState({ trainingMoviesOnDisplay });
+            this.setState({ displayingMovies });
         }
     }
 
@@ -65,7 +65,7 @@ class TrainingSet extends React.Component {
     }
 
     get trainingSet() {
-        const movies = this.state.trainingMoviesOnDisplay;
+        const movies = this.state.displayingMovies;
         return Object.keys(movies).sort().map((movieId) => {
             const movie = movies[movieId];
             return (
@@ -85,7 +85,7 @@ class TrainingSet extends React.Component {
         const progressPercentage = (100 * this.state.ratingCount) / 10;
         return (
             <div className="training-set-container">
-                <PosterSlider movies={this.props.trainingMovies} />
+                <PosterSlider movies={this.props.mostViewedMovies} />
                 <div className="training-set-header">
                     <h1>Popular Movies</h1>
                     <Button
@@ -110,9 +110,9 @@ class TrainingSet extends React.Component {
 /* eslint-disable */
 TrainingSet.propTypes = {
     movieDetails: React.PropTypes.object.isRequired,
-    trainingMovies: React.PropTypes.object.isRequired,
+    mostViewedMovies: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
-    dispatchTrainingMoviesFetch: React.PropTypes.func.isRequired,
+    dispatchMostViewedMoviesFetch: React.PropTypes.func.isRequired,
     dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired
 };
