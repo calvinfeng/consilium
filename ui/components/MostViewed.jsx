@@ -13,7 +13,7 @@ import PosterSlider            from './PosterSlider';
 import MovieItem               from './MovieItem';
 
 
-class TrainingSet extends React.Component {
+class MostViewed extends React.Component {
 
     constructor(props) {
         super(props);
@@ -108,7 +108,7 @@ class TrainingSet extends React.Component {
 }
 
 /* eslint-disable */
-TrainingSet.propTypes = {
+MostViewed.propTypes = {
     movieDetails: React.PropTypes.object.isRequired,
     mostViewedMovies: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
@@ -118,4 +118,4 @@ TrainingSet.propTypes = {
 };
 /* eslint-enable */
 
-export default TrainingSet;
+export default MostViewed;

@@ -5,7 +5,7 @@
 
 import React       from 'react';
 
-class RecommendedSet extends React.Component {
+class Recommendation extends React.Component {
 
     render() {
         return <h1>This is the recommended set of movies</h1>;
@@ -13,4 +13,4 @@ class RecommendedSet extends React.Component {
 
 }
 
-export default RecommendedSet;
+export default Recommendation;

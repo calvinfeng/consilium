@@ -13,8 +13,8 @@ import { movieRatingRecord }       from '../actions/ratings';
 
 
 import RatingRecord                from './RatingRecord';
-import TrainingSet                 from './TrainingSet';
-import RecommendedSet              from './RecommendedSet';
+import MostViewed                  from './MostViewed';
+import Recommendation              from './Recommendation';
 
 // Recommender is the only connected component, it's the ultimate parent for all
 // redux state information
@@ -58,7 +58,7 @@ class Recommender extends React.Component {
         if (this.state.isRecommending) {
             return (
                 <div className="recommender">
-                    <RecommendedSet
+                    <Recommendation
                         dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
                         dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
                         movieRatings={this.props.movieRatings}
@@ -69,7 +69,7 @@ class Recommender extends React.Component {
         }
         return (
             <div className="recommender">
-                <TrainingSet
+                <MostViewed
                     dispatchMostViewedMoviesFetch={this.props.dispatchMostViewedMoviesFetch}
                     dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
                     dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
