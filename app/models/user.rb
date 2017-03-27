@@ -9,7 +9,10 @@ require 'byebug'
 class User
     attr_reader :ratings, :average_rating, :preferences
     def initialize(movie_ratings)
-        @ratings = movie_ratings
+        @ratings = Hash.new
+        movie_ratings.each do |movie_id, rating|
+            @ratings[movie_id.to_s.to_i] = rating
+        end
         @average_rating = compute_avg_rating
         @preference = nil
     end

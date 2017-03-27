@@ -1,3 +1,5 @@
+require 'byebug'
+
 class Api::MoviesController < ApplicationController
 
     def index
@@ -23,13 +25,34 @@ class Api::MoviesController < ApplicationController
         end
     end
 
-    def generate_recommendations
-        ratings = Hash.new
+    # Required params
+    # {
+    #   start_year: 2010,
+    #   end_year: 2015,
+    #   movie_ratings: {
+    #       1: 4.5,
+    #       5: 5.0,
+    #       32: 4.5,
+    #       109487: 5.0,
+    #       109374: 3.5,
+    #       112556: 4.5,
+    #       112852: 4.0,
+    #       116797: 5.0,
+    #       91529: 3.5,
+    #       87232: 2.0,
+    #       81591: 2.5
+    #   }
+    # }
+    def recommendations
+        movie_ratings = Hash.new
         recommender_params[:movie_ratings].each do |movie_id, rating|
-            ratings[movie_id] = rating.to_f
+            movie_ratings[movie_id] = rating.to_f
         end
-        # Just fetching random movies
-        @movies = Movie.first(10)
+
+        start_year = recommender_params[:start_year]
+        end_year = recommender_params[:end_year]
+
+        @movies = generate_recommendations(start_year, end_year, movie_ratings)
         render 'api/movies/recommendation.json.jbuilder'
     end
 
@@ -40,6 +63,25 @@ class Api::MoviesController < ApplicationController
 
     private
     def recommender_params
-        params.require(:recommender)
+        eval(params.require(:recommender))
     end
+
+    def generate_recommendations(start_year, end_year, movie_ratings_by_user)
+        movies = Movie.where("year >= #{start_year} AND year <= #{end_year}")
+        indices = (0...movies.length).to_a.shuffle
+
+        recommended_movies = []
+        user = User.new(movie_ratings_by_user)
+        until recommended_movies.count >= 5 || indices.length == 0
+            index = indices.pop
+            prediction = movies[index].knn_prediction_for(user)
+            puts "\n#{movies[index].title} - prediction = #{prediction}\n" unless prediction.nil?
+            if !prediction.nil? && movies[index].knn_prediction_for(user) > 3.5
+                recommended_movies << movies[index]
+            end
+        end
+
+        return recommended_movies
+    end
+
 end

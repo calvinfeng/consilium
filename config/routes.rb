@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       resources :movies, only:[:index]
   end
 
-  post 'api/movies/recommendations', :to => 'api/movies#generate_recommendations'
+  post 'api/movies/recommendations', :to => 'api/movies#recommendations'
   get  'api/movies/most_viewed', :to => 'api/movies#fetch_most_viewed'
 end
 
