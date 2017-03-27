@@ -3,6 +3,6 @@ json.array! @movies do |movie|
   json.title movie.title
   json.year movie.year
   json.imdbId movie.imdb_id
-  json.avgRating movie.avg_rating
-  json.reviewCount movie.viewers.length
+  json.averageRating movie.average_rating
+  json.ratingCount movie.ratings_count
 end

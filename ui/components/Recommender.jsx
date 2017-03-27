@@ -6,15 +6,15 @@
 import React                       from 'react';
 import { connect }                 from 'react-redux';
 
-import { trainingMoviesFetch }     from '../actions/movies';
+import { mostViewedMoviesFetch }     from '../actions/movies';
 import { recommendedMoviesFetch }  from '../actions/movies';
 import { movieDetailFetch }        from '../actions/movieDetails';
 import { movieRatingRecord }       from '../actions/ratings';
 
 
 import RatingRecord                from './RatingRecord';
-import TrainingSet                 from './TrainingSet';
-import RecommendedSet              from './RecommendedSet';
+import MostViewed                  from './MostViewed';
+import Recommendation              from './Recommendation';
 
 // Recommender is the only connected component, it's the ultimate parent for all
 // redux state information
@@ -58,7 +58,7 @@ class Recommender extends React.Component {
         if (this.state.isRecommending) {
             return (
                 <div className="recommender">
-                    <RecommendedSet
+                    <Recommendation
                         dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
                         dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
                         movieRatings={this.props.movieRatings}
@@ -69,11 +69,11 @@ class Recommender extends React.Component {
         }
         return (
             <div className="recommender">
-                <TrainingSet
-                    dispatchTrainingMoviesFetch={this.props.dispatchTrainingMoviesFetch}
+                <MostViewed
+                    dispatchMostViewedMoviesFetch={this.props.dispatchMostViewedMoviesFetch}
                     dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
                     dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
-                    trainingMovies={this.props.trainingMovies}
+                    mostViewedMovies={this.props.mostViewedMovies}
                     movieRatings={this.props.movieRatings}
                     movieDetails={this.props.movieDetails} />
                 <RatingRecord />
@@ -93,11 +93,11 @@ class Recommender extends React.Component {
 
 /* eslint-disable */
 Recommender.propTypes = {
-    trainingMovies: React.PropTypes.object.isRequired,
+    mostViewedMovies: React.PropTypes.object.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
     movieDetails: React.PropTypes.object.isRequired,
-    dispatchTrainingMoviesFetch: React.PropTypes.func.isRequired,
+    dispatchMostViewedMoviesFetch: React.PropTypes.func.isRequired,
     dispatchRecommendedMoviesFetch: React.PropTypes.func.isRequired,
     dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired
@@ -106,7 +106,7 @@ Recommender.propTypes = {
 
 const mapReduxStateToProps = (state) => {
     return {
-        trainingMovies: state.trainingMovies,
+        mostViewedMovies: state.mostViewedMovies,
         recommendedMovies: state.recommendedMovies,
         movieRatings: state.movieRatings,
         movieDetails: state.movieDetails
@@ -116,7 +116,7 @@ const mapReduxStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dispatchRecommendedMoviesFetch: (movieRatings) => dispatch(recommendedMoviesFetch(movieRatings)),
-        dispatchTrainingMoviesFetch: () => dispatch(trainingMoviesFetch()),
+        dispatchMostViewedMoviesFetch: () => dispatch(mostViewedMoviesFetch()),
         dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating)),
         dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
     };
