@@ -13,22 +13,23 @@ class User
         movie_ratings.each do |movie_id, rating|
             @ratings[movie_id.to_s.to_i] = rating
         end
-        @average_rating = compute_avg_rating
-        @preference = nil
+
+        # Compute other instance properties
+        compute_average_rating
+        compute_preferences
     end
 
-    def compute_avg_rating
-        avg_rating = 0
+    def compute_average_rating
+        sum = 0
         @ratings.each do |movie_id, rating|
-            avg_rating += rating
+            sum += rating
         end
-        avg_rating = avg_rating/@ratings.length
-        return avg_rating
+        @average_rating = sum/@ratings.length
     end
 
     def compute_preferences
         @preference = Array.new(8) { rand }
-        movie_features = eval($redis.get("features"))
+        movie_features = eval($redis.get("movie_features"))
         learning_rate = 0.1
         regularized_factor = 0.15
         500.times do |i|

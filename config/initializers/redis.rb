@@ -41,14 +41,35 @@ def load_movies()
     return load_ratings(movies)
 end
 
-puts "\nLoading data into redis...\n\n"
+def load_movie_features
+    movie_features = Hash.new
+    csv = CSV.parse(File.read('db/csv/20k-users/movie_features.csv'), :headers => true)
+    csv.each do |row|
+        movie_id = row["movieId"].to_i
+        i = 1
+        feature_vector = []
+        while i < row.length
+            feature_vector << row[i].to_f
+            i += 1
+        end
+        movie_features[movie_id] = feature_vector
+    end
+    movie_features
+end
+
+puts "\nLoading movie rating map into redis...\n\n"
 movie_map = load_movies()
 
 $redis.set('movie_rating_map', movie_map)
 
+puts "\nLoading movie features into redis\n\n"
+features = load_movie_features
+
+$redis.set('movie_features', features)
+
+puts "\nLoading most viewed movie ids into redis\n\n"
 # Cache ID's of those movies with plenty historical ratings
 most_viewed_movie_ids = []
-
 movie_map.each do |movie_id, info|
     if info[:ratings] && info[:ratings].length > 450
         most_viewed_movie_ids << movie_id

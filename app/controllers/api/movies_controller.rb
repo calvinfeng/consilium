@@ -75,7 +75,7 @@ class Api::MoviesController < ApplicationController
         until recommended_movies.count >= 5 || indices.length == 0
             index = indices.pop
             prediction = movies[index].knn_prediction_for(user)
-            puts "\n#{movies[index].title} - prediction = #{prediction}\n" unless prediction.nil?
+            puts "\n#{movies[index].title} - prediction = #{prediction}\n\n" unless prediction.nil?
             if !prediction.nil? && movies[index].knn_prediction_for(user) > 3.5
                 recommended_movies << movies[index]
             end
