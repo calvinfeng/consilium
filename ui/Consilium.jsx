@@ -12,7 +12,7 @@ import { createStore, applyMiddleware }           from 'redux';
 import { IndexRoute, hashHistory, Router, Route } from 'react-router';
 
 // Consilium imports
-import Recommender                      from './components/Recommender';
+import Recommender                      from './containers/Recommender';
 import About                            from './components/About';
 import Navigation                       from './components/Navigation';
 
@@ -30,6 +30,10 @@ class Consilium extends React.Component {
     }
 }
 
+Consilium.propTypes = {
+    children: React.PropTypes.array.isRequired
+};
+
 const reduxStore = createStore(Reducer, applyMiddleware(thunk));
 
 const Routes = (
@@ -43,6 +47,7 @@ const Routes = (
     </Provider>
 );
 
-document.addEventListener("DOMContentLoaded", function(){
-    ReactDOM.render(Routes, document.getElementById("application"));
+/* global document */
+document.addEventListener('DOMContentLoaded', () => {
+    ReactDOM.render(Routes, document.getElementById('application'));
 });

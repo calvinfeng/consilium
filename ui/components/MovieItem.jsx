@@ -8,6 +8,7 @@ import Spinner                             from 'spin';
 import Rating                              from 'react-rating';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 
+/* global document */
 class MovieItem extends React.Component {
 
     constructor(props) {

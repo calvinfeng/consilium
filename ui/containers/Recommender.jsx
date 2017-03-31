@@ -6,7 +6,7 @@
 import React                       from 'react';
 import { connect }                 from 'react-redux';
 
-import { mostViewedMoviesFetch }     from '../actions/movies';
+import { mostViewedMoviesFetch }   from '../actions/movies';
 import { recommendedMoviesFetch }  from '../actions/movies';
 import { movieDetailFetch }        from '../actions/movieDetails';
 import { movieRatingRecord }       from '../actions/ratings';

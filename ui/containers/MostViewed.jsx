@@ -9,8 +9,8 @@ import _                       from 'lodash';
 import { ProgressBar, Button } from 'react-bootstrap';
 
 // Components
-import PosterSlider            from './PosterSlider';
-import MovieItem               from './MovieItem';
+import PosterSlider            from '../components/PosterSlider';
+import MovieItem               from '../components/MovieItem';
 
 
 class MostViewed extends React.Component {
@@ -41,11 +41,10 @@ class MostViewed extends React.Component {
     }
 
     get description() {
-        const description = `These are some movies we think you have seen before.
-        If you have seen them, whether you like or dislike them, let us know and
-        give them ratings! If not, click the skip button and we will give you more
-        choices. It will help our backend machine learning algorithm to learn your
-        taste and preference`;
+        const description = `These are some movies we think you have seen before. If you have seen them, whether you
+        like or dislike them, let us know and give them ratings! If not, click the skip button and we will give you
+        more choices. It will help our backend machine learning algorithm to learn your taste and preference`;
+
         if (this.state.ratingCount === 0) {
             return (
                 <div>
@@ -56,6 +55,7 @@ class MostViewed extends React.Component {
                 </div>
             );
         }
+
         return (
             <div>
                 <p>{description}</p>
