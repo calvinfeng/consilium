@@ -5,9 +5,15 @@
     flex-direction: column;
     margin: 5px 5px 5px 5px;
     width: 302px;
+    height: 570px;
     border: 1px solid black;
     border-radius: 8px;
     background-color: white;
+
+    .spinner {
+        top: -50%;
+        left: 50%;
+    }
 
     .title {
         display: flex;
@@ -25,10 +31,6 @@
     .title:hover {
         background: #f7f7f7;
         cursor: pointer;
-    }
-
-    .spinner-container {
-        width: 100%;
     }
 
     .poster {

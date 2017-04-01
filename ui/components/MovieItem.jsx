@@ -19,11 +19,12 @@ class MovieItem extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (!nextProps.movieDetail.isDefaultProp) {
-            // this.spinner.stop();
+            this.spinner.stop();
         }
     }
 
     componentDidMount() {
+        // Attach spinner to
         this.spinner = new Spinner().spin();
         document.getElementById(this.props.movieId).appendChild(this.spinner.el);
         this.props.dispatchMovieDetailFetch(this.props.imdbId);
@@ -37,17 +38,28 @@ class MovieItem extends React.Component {
         // this.props.dispatchMovieSkip(this.props.movieId);
     }
 
+    get poster() {
+        if (this.props.movieDetail.poster) {
+            return (
+                <div className="poster">
+                    <img
+                        id={this.props.movieId}
+                        src={this.props.movieDetail.poster}
+                        alt="Movie Poster" />
+                </div>
+            );
+        }
+
+        return (
+            <div className="poster" />
+        );
+    }
+
     get interface() {
         if (this.props.rating) {
             return (
                 <div>
-                    <div className="spinner-container" id={this.props.movieId} />
-                    <div className="poster">
-                        <img
-                            id={this.props.movieId}
-                            src={this.props.movieDetail.poster}
-                            alt="Movie Poster" />
-                    </div>
+                    {this.poster}
                     <div className="user-rating">
                         <div>Your Rating: <strong>{this.props.rating}</strong></div>
                     </div>
@@ -58,12 +70,7 @@ class MovieItem extends React.Component {
         if (this.props.isRecommendation) {
             return (
                 <div>
-                    <div className="spinner-container" id={this.props.movieId} />
-                    <div className="poster">
-                        <img
-                            src={this.props.movieDetail.poster}
-                            alt="Movie Poster" />
-                    </div>
+                    {this.poster}
                     <div className="plot">{this.props.movieDetail.plot}</div>
                     <div className="rating">
                         <div style={{ width: '100%' }}>
@@ -92,12 +99,7 @@ class MovieItem extends React.Component {
 
         return (
             <div>
-                <div className="spinner-container" id={this.props.movieId} />
-                <div className="poster">
-                    <img
-                        src={this.props.movieDetail.poster}
-                        alt="Movie Poster" />
-                </div>
+                {this.poster}
                 <div className="rating">
                     <div className="star-toolbar-container">
                         <Rating
@@ -119,11 +121,10 @@ class MovieItem extends React.Component {
             </Popover>
         );
         return (
-            <div className="movie-item">
+            <div className="movie-item" id={this.props.movieId}>
                 <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
                     <h3 className="title">
-                        <strong>{this.props.movieDetail.title}</strong>
-                        ({this.props.movieDetail.year})
+                        <strong>{this.props.movieDetail.title}</strong>({this.props.movieDetail.year})
                     </h3>
                 </OverlayTrigger>
                 {this.interface}
@@ -138,8 +139,7 @@ MovieItem.defaultProps = {
         isDefaultProp: true,
         title: 'Loading...',
         year: '....',
-        plot: 'Loading...',
-        poster: 'https://cdn.mirs.com/images/tranzit/loading.gif'
+        plot: 'Loading...'
     }
 };
 

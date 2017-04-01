@@ -11,6 +11,7 @@ export const MOVIE_RATING_DELETED = 'MOVIE_RATING_DELETED';
 export const movieRatingRecord = (movieId, rating) => (dispatch) => {
     const ratingRecord = {};
     ratingRecord[movieId] = rating;
+
     dispatch({
         type: MOVIE_RATING_RECORDED,
         data: ratingRecord

@@ -18,9 +18,12 @@ class MostViewed extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayingMovies: {},
+            moviesOnDisplay: {},
             ratingCount: 0
         };
+
+        this.randomlySetMoviesOnDisplay = this.randomlySetMoviesOnDisplay.bind(this);
+        this.handleClickMoreMovies = this.handleClickMoreMovies.bind(this);
     }
 
     componentDidMount() {
@@ -28,22 +31,15 @@ class MostViewed extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (Object.keys(this.state.displayingMovies).length === 0) {
-            const movies = nextProps.mostViewedMovies;
-            const displayingMovies = {};
-            _.shuffle(Object.keys(movies)).slice(0, 10).forEach((movieId) => {
-                const movie = movies[movieId];
-                displayingMovies[movieId] = movie;
-            });
-
-            this.setState({ displayingMovies });
+        if (Object.keys(this.state.moviesOnDisplay).length === 0) {
+            this.randomlySetMoviesOnDisplay(nextProps.mostViewedMovies);
         }
     }
 
     get description() {
-        const description = `These are some movies we think you have seen before. If you have seen them, whether you
-        like or dislike them, let us know and give them ratings! If not, click the skip button and we will give you
-        more choices. It will help our backend machine learning algorithm to learn your taste and preference`;
+        const description = `These are some of the most viewed American films. We think it is very likely that
+        you have seen at least some of them.  If you have seen them, whether you like or dislike them, let us know and
+        give them ratings! It will help our backend machine learning algorithm to learn your taste and preference`;
 
         if (this.state.ratingCount === 0) {
             return (
@@ -64,10 +60,16 @@ class MostViewed extends React.Component {
         );
     }
 
-    get trainingSet() {
-        const movies = this.state.displayingMovies;
-        return Object.keys(movies).sort().map((movieId) => {
-            const movie = movies[movieId];
+    get mostViewedMovies() {
+        const movieRatings = this.props.movieRatings;
+
+        // Only serve movies that haven't been rated
+        const unratedMovieIds = Object.keys(this.state.moviesOnDisplay).filter((movieId) => {
+            return movieRatings[movieId] === undefined;
+        });
+
+        return unratedMovieIds.sort().map((movieId) => {
+            const movie = this.state.moviesOnDisplay[movieId];
             return (
                 <MovieItem
                     isRecommendation={false}
@@ -81,26 +83,41 @@ class MostViewed extends React.Component {
         });
     }
 
+    randomlySetMoviesOnDisplay(mostViewedMovies) {
+        if (Object.keys(mostViewedMovies).length > 0) {
+            const moviesOnDisplay = {};
+            _.shuffle(Object.keys(mostViewedMovies)).slice(0, 10).forEach((movieId) => {
+                const movie = mostViewedMovies[movieId];
+                moviesOnDisplay[movieId] = movie;
+            });
+            this.setState({ moviesOnDisplay });
+        }
+    }
+
+    handleClickMoreMovies() {
+        this.randomlySetMoviesOnDisplay(this.props.mostViewedMovies);
+    }
+
     render() {
-        const progressPercentage = (100 * this.state.ratingCount) / 10;
+        const progressPercentage = (100 * Object.keys(this.props.movieRatings).length) / 10;
         return (
-            <div className="training-set-container">
+            <div className="most-viewed">
                 <PosterSlider movies={this.props.mostViewedMovies} />
-                <div className="training-set-header">
+                <div className="header">
                     <h1>Popular Movies</h1>
                     <Button
                         disabled={this.state.isMovieSetLoading}
                         bsSize="xsmall"
                         className="react-buttons"
-                        onClick={this.skipAll}
+                        onClick={this.handleClickMoreMovies}
                         bsStyle="primary">
                         More Movies
                     </Button>
                 </div>
                 {this.description}
                 <ProgressBar now={progressPercentage} />
-                <div className="training-set">
-                    { this.trainingSet }
+                <div className="movies">
+                    { this.mostViewedMovies }
                 </div>
             </div>
         );

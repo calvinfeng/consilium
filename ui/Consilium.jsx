@@ -31,7 +31,7 @@ class Consilium extends React.Component {
 }
 
 Consilium.propTypes = {
-    children: React.PropTypes.array.isRequired
+    children: React.PropTypes.object.isRequired
 };
 
 const reduxStore = createStore(Reducer, applyMiddleware(thunk));
