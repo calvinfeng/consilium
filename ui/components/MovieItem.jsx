@@ -24,10 +24,13 @@ class MovieItem extends React.Component {
     }
 
     componentDidMount() {
-        // Attach spinner to
-        this.spinner = new Spinner().spin();
-        document.getElementById(this.props.movieId).appendChild(this.spinner.el);
-        this.props.dispatchMovieDetailFetch(this.props.imdbId);
+        // Check if Redux store has movieDetail information
+        if (this.props.movieDetail.isDefaultProp) {
+            // Attach spinner to
+            this.spinner = new Spinner().spin();
+            document.getElementById(this.props.movieId).appendChild(this.spinner.el);
+            this.props.dispatchMovieDetailFetch(this.props.imdbId);
+        }
     }
 
     handleRatingClick(rating) {

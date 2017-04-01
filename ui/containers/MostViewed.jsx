@@ -4,6 +4,7 @@
 // Author(s): Calvin Feng
 
 import React                   from 'react';
+import { connect }                 from 'react-redux';
 import _                       from 'lodash';
 
 import { ProgressBar, Button } from 'react-bootstrap';
@@ -11,6 +12,10 @@ import { ProgressBar, Button } from 'react-bootstrap';
 // Components
 import PosterSlider            from '../components/PosterSlider';
 import MovieItem               from '../components/MovieItem';
+
+import { movieDetailFetch }        from '../actions/movieDetails';
+import { mostViewedMoviesFetch }   from '../actions/movies';
+import { movieRatingRecord }       from '../actions/ratings';
 
 
 class MostViewed extends React.Component {
@@ -124,7 +129,6 @@ class MostViewed extends React.Component {
     }
 }
 
-/* eslint-disable */
 MostViewed.propTypes = {
     movieDetails: React.PropTypes.object.isRequired,
     mostViewedMovies: React.PropTypes.object.isRequired,
@@ -133,6 +137,22 @@ MostViewed.propTypes = {
     dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired
 };
-/* eslint-enable */
 
-export default MostViewed;
+const mapReduxStateToProps = (state) => {
+    return {
+        mostViewedMovies: state.mostViewedMovies,
+        movieRatings: state.movieRatings,
+        movieDetails: state.movieDetails
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatchMostViewedMoviesFetch: () => dispatch(mostViewedMoviesFetch()),
+        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating)),
+        dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId))
+    };
+};
+
+
+export default connect(mapReduxStateToProps, mapDispatchToProps)(MostViewed);

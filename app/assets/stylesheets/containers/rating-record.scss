@@ -1,8 +1,10 @@
 
-.rating-record-container {
+.rating-record {
+    display: flex;
+    flex-direction: column;
 
     .header {
-        display: flex;
+        display: inherit;
         align-items: center;
         margin-top: 1em;
         margin-bottom: 1em;
@@ -14,8 +16,8 @@
         }
     }
 
-    .rating-record {
-        display: flex;
+    .movies {
+        display: inherit;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: flex-start;;
