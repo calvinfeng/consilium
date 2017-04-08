@@ -12,7 +12,7 @@ require 'csv'
 $redis = Redis.new(:host => 'localhost', :port => 6379)
 $redis.flushdb
 
-def load_ratings(movies)
+def load_ratings_into_movies(movies)
     csv = CSV.parse(File.read('db/csv/20k-users/training_ratings.csv'), :headers => true)
     csv.each do |row|
         user_id = row['userId'].to_i
@@ -22,7 +22,6 @@ def load_ratings(movies)
         if movies[movie_id][:ratings].nil?
             movies[movie_id][:ratings] = Hash.new
         end
-
         movies[movie_id][:ratings][user_id] = rating
     end
 
@@ -38,8 +37,32 @@ def load_movies()
         movies[id] = { title: title }
     end
 
-    return load_ratings(movies)
+    return load_ratings_into_movies(movies)
 end
+
+def load_average_ratings_by_user_id
+    historical_ratings_by_user_id = Hash.new
+    csv = CSV.parse(File.read('db/csv/20k-users/training_ratings.csv'), :headers => true)
+    csv.each do |row|
+        user_id = row['userId'].to_i
+        movie_id = row['movieId'].to_i
+        rating = row['rating'].to_f
+
+        if historical_ratings_by_user_id[user_id].nil?
+            historical_ratings_by_user_id[user_id] = Hash.new
+        end
+        historical_ratings_by_user_id[user_id][movie_id] = rating
+    end
+
+    average_rating_map = Hash.new
+    historical_ratings_by_user_id.each do |user_id, movie_ratings|
+        sum = movie_ratings.values.reduce(:+)
+        average_rating_map[user_id] = sum / movie_ratings.length
+    end
+
+    return average_rating_map
+end
+
 
 def load_movie_features
     movie_features = Hash.new
@@ -57,17 +80,19 @@ def load_movie_features
     movie_features
 end
 
-puts "\nLoading movie rating map into redis...\n\n"
+puts "\nLoading movie_rating_map into redis...\n\n"
 movie_map = load_movies()
-
 $redis.set('movie_rating_map', movie_map)
 
-puts "\nLoading movie features into redis\n\n"
+puts "\nLoading movie_features into redis\n\n"
 features = load_movie_features
-
 $redis.set('movie_features', features)
 
-puts "\nLoading most viewed movie ids into redis\n\n"
+puts "\nLoading average_rating_map into redis\n\n"
+average_rating_map = load_average_ratings_by_user_id
+$redis.set('average_rating_map', average_rating_map)
+
+puts "\nLoading most_viewed_movie_ids into redis\n\n"
 # Cache ID's of those movies with plenty historical ratings
 most_viewed_movie_ids = []
 movie_map.each do |movie_id, info|
@@ -75,5 +100,4 @@ movie_map.each do |movie_id, info|
         most_viewed_movie_ids << movie_id
     end
 end
-
 $redis.set('most_viewed_movie_ids', most_viewed_movie_ids)

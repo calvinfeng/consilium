@@ -3,19 +3,20 @@
 // Copyright 2017 Consilium
 // Author(s): Calvin Feng
 
-import React                   from 'react';
-import { connect }                 from 'react-redux';
-import _                       from 'lodash';
+import React                     from 'react';
+import { connect }               from 'react-redux';
+import _                         from 'lodash';
 
-import { ProgressBar, Button } from 'react-bootstrap';
+import { ProgressBar }           from 'react-bootstrap';
+import { Button }                from 'react-bootstrap';
 
 // Components
-import PosterSlider            from '../components/PosterSlider';
-import MovieItem               from '../components/MovieItem';
+import PosterSlider              from '../components/PosterSlider';
+import MovieItem                 from '../components/MovieItem';
 
-import { movieDetailFetch }        from '../actions/movieDetails';
-import { mostViewedMoviesFetch }   from '../actions/movies';
-import { movieRatingRecord }       from '../actions/ratings';
+import { movieDetailFetch }      from '../actions/movieDetails';
+import { mostViewedMoviesFetch } from '../actions/movies';
+import { movieRatingRecord }     from '../actions/ratings';
 
 
 class MostViewed extends React.Component {
@@ -27,8 +28,8 @@ class MostViewed extends React.Component {
             ratingCount: 0
         };
 
-        this.randomlySetMoviesOnDisplay = this.randomlySetMoviesOnDisplay.bind(this);
         this.handleClickMoreMovies = this.handleClickMoreMovies.bind(this);
+        this.randomlySetMoviesOnDisplay = this.randomlySetMoviesOnDisplay.bind(this);
     }
 
     componentDidMount() {
@@ -41,15 +42,15 @@ class MostViewed extends React.Component {
         }
     }
 
-    get description() {
-        const description = `These are some of the most viewed American films. We think it is very likely that
+    get instruction() {
+        const instruction = `These are some of the most viewed American films. We think it is very likely that
         you have seen at least some of them.  If you have seen them, whether you like or dislike them, let us know and
         give them ratings! It will help our backend machine learning algorithm to learn your taste and preference`;
 
         if (this.state.ratingCount === 0) {
             return (
-                <div>
-                    <p>{description}</p>
+                <div className="instruction">
+                    <p>{instruction}</p>
                     <h4>
                         As soon as 10 movies are rated, the recommender system will get to work!
                     </h4>
@@ -58,8 +59,8 @@ class MostViewed extends React.Component {
         }
 
         return (
-            <div>
-                <p>{description}</p>
+            <div className="instruction">
+                <p>{instruction}</p>
                 <h4>Rate <strong>{10 - this.state.ratingCount}</strong> more movies</h4>
             </div>
         );
@@ -110,19 +111,21 @@ class MostViewed extends React.Component {
                 <PosterSlider movies={this.props.mostViewedMovies} />
                 <div className="header">
                     <h1>Popular Movies</h1>
-                    <Button
-                        disabled={this.state.isMovieSetLoading}
-                        bsSize="xsmall"
-                        className="react-buttons"
-                        onClick={this.handleClickMoreMovies}
-                        bsStyle="primary">
-                        More Movies
-                    </Button>
                 </div>
-                {this.description}
+                {this.instruction}
                 <ProgressBar now={progressPercentage} />
                 <div className="movies">
                     { this.mostViewedMovies }
+                </div>
+                <div className="footer">
+                    <Button
+                        disabled={this.state.isMovieSetLoading}
+                        bsSize="small"
+                        className="react-buttons"
+                        onClick={this.handleClickMoreMovies}
+                        bsStyle="primary">
+                        Load more movies
+                    </Button>
                 </div>
             </div>
         );
@@ -131,18 +134,18 @@ class MostViewed extends React.Component {
 
 MostViewed.propTypes = {
     movieDetails: React.PropTypes.object.isRequired,
-    mostViewedMovies: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
-    dispatchMostViewedMoviesFetch: React.PropTypes.func.isRequired,
+    mostViewedMovies: React.PropTypes.object.isRequired,
+    dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
     dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
-    dispatchMovieDetailFetch: React.PropTypes.func.isRequired
+    dispatchMostViewedMoviesFetch: React.PropTypes.func.isRequired
 };
 
 const mapReduxStateToProps = (state) => {
     return {
         mostViewedMovies: state.mostViewedMovies,
-        movieRatings: state.movieRatings,
-        movieDetails: state.movieDetails
+        movieDetails: state.movieDetails,
+        movieRatings: state.movieRatings
     };
 };
 

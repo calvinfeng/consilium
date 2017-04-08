@@ -19,39 +19,32 @@ class Recommender extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isRecommending: false,
-            ratingCountNeededForNextRecommendation: 10
+            numberOfRatingsNeededForNextFetch: 10
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        let isRecommending = false;
-
-        // TODO: Fix the condition for fetching next round of recommendation, the current
-        // approach is ugly
+        // First round of fetching
         if (
-            nextProps.recommendedMovies
-            && Object.keys(nextProps.recommendedMovies).length >= this.state.ratingCountNeededForNextRecommendation
+            Object.keys(nextProps.movieRatings).length >= 10
+            && Object.keys(nextProps.recommendedMovies).length === 0
         ) {
-            isRecommending = true;
-        }
-
-        if (Object.keys(nextProps.movieRatings).length >= 10) {
-            isRecommending = true;
-        }
-
-        if (isRecommending) {
             this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings);
+            this.setState({
+                numberOfRatingsNeededForNextFetch: this.state.numberOfRatingsNeededForNextFetch + 10
+            });
         }
 
-        this.setState({
-            isRecommending,
-            ratingCountNeededForNextRecommendation: this.state.ratingCountNeededForNextRecommendation + 10
-        });
+        if (Object.keys(nextProps.movieRatings).length >= this.state.numberOfRatingsNeededForNextFetch) {
+            this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings);
+            this.setState({
+                numberOfRatingsNeededForNextFetch: this.state.numberOfRatingsNeededForNextFetch + 10
+            });
+        }
     }
 
-    get indexes() {
-        if (this.state.isRecommending) {
+    get content() {
+        if (Object.keys(this.props.recommendedMovies).length > 0) {
             return (
                 <div className="recommender">
                     <Recommendation />
@@ -59,6 +52,7 @@ class Recommender extends React.Component {
                 </div>
             );
         }
+
         return (
             <div className="recommender">
                 <MostViewed />
@@ -70,27 +64,22 @@ class Recommender extends React.Component {
     render() {
         return (
             <div className="recommender-container">
-                {this.indexes}
+                {this.content}
             </div>
         );
     }
-
 }
 
 Recommender.propTypes = {
-    mostViewedMovies: React.PropTypes.object.isRequired,
-    recommendedMovies: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
-    movieDetails: React.PropTypes.object.isRequired,
+    recommendedMovies: React.PropTypes.object.isRequired,
     dispatchRecommendedMoviesFetch: React.PropTypes.func.isRequired
 };
 
 const mapReduxStateToProps = (state) => {
     return {
-        mostViewedMovies: state.mostViewedMovies,
-        recommendedMovies: state.recommendedMovies,
         movieRatings: state.movieRatings,
-        movieDetails: state.movieDetails
+        recommendedMovies: state.recommendedMovies
     };
 };
 

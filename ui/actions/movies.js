@@ -61,7 +61,7 @@ export const recommendedMoviesFetch = (movieRatings) => (dispatch) => {
         }
     };
     return request
-        .post('api/recommender/recommended_movies', {
+        .post('api/movies/recommendations', {
             movie_ratings: movieRatings
         }, config)
         .then((res) => {

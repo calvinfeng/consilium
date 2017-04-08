@@ -45,12 +45,12 @@ class Api::MoviesController < ApplicationController
     # }
     def recommendations
         movie_ratings = Hash.new
-        recommender_params[:movie_ratings].each do |movie_id, rating|
+        params[:movie_ratings].each do |movie_id, rating|
             movie_ratings[movie_id] = rating.to_f
         end
 
-        start_year = recommender_params[:start_year]
-        end_year = recommender_params[:end_year]
+        start_year = params[:start_year]
+        end_year = params[:end_year]
 
         @movies = generate_recommendations(start_year, end_year, movie_ratings)
         render 'api/movies/recommendation.json.jbuilder'
@@ -62,11 +62,13 @@ class Api::MoviesController < ApplicationController
     end
 
     private
-    def recommender_params
-        eval(params.require(:recommender))
-    end
+    # def recommender_params
+    #     eval(params.require(:recommender))
+    # end
 
     def generate_recommendations(start_year, end_year, movie_ratings_by_user)
+        start_year = start_year || 1900
+        end_year = end_year || 2017
         movies = Movie.where("year >= #{start_year} AND year <= #{end_year}")
         indices = (0...movies.length).to_a.shuffle
 

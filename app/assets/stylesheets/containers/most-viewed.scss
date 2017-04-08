@@ -1,18 +1,25 @@
-
 .most-viewed {
+    font-size: 12px;
 
     .header {
       display: flex;
       align-items: center;
       margin-top: 1em;
       margin-bottom: 1em;
-
-      button {
-        margin: 1em 0em 0em 1em;
+      h1 {
+          font-size: 4em;
+          font-weight: 800;
       }
-
     }
+    .instruction {
+        p {
+            font-size: 1.3em;
+        }
 
+        h4 {
+            font-size: 2em;
+        }
+    }
     .movies {
         display: flex;
         flex-direction: row;
@@ -20,4 +27,14 @@
         justify-content: center;
     }
 
+    .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        height: 6em;
+        button {
+            font-size: 1.2em;
+        }
+    }
 }

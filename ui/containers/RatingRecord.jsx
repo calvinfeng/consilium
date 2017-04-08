@@ -7,6 +7,7 @@ import React                 from 'react';
 import { connect }           from 'react-redux';
 
 import MovieItem             from '../components/MovieItem';
+
 import { movieDetailFetch }  from '../actions/movieDetails';
 import { movieRatingRecord } from '../actions/ratings';
 
@@ -35,7 +36,7 @@ class RatingRecord extends React.Component {
         return (
             <div className="rating-record">
                 <div className="header">
-                    <h1>Rating record is coming soon!</h1>
+                    <h1>Rating Record</h1>
                 </div>
                 <div className="movies">
                     {this.ratedMovies}

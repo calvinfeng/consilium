@@ -1,3 +1,4 @@
+require 'byebug'
 class HistoricalUser < ActiveRecord::Base
 
     has_many :ratings,
@@ -11,12 +12,19 @@ class HistoricalUser < ActiveRecord::Base
     def average_rating
         return @average_rating unless @average_rating.nil?
 
-        sum = 0
-        self.ratings.each do | rating |
-            sum += rating.value
+        rating_map = $redis.get("average_rating_map")
+
+        if rating_map && eval(rating_map)[self.id]
+            @average_rating = eval(rating_map)[self.id]
+        else
+            sum = 0
+            self.ratings.each do | rating |
+                sum += rating.value
+            end
+
+            @average_rating = sum / self.ratings.count
         end
 
-        @average_rating = sum / self.ratings.count
         return @average_rating
     end
 end

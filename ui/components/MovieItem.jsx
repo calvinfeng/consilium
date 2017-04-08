@@ -18,7 +18,7 @@ class MovieItem extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!nextProps.movieDetail.isDefaultProp) {
+        if (!nextProps.movieDetail.isDefaultProp && this.spinner) {
             this.spinner.stop();
         }
     }
