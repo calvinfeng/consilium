@@ -5,7 +5,7 @@
     flex-direction: column;
     margin: 5px 5px 5px 5px;
     width: 302px;
-    height: 570px;
+    height: 560px;
     border: 1px solid black;
     border-radius: 8px;
     background-color: white;
@@ -16,14 +16,19 @@
     }
 
     .title {
+        strong {
+            font-weight: 900;
+            margin-right: 0.3em;
+        }
+        font-weight: 400;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 50px;
-        font-size: 1em;
+        font-size: 1.2em;
         text-align: center;
         vertical-align: center;
-        margin: 0;
+        margin: 0 0 0 0;
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
     }
@@ -58,16 +63,16 @@
         border-bottom: 1px solid black;
     }
 
-    .rating {
+    .rating-toolbar {
         width: 100%;
         display: flex;
         justify-content: center;
-        padding: 1em 1em 1em 1em;
+        margin: 1em 0 1em 0;
+        padding: 0 0 0 0;
 
         .star-toolbar-container {
             display: flex;
             flex-direction: row;
-            margin: 5px;
             justify-content: space-around;
             align-content: center;
         }
@@ -76,14 +81,21 @@
             display: flex;
             flex-direction: row;
             justify-content: flex-end;
+            button {
+                margin: 0.5em 0.5em 0.5em 0.5em;
+            }
         }
     }
 
-    .user-rating {
+    .rating-value {
         display: flex;
         font-size: 1em;
         justify-content: center;
         font-size: 1.2em;
         margin: 1em 1em 1em 1em;
     }
+}
+
+.movie-item.recommendation {
+    height: 640px;
 }

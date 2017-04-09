@@ -1,0 +1,25 @@
+.recommendation {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    font-family: Roboto;
+
+    .header {
+        display: inherit;
+        align-items: center;
+        margin-top: 1em;
+        margin-bottom: 1em;
+
+        h1 {
+            font-size: 4em;
+            font-weight: 800;
+        }
+    }
+
+    .movies {
+        display: inherit;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;;
+    }
+}

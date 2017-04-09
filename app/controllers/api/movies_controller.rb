@@ -52,7 +52,9 @@ class Api::MoviesController < ApplicationController
         start_year = params[:start_year]
         end_year = params[:end_year]
 
-        @movies = generate_recommendations(start_year, end_year, movie_ratings)
+        # NOTE: Change it back later
+        # @movies = generate_recommendations(start_year, end_year, movie_ratings)
+        @movies = Movie.find(eval($redis.get("most_viewed_movie_ids"))).first(10)
         render 'api/movies/recommendation.json.jbuilder'
     end
 

@@ -14,9 +14,10 @@ import { Button }                from 'react-bootstrap';
 import PosterSlider              from '../components/PosterSlider';
 import MovieItem                 from '../components/MovieItem';
 
-import { movieDetailFetch }      from '../actions/movieDetails';
+import { movieSkip }             from '../actions/movies';
 import { mostViewedMoviesFetch } from '../actions/movies';
 import { movieRatingRecord }     from '../actions/ratings';
+import { movieDetailFetch }      from '../actions/movieDetails';
 
 
 class MostViewed extends React.Component {
@@ -78,13 +79,14 @@ class MostViewed extends React.Component {
             const movie = this.state.moviesOnDisplay[movieId];
             return (
                 <MovieItem
-                    isRecommendation={false}
                     key={movie.id}
                     movieId={movie.id}
                     imdbId={movie.imdbId}
+                    isRecommendation={false}
                     movieDetail={this.props.movieDetails[movie.imdbId]}
-                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
-                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch} />
+                    dispatchMovieSkip={this.props.dispatchMovieSkip}
+                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
+                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord} />
             );
         });
     }
@@ -136,6 +138,7 @@ MostViewed.propTypes = {
     movieDetails: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
     mostViewedMovies: React.PropTypes.object.isRequired,
+    dispatchMovieSkip: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
     dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
     dispatchMostViewedMoviesFetch: React.PropTypes.func.isRequired
@@ -151,9 +154,10 @@ const mapReduxStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        dispatchMovieSkip: (movieId) => dispatch(movieSkip(movieId)),
         dispatchMostViewedMoviesFetch: () => dispatch(mostViewedMoviesFetch()),
-        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating)),
-        dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId))
+        dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
+        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating))
     };
 };
 

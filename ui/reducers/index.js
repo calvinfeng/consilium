@@ -7,14 +7,16 @@
 import { combineReducers }      from 'redux';
 
 // Consilium imports
-import mostViewedMoviesReducer    from './movies/mostViewedMovies';
+import mostViewedMoviesReducer  from './movies/mostViewedMovies';
 import recommendedMoviesReducer from './movies/recommendedMovies';
+import skippedMoviesReducer     from './movies/skippedMovies';
 import ratingsReducer           from './users/ratings';
 import movieDetailsReducer      from './movies/movieDetails';
 
 export default combineReducers({
-    mostViewedMovies: mostViewedMoviesReducer,
-    recommendedMovies: recommendedMoviesReducer,
     movieRatings: ratingsReducer,
-    movieDetails: movieDetailsReducer
+    movieDetails: movieDetailsReducer,
+    skippedMovies: skippedMoviesReducer,
+    mostViewedMovies: mostViewedMoviesReducer,
+    recommendedMovies: recommendedMoviesReducer
 });

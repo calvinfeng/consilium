@@ -8,26 +8,27 @@ import { connect }           from 'react-redux';
 
 import MovieItem             from '../components/MovieItem';
 
+import { movieSkip }         from '../actions/movies';
 import { movieDetailFetch }  from '../actions/movieDetails';
 import { movieRatingRecord } from '../actions/ratings';
 
 
 class RatingRecord extends React.Component {
-
     get ratedMovies() {
         const ratedMovieIds = Object.keys(this.props.movieRatings);
         return ratedMovieIds.map((movieId) => {
             const movie = this.props.mostViewedMovies[movieId] || this.props.recommendedMovies[movieId];
             return (
                 <MovieItem
-                    rating={this.props.movieRatings[movieId]}
-                    isRecommendation={false}
                     key={movie.id}
                     movieId={movie.id}
                     imdbId={movie.imdbId}
+                    isRecommendation={false}
+                    rating={this.props.movieRatings[movieId]}
                     movieDetail={this.props.movieDetails[movie.imdbId]}
-                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
-                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch} />
+                    dispatchMovieSkip={this.props.dispatchMovieSkip}
+                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
+                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord} />
             );
         });
     }
@@ -44,31 +45,32 @@ class RatingRecord extends React.Component {
             </div>
         );
     }
-
 }
 
 RatingRecord.propTypes = {
-    recommendedMovies: React.PropTypes.object.isRequired,
+    movieRatings: React.PropTypes.object.isRequired,
     movieDetails: React.PropTypes.object.isRequired,
     mostViewedMovies: React.PropTypes.object.isRequired,
-    movieRatings: React.PropTypes.object.isRequired,
+    recommendedMovies: React.PropTypes.object.isRequired,
+    dispatchMovieSkip: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
     dispatchMovieRatingRecord: React.PropTypes.func.isRequired
 };
 
 const mapReduxStateToProps = (state) => {
     return {
-        mostViewedMovies: state.mostViewedMovies,
         movieRatings: state.movieRatings,
         movieDetails: state.movieDetails,
+        mostViewedMovies: state.mostViewedMovies,
         recommendedMovies: state.recommendedMovies
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating)),
-        dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId))
+        dispatchMovieSkip: (movieId) => dispatch(movieSkip(movieId)),
+        dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
+        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating))
     };
 };
 

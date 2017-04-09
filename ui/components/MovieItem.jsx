@@ -38,7 +38,33 @@ class MovieItem extends React.Component {
     }
 
     handleSkip() {
-        // this.props.dispatchMovieSkip(this.props.movieId);
+        this.props.dispatchMovieSkip(this.props.movieId);
+    }
+
+    get title() {
+        if (this.props.rating || this.props.isRecommendation) {
+            return (
+                <h3 className="title">
+                    <strong>{this.props.movieDetail.title}</strong>
+                    {this.props.movieDetail.year}
+                </h3>
+            );
+        }
+
+        const popover = (
+            <Popover id="popover-trigger-click-root-close" title="Overview">
+                {this.props.movieDetail.plot}
+            </Popover>
+        );
+
+        return (
+            <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
+                <h3 className="title">
+                    <strong>{this.props.movieDetail.title}</strong>
+                    {this.props.movieDetail.year}
+                </h3>
+            </OverlayTrigger>
+        );
     }
 
     get poster() {
@@ -58,42 +84,35 @@ class MovieItem extends React.Component {
         );
     }
 
-    get interface() {
+    get ratingInterface() {
         if (this.props.rating) {
             return (
-                <div>
-                    {this.poster}
-                    <div className="user-rating">
-                        <div>Your Rating: <strong>{this.props.rating}</strong></div>
-                    </div>
+                <div className="rating-value">
+                    <div>Your Rating: <strong>{this.props.rating}</strong></div>
                 </div>
             );
         }
 
         if (this.props.isRecommendation) {
             return (
-                <div>
-                    {this.poster}
-                    <div className="plot">{this.props.movieDetail.plot}</div>
-                    <div className="rating">
-                        <div style={{ width: '100%' }}>
-                            <div className="star-toolbar-container">
-                                <Rating
-                                    fractions={2}
-                                    onClick={this.handleRatingClick}
-                                    empty={'fa fa-star-o fa-3x'}
-                                    full={'fa fa-star fa-3x'}
-                                    color={'yellow'} />
-                            </div>
-                            <div className="button-container">
-                                <Button
-                                    bsSize="xsmall"
-                                    className="react-buttons"
-                                    onClick={this.handleSkip}
-                                    bsStyle="primary">
-                                    Not Interested
-                                </Button>
-                            </div>
+                <div className="rating-toolbar">
+                    <div style={{ width: '100%' }}>
+                        <div className="star-toolbar-container">
+                            <Rating
+                                fractions={2}
+                                onClick={this.handleRatingClick}
+                                empty={'fa fa-star-o fa-3x'}
+                                full={'fa fa-star fa-3x'}
+                                color={'yellow'} />
+                        </div>
+                        <div className="button-container">
+                            <Button
+                                bsSize="xsmall"
+                                className="react-buttons"
+                                onClick={this.handleSkip}
+                                bsStyle="primary">
+                                Not Interested
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -101,36 +120,51 @@ class MovieItem extends React.Component {
         }
 
         return (
-            <div>
-                {this.poster}
-                <div className="rating">
-                    <div className="star-toolbar-container">
-                        <Rating
-                            fractions={2}
-                            onClick={this.handleRatingClick}
-                            empty={'fa fa-star-o fa-3x'}
-                            full={'fa fa-star fa-3x'}
-                            color={'yellow'} />
-                    </div>
+            <div className="rating-toolbar">
+                <div className="star-toolbar-container">
+                    <Rating
+                        fractions={2}
+                        onClick={this.handleRatingClick}
+                        empty={'fa fa-star-o fa-3x'}
+                        full={'fa fa-star fa-3x'}
+                        color={'yellow'} />
                 </div>
             </div>
         );
     }
 
     render() {
-        const popover = (
-            <Popover id="popover-trigger-click-root-close" title="Overview">
-                {this.props.movieDetail.plot}
-            </Popover>
-        );
+        // This is rated item
+        if (this.props.rating) {
+            return (
+                <div className="movie-item" id={this.props.movieId}>
+                    {this.title}
+                    {this.poster}
+                    {this.ratingInterface}
+                </div>
+            );
+        }
+
+        // This is recommendation
+        if (this.props.isRecommendation) {
+            return (
+                <div className="movie-item recommendation" id={this.props.movieId}>
+                    {this.title}
+                    {this.poster}
+                    <div className="plot">
+                        {this.props.movieDetail.plot}
+                    </div>
+                    {this.ratingInterface}
+                </div>
+            );
+        }
+
+        // This is a most-viewed item
         return (
             <div className="movie-item" id={this.props.movieId}>
-                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
-                    <h3 className="title">
-                        <strong>{this.props.movieDetail.title}</strong>({this.props.movieDetail.year})
-                    </h3>
-                </OverlayTrigger>
-                {this.interface}
+                {this.title}
+                {this.poster}
+                {this.ratingInterface}
             </div>
         );
     }
@@ -153,8 +187,9 @@ MovieItem.propTypes = {
     isRecommendation: React.PropTypes.bool.isRequired,
     movieId: React.PropTypes.number.isRequired,
     imdbId: React.PropTypes.string.isRequired,
-    dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
-    dispatchMovieDetailFetch: React.PropTypes.func.isRequired
+    dispatchMovieSkip: React.PropTypes.func.isRequired,
+    dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
+    dispatchMovieRatingRecord: React.PropTypes.func.isRequired
 };
 /* eslint-enable */
 

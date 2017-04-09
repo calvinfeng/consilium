@@ -71,3 +71,16 @@ export const recommendedMoviesFetch = (movieRatings) => (dispatch) => {
             dispatch(recommendedMoviesFetchFail(error));
         });
 };
+
+export const MOVIE_SKIP_SUCCESS = 'MOVIE_SKIP_SUCCESS';
+
+const movieSkipSuccess = (movieId) => {
+    return {
+        type: MOVIE_SKIP_SUCCESS,
+        movieId
+    };
+};
+
+export const movieSkip = (movieId) => (dispatch) => {
+    dispatch(movieSkipSuccess(movieId));
+};
