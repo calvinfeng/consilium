@@ -37,7 +37,7 @@ class RatingRecord extends React.Component {
         return (
             <div className="rating-record">
                 <div className="header">
-                    <h1>Rating Record</h1>
+                    <h1>Rating History</h1>
                 </div>
                 <div className="movies">
                     {this.ratedMovies}

@@ -1,9 +1,10 @@
 
 .rating-record {
-    display: flex;
-    flex-direction: column;
+    width: 30%;
     font-size: 12px;
     font-family: Roboto;
+    display: flex;
+    flex-direction: column;
 
     .header {
         display: inherit;
@@ -12,8 +13,8 @@
         margin-bottom: 1em;
 
         h1 {
-            font-size: 4em;
-            font-weight: 800;
+            font-size: 2em;
+            font-weight: 600;
         }
     }
 
