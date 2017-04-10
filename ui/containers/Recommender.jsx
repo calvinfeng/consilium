@@ -62,11 +62,7 @@ class Recommender extends React.Component {
     }
 
     render() {
-        return (
-            <div className="recommender-container">
-                {this.content}
-            </div>
-        );
+        return this.content;
     }
 }
 

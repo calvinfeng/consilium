@@ -5,8 +5,13 @@
 
 import React                         from 'react';
 import { hashHistory }               from 'react-router';
-import { Nav, NavItem, NavDropdown } from 'react-bootstrap';
-import { MenuItem, Button }          from 'react-bootstrap';
+import { Nav }                       from 'react-bootstrap';
+import { NavItem }                   from 'react-bootstrap';
+import { NavDropdown }               from 'react-bootstrap';
+import { Navbar }                    from 'react-bootstrap';
+import { MenuItem }                  from 'react-bootstrap';
+import { Button }                    from 'react-bootstrap';
+
 
 class Navigation extends React.Component {
 
@@ -16,7 +21,6 @@ class Navigation extends React.Component {
             activeKey: 1
         };
 
-        // TODO: Update to ES7 syntax
         this.handleSelectTab = this.handleSelectTab.bind(this);
     }
 
@@ -31,27 +35,27 @@ class Navigation extends React.Component {
 
     render() {
         return (
-            <div>
-                <Nav bsStyle="tabs"
-                    activeKey={this.state.activeKey}
-                    onSelect={this.handleSelectTab}>
-                    <NavItem eventKey={1}>Movie Recommender</NavItem>
-                    <NavItem eventKey={2}>About</NavItem>
-                    <NavDropdown eventKey={3} id="nav-dropdown" title="Our Team">
-                        <MenuItem href="https://www.linkedin.com/in/calvin-feng">
-                            <i className="fa fa-linkedin-square" aria-hidden="true" />
-                            &nbsp;Calvin Feng
-                        </MenuItem>
-                        <MenuItem href="https://www.linkedin.com/in/steven-cheong-55404bbb">
-                            <i className="fa fa-linkedin-square" aria-hidden="true" />
-                            &nbsp;Steven Cheong
-                        </MenuItem>
-                        <MenuItem href="https://www.linkedin.com/in/veronica-chau">
-                            <i className="fa fa-linkedin-square" aria-hidden="true" />
-                            &nbsp;Veronica Chau
-                        </MenuItem>
-                    </NavDropdown>
-                </Nav>
+            <div className="navigation">
+                <Navbar inverse collapseOnSelect>
+                    <Navbar.Header>
+                        <Navbar.Brand>
+                            <a href="/#">Consilium</a>
+                        </Navbar.Brand>
+                        <Navbar.Toggle />
+                    </Navbar.Header>
+                    <Navbar.Collapse>
+                        <Nav pullRight>
+                            <NavItem eventKey={1} href="https://calvinfeng.github.io/recommender.html">About</NavItem>
+                            <NavDropdown eventKey={2} title="Menu" id="basic-nav-dropdown">
+                                <MenuItem eventKey={2.1}>Do</MenuItem>
+                                <MenuItem eventKey={2.2}>Something</MenuItem>
+                                <MenuItem eventKey={2.3}>Here</MenuItem>
+                                <MenuItem divider />
+                                <MenuItem eventKey={2.4}>Separated link</MenuItem>
+                            </NavDropdown>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
             </div>
         );
     }

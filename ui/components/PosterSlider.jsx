@@ -37,7 +37,7 @@ class PosterSlider extends React.Component {
     }
 
     get carouselItems() {
-        const numberPerRow = 4;
+        const numberPerRow = 5;
         const carouselItems = [];
         for (let i = 0; i < this.state.posters.length; i += 1) {
             if (i % numberPerRow === 0) {

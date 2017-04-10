@@ -1,3 +1,5 @@
+@import "globals/global.scss";
+
 @import "components/about.scss";
 @import "components/movie-item.scss";
 @import "components/poster-slider.scss";
@@ -6,12 +8,3 @@
 @import "containers/rating-record.scss";
 @import "containers/recommender.scss";
 @import "containers/most-viewed.scss";
-
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
-    font-family: Roboto;
-    font-size: 12px;
-}

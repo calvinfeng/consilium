@@ -22,7 +22,7 @@ import Reducer                          from './reducers/index';
 class Consilium extends React.Component {
     render() {
         return (
-            <div>
+            <div className="consilium">
                 <Navigation />
                 {this.props.children}
             </div>
