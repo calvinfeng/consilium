@@ -4,11 +4,9 @@
     display: flex;
     flex-direction: column;
     margin: 5px 5px 5px 5px;
-    width: 302px;
-    height: 560px;
-    border: 1px solid black;
-    border-radius: 8px;
-    background-color: white;
+    width: 151px;
+    height: 280px;
+    background-color: transparent;
 
     .spinner {
         top: -50%;
@@ -17,7 +15,7 @@
 
     .title {
         strong {
-            font-weight: 900;
+            font-weight: 600;
             margin-right: 0.3em;
         }
         font-weight: 400;
@@ -43,8 +41,8 @@
         justify-content: center;
         align-items: center;
         flex-flow: column;
-        width: 300px;
-        height: 450px;
+        width: 150px;
+        height: 225px;
         position: relative;
 
         img {
@@ -56,7 +54,7 @@
     }
 
     .plot {
-        height: 100px;
+        height: 50px;
         overflow-y: scroll;
         font-size: 1em;
         padding: 5px 10px;
@@ -91,11 +89,11 @@
         display: flex;
         font-size: 1em;
         justify-content: center;
-        font-size: 1.2em;
         margin: 1em 1em 1em 1em;
     }
 }
 
 .movie-item.recommendation {
-    height: 640px;
+    width: 151px;
+    height: 400px;
 }

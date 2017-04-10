@@ -44,7 +44,14 @@ class PosterSlider extends React.Component {
                 let j = i;
                 const posterRow = [];
                 while (j < i + numberPerRow && j < this.state.posters.length) {
-                    posterRow.push(<img alt="movie-poster" src={this.state.posters[j]} key={j} />);
+                    posterRow.push(
+                        <img
+                            alt="movie-poster"
+                            src={this.state.posters[j]}
+                            key={j}
+                            height={225}
+                            width={150} />
+                    );
                     j += 1;
                 }
                 carouselItems.push(

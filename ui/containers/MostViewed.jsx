@@ -110,12 +110,12 @@ class MostViewed extends React.Component {
         const progressPercentage = (100 * Object.keys(this.props.movieRatings).length) / 10;
         return (
             <div className="most-viewed">
-                <PosterSlider
-                    movies={this.state.moviesOnDisplay}
-                    movieDetails={this.props.movieDetails} />
                 <div className="header">
                     <h1>Popular Movies</h1>
                 </div>
+                <PosterSlider
+                    movies={this.state.moviesOnDisplay}
+                    movieDetails={this.props.movieDetails} />
                 {this.instruction}
                 <ProgressBar now={progressPercentage} />
                 <div className="movies">

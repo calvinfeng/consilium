@@ -101,8 +101,8 @@ class MovieItem extends React.Component {
                             <Rating
                                 fractions={2}
                                 onClick={this.handleRatingClick}
-                                empty={'fa fa-star-o fa-3x'}
-                                full={'fa fa-star fa-3x'}
+                                empty={'fa fa-star-o fa-2x'}
+                                full={'fa fa-star fa-2x'}
                                 color={'yellow'} />
                         </div>
                         <div className="button-container">
@@ -125,8 +125,8 @@ class MovieItem extends React.Component {
                     <Rating
                         fractions={2}
                         onClick={this.handleRatingClick}
-                        empty={'fa fa-star-o fa-3x'}
-                        full={'fa fa-star fa-3x'}
+                        empty={'fa fa-star-o fa-2x'}
+                        full={'fa fa-star fa-2x'}
                         color={'yellow'} />
                 </div>
             </div>
@@ -138,7 +138,6 @@ class MovieItem extends React.Component {
         if (this.props.rating) {
             return (
                 <div className="movie-item" id={this.props.movieId}>
-                    {this.title}
                     {this.poster}
                     {this.ratingInterface}
                 </div>
@@ -162,7 +161,6 @@ class MovieItem extends React.Component {
         // This is a most-viewed item
         return (
             <div className="movie-item" id={this.props.movieId}>
-                {this.title}
                 {this.poster}
                 {this.ratingInterface}
             </div>
