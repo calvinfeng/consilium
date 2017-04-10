@@ -94,7 +94,7 @@ class MostViewed extends React.Component {
     randomlySetMoviesOnDisplay(mostViewedMovies) {
         if (Object.keys(mostViewedMovies).length > 0) {
             const moviesOnDisplay = {};
-            _.shuffle(Object.keys(mostViewedMovies)).slice(0, 10).forEach((movieId) => {
+            _.shuffle(Object.keys(mostViewedMovies)).slice(0, 12).forEach((movieId) => {
                 const movie = mostViewedMovies[movieId];
                 moviesOnDisplay[movieId] = movie;
             });
@@ -109,7 +109,7 @@ class MostViewed extends React.Component {
     render() {
         const progressPercentage = (100 * Object.keys(this.props.movieRatings).length) / 10;
         return (
-            <div className="most-viewed">
+            <div className="most-viewed-container">
                 <div className="header">
                     <h1>Popular Movies</h1>
                 </div>
@@ -124,7 +124,7 @@ class MostViewed extends React.Component {
                 <div className="footer">
                     <Button
                         disabled={this.state.isMovieSetLoading}
-                        bsSize="small"
+                        bsSize="xsmall"
                         className="react-buttons"
                         onClick={this.handleClickMoreMovies}
                         bsStyle="primary">

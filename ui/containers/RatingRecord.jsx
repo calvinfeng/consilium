@@ -35,7 +35,7 @@ class RatingRecord extends React.Component {
 
     render() {
         return (
-            <div className="rating-record">
+            <div className="rating-record-container">
                 <div className="header">
                     <h1>Rating History</h1>
                 </div>

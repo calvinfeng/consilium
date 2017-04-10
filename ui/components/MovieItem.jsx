@@ -41,6 +41,95 @@ class MovieItem extends React.Component {
         this.props.dispatchMovieSkip(this.props.movieId);
     }
 
+    get poster() {
+        if (this.props.movieDetail.poster) {
+            return (
+                <div className="poster">
+                    <img
+                        id={this.props.movieId}
+                        src={this.props.movieDetail.poster}
+                        alt="Movie Poster" />
+                </div>
+            );
+        }
+
+        return (
+            <div className="poster" />
+        );
+    }
+
+    get ratedItemContent() {
+        return (
+            <div className="rated movie-item" id={this.props.movieId}>
+                {this.poster}
+                <div className="rating-value">
+                    <div>Your Rating: <strong>{this.props.rating}</strong></div>
+                </div>
+            </div>
+        );
+    }
+
+    get recommendedItemContent() {
+        return (
+            <div className="recommended movie-item" id={this.props.movieId}>
+                <h3 className="title">
+                    <strong>{this.props.movieDetail.title}</strong>
+                    {this.props.movieDetail.year}
+                </h3>
+                <div className="content-box">
+                    <div className="left">
+                        {this.poster}
+                    </div>
+
+                    <div className="right">
+                        <div className="plot">
+                            {this.props.movieDetail.plot}
+                        </div>
+                        <div className="rating-toolbar">
+                            <div style={{ width: '100%' }}>
+                                <div className="star-toolbar-container">
+                                    <Rating
+                                        fractions={2}
+                                        onClick={this.handleRatingClick}
+                                        empty={'fa fa-star-o fa-2x'}
+                                        full={'fa fa-star fa-2x'}
+                                        color={'yellow'} />
+                                </div>
+                                <div className="button-container">
+                                    <Button
+                                        bsSize="xsmall"
+                                        className="react-buttons"
+                                        onClick={this.handleSkip}
+                                        bsStyle="primary">
+                                        Not Interested
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    get mostViewedItemContent() {
+        return (
+            <div className="most-viewed movie-item" id={this.props.movieId}>
+                {this.poster}
+                <div className="rating-toolbar">
+                    <div className="star-toolbar-container">
+                        <Rating
+                            fractions={2}
+                            onClick={this.handleRatingClick}
+                            empty={'fa fa-star-o fa-2x'}
+                            full={'fa fa-star fa-2x'}
+                            color={'yellow'} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     get title() {
         if (this.props.rating || this.props.isRecommendation) {
             return (
@@ -67,104 +156,16 @@ class MovieItem extends React.Component {
         );
     }
 
-    get poster() {
-        if (this.props.movieDetail.poster) {
-            return (
-                <div className="poster">
-                    <img
-                        id={this.props.movieId}
-                        src={this.props.movieDetail.poster}
-                        alt="Movie Poster" />
-                </div>
-            );
-        }
-
-        return (
-            <div className="poster" />
-        );
-    }
-
-    get ratingInterface() {
-        if (this.props.rating) {
-            return (
-                <div className="rating-value">
-                    <div>Your Rating: <strong>{this.props.rating}</strong></div>
-                </div>
-            );
-        }
-
-        if (this.props.isRecommendation) {
-            return (
-                <div className="rating-toolbar">
-                    <div style={{ width: '100%' }}>
-                        <div className="star-toolbar-container">
-                            <Rating
-                                fractions={2}
-                                onClick={this.handleRatingClick}
-                                empty={'fa fa-star-o fa-2x'}
-                                full={'fa fa-star fa-2x'}
-                                color={'yellow'} />
-                        </div>
-                        <div className="button-container">
-                            <Button
-                                bsSize="xsmall"
-                                className="react-buttons"
-                                onClick={this.handleSkip}
-                                bsStyle="primary">
-                                Not Interested
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
-        return (
-            <div className="rating-toolbar">
-                <div className="star-toolbar-container">
-                    <Rating
-                        fractions={2}
-                        onClick={this.handleRatingClick}
-                        empty={'fa fa-star-o fa-2x'}
-                        full={'fa fa-star fa-2x'}
-                        color={'yellow'} />
-                </div>
-            </div>
-        );
-    }
-
     render() {
-        // This is rated item
         if (this.props.rating) {
-            return (
-                <div className="movie-item" id={this.props.movieId}>
-                    {this.poster}
-                    {this.ratingInterface}
-                </div>
-            );
+            return this.ratedItemContent;
         }
 
-        // This is recommendation
         if (this.props.isRecommendation) {
-            return (
-                <div className="movie-item recommendation" id={this.props.movieId}>
-                    {this.title}
-                    {this.poster}
-                    <div className="plot">
-                        {this.props.movieDetail.plot}
-                    </div>
-                    {this.ratingInterface}
-                </div>
-            );
+            return this.recommendedItemContent;
         }
 
-        // This is a most-viewed item
-        return (
-            <div className="movie-item" id={this.props.movieId}>
-                {this.poster}
-                {this.ratingInterface}
-            </div>
-        );
+        return this.mostViewedItemContent;
     }
 }
 

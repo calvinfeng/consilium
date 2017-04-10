@@ -36,7 +36,7 @@ class Recommendation extends React.Component {
 
     render() {
         return (
-            <div className="recommendation">
+            <div className="recommendation-container">
                 <div className="header">
                     <h1>Recommendations</h1>
                 </div>
