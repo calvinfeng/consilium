@@ -6,7 +6,7 @@
 import React                               from 'react';
 import Spinner                             from 'spin';
 import Rating                              from 'react-rating';
-import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button, OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 
 /* global document */
 class MovieItem extends React.Component {
@@ -59,12 +59,17 @@ class MovieItem extends React.Component {
     }
 
     get ratedItemContent() {
+        const tooltip = (
+            <Tooltip id="tooltip">
+                Your rating: <strong>{this.props.rating}</strong>
+            </Tooltip>
+        );
+
         return (
             <div className="rated movie-item" id={this.props.movieId}>
-                {this.poster}
-                <div className="rating-value">
-                    <div>Your Rating: <strong>{this.props.rating}</strong></div>
-                </div>
+                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={tooltip}>
+                    {this.poster}
+                </OverlayTrigger>
             </div>
         );
     }
@@ -113,9 +118,18 @@ class MovieItem extends React.Component {
     }
 
     get mostViewedItemContent() {
+        const titleString = this.props.movieDetail.title + ' - ' + this.props.movieDetail.year;
+        const popover = (
+            <Popover id="popover-trigger-click-root-close" title={titleString}>
+                {this.props.movieDetail.plot}
+            </Popover>
+        );
+
         return (
             <div className="most-viewed movie-item" id={this.props.movieId}>
-                {this.poster}
+                <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popover}>
+                    {this.poster}
+                </OverlayTrigger>
                 <div className="rating-toolbar">
                     <div className="star-toolbar-container">
                         <Rating

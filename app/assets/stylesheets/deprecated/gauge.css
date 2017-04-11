@@ -1,0 +1,17 @@
+/*.gauge-index {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gauge-header {
+  display: flex;
+  align-items: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#skip-button {
+  margin: 1em 0em 0em 1em;
+}*/

@@ -8,10 +8,10 @@ html, body {
 
 #application .consilium {
     display: flex;
-    width: 100%;
+    min-height:100vh;
+    min-width: 100vw;
     font-size: 15px;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     background: -moz-linear-gradient(332deg, rgba(255,255,255,1) 0%, rgba(201,201,201,1) 100%); /* ff3.6+ */
     background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(100%, rgba(201,201,201,1))); /* safari4+,chrome */
