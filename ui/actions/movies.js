@@ -1,7 +1,9 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+ * @copyright Consilium, 2017
+ * @author Calvin Feng
+ */
 
 /* global XSRF_TOKEN */
 // Thirdparty imports
@@ -72,15 +74,12 @@ export const recommendedMoviesFetch = (movieRatings) => (dispatch) => {
         });
 };
 
-export const MOVIE_SKIP_SUCCESS = 'MOVIE_SKIP_SUCCESS';
+// None-request type actions adapt a different naming convention
+export const SKIP_MOVIE = 'SKIP_MOVIE';
 
-const movieSkipSuccess = (movieId) => {
-    return {
-        type: MOVIE_SKIP_SUCCESS,
+export const skipMovie = (movieId) => (dispatch) => {
+    dispatch({
+        type: SKIP_MOVIE,
         movieId
-    };
-};
-
-export const movieSkip = (movieId) => (dispatch) => {
-    dispatch(movieSkipSuccess(movieId));
+    });
 };

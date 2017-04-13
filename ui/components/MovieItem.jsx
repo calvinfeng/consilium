@@ -34,11 +34,11 @@ class MovieItem extends React.Component {
     }
 
     handleRatingClick(rating) {
-        this.props.dispatchMovieRatingRecord(this.props.movieId, rating);
+        this.props.dispatchRecordMovieRating(this.props.movieId, rating);
     }
 
     handleSkip() {
-        this.props.dispatchMovieSkip(this.props.movieId);
+        this.props.dispatchSkipMovie(this.props.movieId);
     }
 
     get poster() {
@@ -200,9 +200,9 @@ MovieItem.propTypes = {
     isRecommendation: React.PropTypes.bool.isRequired,
     movieId: React.PropTypes.number.isRequired,
     imdbId: React.PropTypes.string.isRequired,
-    dispatchMovieSkip: React.PropTypes.func.isRequired,
+    dispatchSkipMovie: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
-    dispatchMovieRatingRecord: React.PropTypes.func.isRequired
+    dispatchRecordMovieRating: React.PropTypes.func.isRequired
 };
 /* eslint-enable */
 

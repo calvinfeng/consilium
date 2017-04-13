@@ -8,9 +8,10 @@ import { connect }           from 'react-redux';
 
 import MovieItem             from '../components/MovieItem';
 
-import { movieSkip }         from '../actions/movies';
 import { movieDetailFetch }  from '../actions/movieDetails';
-import { movieRatingRecord } from '../actions/ratings';
+
+import { skipMovie }         from '../actions/movies';
+import { recordMovieRating } from '../actions/movieRatings';
 
 
 class RatingRecord extends React.Component {
@@ -26,9 +27,9 @@ class RatingRecord extends React.Component {
                     isRecommendation={false}
                     rating={this.props.movieRatings[movieId]}
                     movieDetail={this.props.movieDetails[movie.imdbId]}
-                    dispatchMovieSkip={this.props.dispatchMovieSkip}
+                    dispatchSkipMovie={this.props.dispatchSkipMovie}
                     dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
-                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord} />
+                    dispatchRecordMovieRating={this.props.dispatchRecordMovieRating} />
             );
         });
     }
@@ -52,9 +53,9 @@ RatingRecord.propTypes = {
     movieDetails: React.PropTypes.object.isRequired,
     mostViewedMovies: React.PropTypes.object.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
-    dispatchMovieSkip: React.PropTypes.func.isRequired,
+    dispatchSkipMovie: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
-    dispatchMovieRatingRecord: React.PropTypes.func.isRequired
+    dispatchRecordMovieRating: React.PropTypes.func.isRequired
 };
 
 const mapReduxStateToProps = (state) => {
@@ -68,9 +69,9 @@ const mapReduxStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatchMovieSkip: (movieId) => dispatch(movieSkip(movieId)),
         dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
-        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating))
+        dispatchSkipMovie: (movieId) => dispatch(skipMovie(movieId)),
+        dispatchRecordMovieRating: (movieId, rating) => dispatch(recordMovieRating(movieId, rating))
     };
 };
 

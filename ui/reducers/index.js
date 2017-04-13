@@ -10,11 +10,11 @@ import { combineReducers }      from 'redux';
 import mostViewedMoviesReducer  from './movies/mostViewedMovies';
 import recommendedMoviesReducer from './movies/recommendedMovies';
 import skippedMoviesReducer     from './movies/skippedMovies';
-import ratingsReducer           from './users/ratings';
 import movieDetailsReducer      from './movies/movieDetails';
+import movieRatingsReducer      from './users/movieRatings';
 
 export default combineReducers({
-    movieRatings: ratingsReducer,
+    movieRatings: movieRatingsReducer,
     movieDetails: movieDetailsReducer,
     skippedMovies: skippedMoviesReducer,
     mostViewedMovies: mostViewedMoviesReducer,
