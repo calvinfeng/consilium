@@ -16,6 +16,7 @@ import MovieItem                 from '../components/MovieItem';
 
 import { mostViewedMoviesFetch } from '../actions/movies';
 import { movieDetailFetch }      from '../actions/movieDetails';
+import { movieTrailerFetch }     from '../actions/movieTrailers';
 
 import { skipMovie }             from '../actions/movies';
 import { recordMovieRating }     from '../actions/movieRatings';
@@ -45,9 +46,9 @@ class MostViewed extends React.Component {
     }
 
     get instruction() {
-        const instruction = `These are some of the most viewed American films. We think it is very likely that
-        you have seen at least some of them.  If you have seen them, whether you like or dislike them, let us know and
-        give them ratings! It will help our backend machine learning algorithm to learn your taste and preference`;
+        const instruction = `These are some of the most viewed American films. We think it is very likely that you have
+        seen at least some of them.  If you have seen them, whether you like or dislike them, let us know and give them
+        ratings! It will help our backend machine learning algorithm to learn your taste and preference`;
 
         if (this.state.ratingCount === 0) {
             return (
@@ -80,14 +81,15 @@ class MostViewed extends React.Component {
             const movie = this.state.moviesOnDisplay[movieId];
             return (
                 <MovieItem
+                    isRecommendation={false}
                     key={movie.id}
                     movieId={movie.id}
                     imdbId={movie.imdbId}
-                    isRecommendation={false}
                     movieDetail={this.props.movieDetails[movie.imdbId]}
                     dispatchSkipMovie={this.props.dispatchSkipMovie}
+                    dispatchRecordMovieRating={this.props.dispatchRecordMovieRating}
                     dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
-                    dispatchRecordMovieRating={this.props.dispatchRecordMovieRating} />
+                    dispatchMovieTrailerFetch={this.props.dispatchMovieTrailerFetch}  />
             );
         });
     }
@@ -143,6 +145,7 @@ MostViewed.propTypes = {
     mostViewedMovies: React.PropTypes.object.isRequired,
     dispatchSkipMovie: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
+    dispatchMovieTrailerFetch: React.PropTypes.func.isRequired,
     dispatchRecordMovieRating: React.PropTypes.func.isRequired,
     dispatchMostViewedMoviesFetch: React.PropTypes.func.isRequired
 };
@@ -158,8 +161,9 @@ const mapReduxStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dispatchMostViewedMoviesFetch: () => dispatch(mostViewedMoviesFetch()),
-        dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
         dispatchSkipMovie: (movieId) => dispatch(skipMovie(movieId)),
+        dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
+        dispatchMovieTrailerFetch: (imdbId) => dispatch(movieTrailerFetch(imdbId)),
         dispatchRecordMovieRating: (movieId, rating) => dispatch(recordMovieRating(movieId, rating))
     };
 };

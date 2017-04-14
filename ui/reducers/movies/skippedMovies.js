@@ -1,11 +1,13 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+ * @copyright Consilium, 2017
+ * @author Calvin Feng
+ */
 
 import { SKIP_MOVIE } from '../../actions/movies';
 
-// Key Actions - Fetch
+
 export default function skippedMoviesReducer(state = {}, action) {
     switch (action.type) {
 

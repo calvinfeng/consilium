@@ -1,9 +1,12 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+ * @copyright Consilium, 2017
+ * @author Calvin Feng
+ */
 
 import React       from 'react';
+
 
 class About extends React.Component {
 

@@ -1,11 +1,14 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+ * @copyright Consilium, 2017
+ * @author Calvin Feng
+ */
 
 import React            from 'react';
 import { Carousel }     from 'react-bootstrap';
 import { CarouselItem } from 'react-bootstrap';
+
 
 class PosterSlider extends React.Component {
     constructor(props) {

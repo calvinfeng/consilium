@@ -116,31 +116,13 @@
     margin-bottom: 1em;
     border-top-left-radius: 1em;
     border-top-right-radius: 1em;
-    .title {
-        height: 50px;
-        font-weight: 400;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        vertical-align: center;
-        margin: 0 0 0 0;
-        border-top-left-radius: inherit;
-        border-top-right-radius: inherit;
-
-        strong {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-right: 0.3em;
-        }
-    }
 
     .content-box {
         display: flex;
         flex-direction: row;
         justify-content: center;
         width: 100%;
-        height: calc(100% - 50px);
+        height: 100%;
 
         .left {
             height: 100%;
@@ -172,8 +154,27 @@
             display: flex;
             flex-direction: column;
 
+            .title {
+                height: 50px;
+                font-weight: 400;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                vertical-align: center;
+                margin: 0 0 0 0;
+                border-top-left-radius: inherit;
+                border-top-right-radius: inherit;
+
+                strong {
+                    font-size: 1.2em;
+                    font-weight: 600;
+                    margin-right: 0.3em;
+                }
+            }
+
             .plot {
-                height: 85%;
+                height: calc(0.80 * (100% - 50px));
                 overflow-y: scroll;
                 font-size: 1em;
                 padding: 5px 10px;
@@ -182,11 +183,12 @@
 
             .rating-toolbar {
                 width: 100%;
-                height: 15%;
+                height: calc(0.20 * (100% - 50px));
                 display: flex;
                 justify-content: center;
-                margin: 1em 0 1em 0;
+                margin: 0.5em 0 0.5em 0;
                 padding: 0 0 0 0;
+                flex-direction: column;
 
                 .star-toolbar-container {
                     display: flex;
@@ -199,6 +201,7 @@
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-end;
+                    margin-top: 1em;
                     button {
                         margin: 0.5em 0.5em 0.5em 0.5em;
                     }

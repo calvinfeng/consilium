@@ -10,10 +10,11 @@ import request from 'axios';
 export const MOVIE_TRAILER_FETCH_SUCCESS = 'MOVIE_TRAILER_FETCH_SUCCESS';
 export const MOVIE_TRAILER_FETCH_FAIL = 'MOVIE_TRAILER_FETCH_FAIL';
 
-const movieTrailerFetchSuccess = (data) => {
+const movieTrailerFetchSuccess = (data, imdbId) => {
     return {
         type: MOVIE_TRAILER_FETCH_SUCCESS,
-        data
+        data,
+        imdbId
     };
 };
 
@@ -34,7 +35,7 @@ export const movieTrailerFetch = (imdbId) => (dispatch) => {
     return request
         .get(`https://api.themoviedb.org/3/movie/${imdbId}/videos`, config)
         .then((res) => {
-            dispatch(movieTrailerFetchSuccess(res.data));
+            dispatch(movieTrailerFetchSuccess(res.data, imdbId));
         })
         .catch((error) => {
             dispatch(movieTrailerFetchFail(error));

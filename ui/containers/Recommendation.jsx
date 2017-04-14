@@ -7,8 +7,10 @@ import React                 from 'react';
 import { connect }           from 'react-redux';
 
 import MovieItem             from '../components/MovieItem';
+import MovieTrailer          from '../components/MovieTrailer';
 
 import { movieDetailFetch }  from '../actions/movieDetails';
+import { movieTrailerFetch } from '../actions/movieTrailers';
 
 import { skipMovie }         from '../actions/movies';
 import { recordMovieRating } from '../actions/movieRatings';
@@ -29,11 +31,30 @@ class Recommendation extends React.Component {
                     movieId={movie.id}
                     imdbId={movie.imdbId}
                     movieDetail={this.props.movieDetails[movie.imdbId]}
+                    movieTrailers={this.props.movieTrailers[movie.imdbId]}
                     dispatchSkipMovie={this.props.dispatchSkipMovie}
                     dispatchRecordMovieRating={this.props.dispatchRecordMovieRating}
-                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch} />
+                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
+                    dispatchMovieTrailerFetch={this.props.dispatchMovieTrailerFetch} />
             );
         });
+    }
+
+    get trailerPlayer() {
+        const movieImdbIds = Object.keys(this.props.movieTrailers);
+
+        if (movieImdbIds.length > 0) {
+            const randomIndex = Math.floor(Math.random() * movieImdbIds.length);
+            const randomImdbId = movieImdbIds[randomIndex];
+            return (
+                <div className="trailer-player">
+                    <MovieTrailer
+                        videoSourceList={this.props.movieTrailers[randomImdbId]} />
+                </div>
+            );
+        }
+
+        return <div className="trailer-player" />;
     }
 
     render() {
@@ -42,6 +63,7 @@ class Recommendation extends React.Component {
                 <div className="header">
                     <h1>Recommendations</h1>
                 </div>
+                {this.trailerPlayer}
                 <div className="movies">
                     {this.recommendedMovies}
                 </div>
@@ -53,15 +75,18 @@ class Recommendation extends React.Component {
 Recommendation.propTypes = {
     movieDetails: React.PropTypes.object.isRequired,
     skippedMovies: React.PropTypes.object.isRequired,
+    movieTrailers: React.PropTypes.object.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
     dispatchSkipMovie: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
+    dispatchMovieTrailerFetch: React.PropTypes.func.isRequired,
     dispatchRecordMovieRating: React.PropTypes.func.isRequired
 };
 
 const mapReduxStateToProps = (state) => {
     return {
         movieDetails: state.movieDetails,
+        movieTrailers: state.movieTrailers,
         skippedMovies: state.skippedMovies,
         recommendedMovies: state.recommendedMovies
     };
@@ -71,6 +96,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         dispatchSkipMovie: (movieId) => dispatch(skipMovie(movieId)),
         dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
+        dispatchMovieTrailerFetch: (imdbId) => dispatch(movieTrailerFetch(imdbId)),
         dispatchRecordMovieRating: (movieId, rating) => dispatch(recordMovieRating(movieId, rating))
     };
 };
