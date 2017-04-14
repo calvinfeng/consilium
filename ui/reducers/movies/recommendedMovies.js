@@ -1,12 +1,14 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+ * @copyright Consilium, 2017
+ * @author Calvin Feng
+ */
 
 import { RECOMMENDED_MOVIES_FETCH_SUCCESS } from '../../actions/movies';
 import { RECOMMENDED_MOVIES_FETCH_FAIL }    from '../../actions/movies';
 
-// Key Actions - Fetch
+
 export default function recommendedMoviesReducer(state = {}, action) {
     switch (action.type) {
 

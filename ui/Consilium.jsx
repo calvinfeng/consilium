@@ -22,7 +22,7 @@ import Reducer                          from './reducers/index';
 class Consilium extends React.Component {
     render() {
         return (
-            <div>
+            <div className="consilium">
                 <Navigation />
                 {this.props.children}
             </div>
@@ -31,7 +31,7 @@ class Consilium extends React.Component {
 }
 
 Consilium.propTypes = {
-    children: React.PropTypes.array.isRequired
+    children: React.PropTypes.object.isRequired
 };
 
 const reduxStore = createStore(Reducer, applyMiddleware(thunk));

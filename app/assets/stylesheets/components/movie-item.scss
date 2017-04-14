@@ -1,44 +1,42 @@
-
-.movie-item {
-    /*display: inline-block;*/
+.most-viewed.movie-item {
     display: flex;
     flex-direction: column;
     margin: 5px 5px 5px 5px;
-    width: 302px;
-    border: 1px solid black;
-    border-radius: 8px;
-    background-color: white;
+    width: 151px;
+    height: 280px;
+    background-color: transparent;
+
+    .spinner {
+        top: -50%;
+        left: 50%;
+    }
 
     .title {
+        strong {
+            font-weight: 600;
+            margin-right: 0.3em;
+        }
+        font-weight: 400;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 50px;
-        font-size: 1em;
+        font-size: 1.2em;
         text-align: center;
         vertical-align: center;
-        margin: 0;
+        margin: 0 0 0 0;
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
     }
 
-    .title:hover {
-        background: #f7f7f7;
-        cursor: pointer;
-    }
-
-    .spinner-container {
-        width: 100%;
-    }
-
     .poster {
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-flow: column;
-        width: 300px;
-        height: 450px;
-        position: relative;
+        width: 150px;
+        height: 225px;
 
         img {
             display: flex;
@@ -49,23 +47,23 @@
     }
 
     .plot {
-        height: 100px;
+        height: 50px;
         overflow-y: scroll;
         font-size: 1em;
         padding: 5px 10px;
         border-bottom: 1px solid black;
     }
 
-    .rating {
+    .rating-toolbar {
         width: 100%;
         display: flex;
         justify-content: center;
-        padding: 1em 1em 1em 1em;
+        margin: 1em 0 1em 0;
+        padding: 0 0 0 0;
 
         .star-toolbar-container {
             display: flex;
             flex-direction: row;
-            margin: 5px;
             justify-content: space-around;
             align-content: center;
         }
@@ -74,12 +72,141 @@
             display: flex;
             flex-direction: row;
             justify-content: flex-end;
+            button {
+                margin: 0.5em 0.5em 0.5em 0.5em;
+            }
         }
     }
+}
 
-    .user-rating {
+.rated.movie-item {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 5px 5px 5px;
+    width: 60px;
+    height: 90px;
+    background-color: transparent;
+
+    .poster {
         display: flex;
-        font-size: 1em;
         justify-content: center;
+        align-items: center;
+        flex-flow: column;
+        width: 60px;
+        height: 90px;
+
+        img {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    }
+}
+
+
+.recommended.movie-item {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: white;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+
+    .content-box {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+
+        .left {
+            height: 100%;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+
+            .poster {
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-flow: column;
+                width: 300px;
+                position: relative;
+
+                img {
+                    display: flex;
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden;
+                }
+            }
+        }
+
+        .right {
+            height: 100%;
+            width: calc(100% - 300px);
+            display: flex;
+            flex-direction: column;
+
+            .title {
+                height: 50px;
+                font-weight: 400;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                vertical-align: center;
+                margin: 0 0 0 0;
+                border-top-left-radius: inherit;
+                border-top-right-radius: inherit;
+
+                strong {
+                    font-size: 1.2em;
+                    font-weight: 600;
+                    margin-right: 0.3em;
+                }
+            }
+
+            .plot {
+                height: calc(0.80 * (100% - 50px));
+                overflow-y: scroll;
+                font-size: 1em;
+                padding: 5px 10px;
+                border-bottom: 0px;
+            }
+
+            .rating-toolbar {
+                width: 100%;
+                height: calc(0.20 * (100% - 50px));
+                display: flex;
+                justify-content: center;
+                margin: 0.5em 0 0.5em 0;
+                padding: 0 0 0 0;
+                flex-direction: column;
+
+                .star-toolbar-container {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-around;
+                    align-content: center;
+                }
+
+                .button-container {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    margin-top: 1em;
+                    button {
+                        margin: 0.5em 0.5em 0.5em 0.5em;
+                    }
+                }
+            }
+        }
     }
 }

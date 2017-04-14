@@ -6,119 +6,81 @@
 import React                       from 'react';
 import { connect }                 from 'react-redux';
 
-import { mostViewedMoviesFetch }   from '../actions/movies';
 import { recommendedMoviesFetch }  from '../actions/movies';
-import { movieDetailFetch }        from '../actions/movieDetails';
-import { movieRatingRecord }       from '../actions/ratings';
-
 
 import RatingRecord                from './RatingRecord';
 import MostViewed                  from './MostViewed';
 import Recommendation              from './Recommendation';
 
-// Recommender is the only connected component, it's the ultimate parent for all
-// redux state information
+
 class Recommender extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            isRecommending: false,
-            ratingCountNeededForNextRecommendation: 10
+            numberOfRatingsNeededForNextFetch: 10
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        let isRecommending = false;
-
-        // TODO: Fix the condition for fetching next round of recommendation, the current
-        // approach is ugly
+        // First round of fetching
         if (
-            nextProps.recommendedMovies
-            && Object.keys(nextProps.recommendedMovies).length >= this.state.ratingCountNeededForNextRecommendation
+            Object.keys(nextProps.movieRatings).length >= 10
+            && Object.keys(nextProps.recommendedMovies).length === 0
         ) {
-            isRecommending = true;
-        }
-
-        if (Object.keys(nextProps.movieRatings).length >= 10) {
-            isRecommending = true;
-        }
-
-        if (isRecommending) {
             this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings);
+            this.setState({
+                numberOfRatingsNeededForNextFetch: this.state.numberOfRatingsNeededForNextFetch + 10
+            });
         }
 
-        this.setState({
-            isRecommending,
-            ratingCountNeededForNextRecommendation: this.state.ratingCountNeededForNextRecommendation + 10
-        });
+        if (Object.keys(nextProps.movieRatings).length >= this.state.numberOfRatingsNeededForNextFetch) {
+            this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings);
+            this.setState({
+                numberOfRatingsNeededForNextFetch: this.state.numberOfRatingsNeededForNextFetch + 10
+            });
+        }
     }
 
-    get indexes() {
-        if (this.state.isRecommending) {
+    get content() {
+        if (Object.keys(this.props.recommendedMovies).length > 0) {
             return (
                 <div className="recommender">
-                    <Recommendation
-                        dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
-                        dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
-                        movieRatings={this.props.movieRatings}
-                        movieDetails={this.props.movieDetails} />
+                    <Recommendation />
                     <RatingRecord />
                 </div>
             );
         }
+
         return (
             <div className="recommender">
-                <MostViewed
-                    dispatchMostViewedMoviesFetch={this.props.dispatchMostViewedMoviesFetch}
-                    dispatchMovieRatingRecord={this.props.dispatchMovieRatingRecord}
-                    dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
-                    mostViewedMovies={this.props.mostViewedMovies}
-                    movieRatings={this.props.movieRatings}
-                    movieDetails={this.props.movieDetails} />
+                <MostViewed />
                 <RatingRecord />
             </div>
         );
     }
 
     render() {
-        return (
-            <div className="recommender-container">
-                {this.indexes}
-            </div>
-        );
+        return this.content;
     }
-
 }
 
-/* eslint-disable */
 Recommender.propTypes = {
-    mostViewedMovies: React.PropTypes.object.isRequired,
-    recommendedMovies: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
-    movieDetails: React.PropTypes.object.isRequired,
-    dispatchMostViewedMoviesFetch: React.PropTypes.func.isRequired,
-    dispatchRecommendedMoviesFetch: React.PropTypes.func.isRequired,
-    dispatchMovieRatingRecord: React.PropTypes.func.isRequired,
-    dispatchMovieDetailFetch: React.PropTypes.func.isRequired
+    recommendedMovies: React.PropTypes.object.isRequired,
+    dispatchRecommendedMoviesFetch: React.PropTypes.func.isRequired
 };
-/* eslint-enable */
 
 const mapReduxStateToProps = (state) => {
     return {
-        mostViewedMovies: state.mostViewedMovies,
-        recommendedMovies: state.recommendedMovies,
         movieRatings: state.movieRatings,
-        movieDetails: state.movieDetails
+        recommendedMovies: state.recommendedMovies
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatchRecommendedMoviesFetch: (movieRatings) => dispatch(recommendedMoviesFetch(movieRatings)),
-        dispatchMostViewedMoviesFetch: () => dispatch(mostViewedMoviesFetch()),
-        dispatchMovieRatingRecord: (movieId, rating) => dispatch(movieRatingRecord(movieId, rating)),
-        dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
+        dispatchRecommendedMoviesFetch: (movieRatings) => dispatch(recommendedMoviesFetch(movieRatings))
     };
 };
 

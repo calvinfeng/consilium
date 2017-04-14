@@ -1,4 +1,4 @@
-.item-container {
+/*.item-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,13 +19,11 @@
   justify-content: center;
 }
 
-/*.
 react-buttons {
   margin: 0;
   margin-left: 5px;
   margin-right: 5px;
 }
-*/
 
 .top-bar {
   width: 100%;
@@ -42,4 +40,4 @@ react-buttons {
   width: 100%;
   height: auto;
   background-color: black;
-}
+}*/

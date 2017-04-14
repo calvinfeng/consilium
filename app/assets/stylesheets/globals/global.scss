@@ -1,5 +1,18 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    font-family: Roboto;
+}
 
-.recommender-container {
+#application .consilium {
+    display: flex;
+    min-height:100vh;
+    min-width: 100vw;
+    font-size: 15px;
+    flex-direction: column;
+    align-items: center;
     background: -moz-linear-gradient(332deg, rgba(255,255,255,1) 0%, rgba(201,201,201,1) 100%); /* ff3.6+ */
     background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, rgba(255,255,255,1)), color-stop(100%, rgba(201,201,201,1))); /* safari4+,chrome */
     background: -webkit-linear-gradient(332deg, rgba(255,255,255,1) 0%, rgba(201,201,201,1) 100%); /* safari5.1+,chrome10+ */
@@ -7,8 +20,4 @@
     background: -ms-linear-gradient(332deg, rgba(255,255,255,1) 0%, rgba(201,201,201,1) 100%); /* ie10+ */
     background: linear-gradient(118deg, rgba(255,255,255,1) 0%, rgba(201,201,201,1) 100%); /* w3c */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#C9C9C9',GradientType=1 ); /* ie6-9 */
-
-    .recommender {
-        padding: 1em 1em 1em 1em;
-    }
 }

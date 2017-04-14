@@ -1,0 +1,51 @@
+.most-viewed-container {
+    width: 75%;
+    font-size: 15px;
+    font-family: Roboto;
+    margin: 1em 1em 1em 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .header {
+        display: flex;
+        align-items: center;
+
+        h1 {
+            font-size: 2em;
+            font-weight: 800;
+        }
+    }
+
+    .instruction {
+        margin-top: 1em;
+
+        p {
+            font-size: 1em;
+        }
+
+        h4 {
+            font-weight: 600;
+            font-size: 1em;
+        }
+    }
+
+    .movies {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        height: 4em;
+
+        button {
+            font-size: 1em;
+        }
+    }
+}

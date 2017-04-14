@@ -1,7 +1,9 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+ * @copyright Consilium, 2017
+ * @author Calvin Feng
+ */
 
 // Thirdparty imports
 import request    from 'axios';
@@ -19,7 +21,7 @@ const movieDetailFetchSuccess = (data) => {
 const movieDetailFetchFail = (error) => {
     return {
         type: MOVIE_DETAIL_FETCH_FAIL,
-        error: error
+        error
     };
 };
 

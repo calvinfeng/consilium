@@ -1,5 +1,4 @@
-.movie-item {
-  /*display: inline-block;*/
+/*.movie-item {
   display: flex;
   flex-direction: column;
   margin: 5px 5px 5px 5px;
@@ -73,4 +72,4 @@
   display: flex;
   font-size: 1em;
   justify-content: center;
-}
+}*/

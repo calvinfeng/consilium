@@ -1,10 +1,13 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+ * @copyright Consilium, 2017
+ * @author Calvin Feng
+ */
 
 import { MOVIE_DETAIL_FETCH_SUCCESS } from '../../actions/movieDetails';
 import { MOVIE_DETAIL_FETCH_FAIL }    from '../../actions/movieDetails';
+
 
 export default function movieDetailsReducer(state = {}, action) {
     switch (action.type) {

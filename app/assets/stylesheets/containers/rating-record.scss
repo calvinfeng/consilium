@@ -1,0 +1,26 @@
+.rating-record-container {
+    width: 25%;
+    font-size: 15px;
+    font-family: Roboto;
+    margin: 1em 1em 1em 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .header {
+        display: flex;
+        align-items: center;
+
+        h1 {
+            font-size: 2em;
+            font-weight: 800;
+        }
+    }
+
+    .movies {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+}
