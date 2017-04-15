@@ -15,8 +15,31 @@ import { movieTrailerFetch } from '../actions/movieTrailers';
 import { skipMovie }         from '../actions/movies';
 import { recordMovieRating } from '../actions/movieRatings';
 
-
+/* global $ */
 class Recommendation extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            activeTrailer: undefined
+        };
+
+        this.playTrailer = this.playTrailer.bind(this);
+    }
+
+    playTrailer(imdbId) {
+        if (this.props.movieTrailers[imdbId] && this.props.movieTrailers[imdbId].length > 0) {
+            this.setState({
+                activeTrailer: this.props.movieTrailers[imdbId]
+            });
+        }
+
+        $('html, body').animate({
+            scrollTop: 0
+        }, 1000);
+    }
+
     get recommendedMovies() {
         const recommendedMovieIds = Object.keys(this.props.recommendedMovies).filter((movieId) => {
             return !this.props.skippedMovies[movieId];
@@ -32,6 +55,7 @@ class Recommendation extends React.Component {
                     imdbId={movie.imdbId}
                     movieDetail={this.props.movieDetails[movie.imdbId]}
                     movieTrailers={this.props.movieTrailers[movie.imdbId]}
+                    playTrailer={this.playTrailer}
                     dispatchSkipMovie={this.props.dispatchSkipMovie}
                     dispatchRecordMovieRating={this.props.dispatchRecordMovieRating}
                     dispatchMovieDetailFetch={this.props.dispatchMovieDetailFetch}
@@ -41,6 +65,15 @@ class Recommendation extends React.Component {
     }
 
     get trailerPlayer() {
+        if (this.state.activeTrailer) {
+            return (
+                <div className="trailer-player">
+                    <MovieTrailer
+                        videoSourceList={this.state.activeTrailer} />
+                </div>
+            );
+        }
+
         const movieImdbIds = Object.keys(this.props.movieTrailers);
 
         if (movieImdbIds.length > 0) {
