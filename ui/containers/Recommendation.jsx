@@ -8,6 +8,7 @@ import { connect }           from 'react-redux';
 
 import MovieItem             from '../components/MovieItem';
 import MovieTrailer          from '../components/MovieTrailer';
+import YearRangeSelector     from '../components/YearRangeSelector';
 
 import { movieDetailFetch }  from '../actions/movieDetails';
 import { movieTrailerFetch } from '../actions/movieTrailers';
@@ -96,6 +97,7 @@ class Recommendation extends React.Component {
                 <div className="header">
                     <h1>Recommendations</h1>
                 </div>
+                <YearRangeSelector />
                 {this.trailerPlayer}
                 <div className="movies">
                     {this.recommendedMovies}

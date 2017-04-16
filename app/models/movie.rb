@@ -27,7 +27,7 @@ class Movie < ActiveRecord::Base
     def svd_prediction_for(user)
       predicted_rating = 0
       self.feature.each_with_index do |feature_k, k|
-        predicted_rating += (feature_k * user.preference[k])
+        predicted_rating += (feature_k * user.preference_vector[k])
       end
       predicted_rating
     end

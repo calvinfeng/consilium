@@ -49,6 +49,8 @@ class Api::MoviesController < ApplicationController
             movie_ratings[movie_id] = rating.to_f
         end
 
+        new_user = User.new(movie_ratings)
+
         start_year = params[:start_year]
         end_year = params[:end_year]
 
