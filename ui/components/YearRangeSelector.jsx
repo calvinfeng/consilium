@@ -7,6 +7,9 @@
 
 import React            from 'react';
 import { Range }        from 'rc-slider';
+import { Button }         from 'react-bootstrap';
+import { OverlayTrigger } from 'react-bootstrap';
+import { Popover }        from 'react-bootstrap';
 
 class YearRangeSelector extends React.Component {
 
@@ -39,12 +42,17 @@ class YearRangeSelector extends React.Component {
     }
 
     render() {
-        return (
-            <div className="year-range-selector">
+        const title = `Year: ${this.state.minYear} - ${this.state.maxYear}`;
+
+        const popover = (
+            <Popover
+                id="popover-positioned-bottom"
+                title={title}
+                className="year-range-selector">
                 <div className="instruction">
-                    <h1>
-                        Year: {this.state.minYear} - {this.state.maxYear}
-                    </h1>
+                    <p>
+                        Move the slider to select your year range
+                    </p>
                 </div>
                 <div className="slider">
                     <Range
@@ -53,10 +61,15 @@ class YearRangeSelector extends React.Component {
                         min={1930}
                         max={2016}
                         allowCross={false}
-                        tipFormatter={(value) => `${value}%`}
                         onChange={this.handleChange} />
                 </div>
-            </div>
+            </Popover>
+        );
+
+        return (
+            <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
+                <Button className="year-range-selector-trigger">Filter by year</Button>
+            </OverlayTrigger>
         );
     }
 
