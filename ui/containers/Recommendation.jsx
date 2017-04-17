@@ -3,18 +3,19 @@
 // Copyright 2017 Consilium
 // Author(s): Calvin Feng
 
-import React                 from 'react';
-import { connect }           from 'react-redux';
+import React                      from 'react';
+import { connect }                from 'react-redux';
 
-import MovieItem             from '../components/MovieItem';
-import MovieTrailer          from '../components/MovieTrailer';
-import YearRangeSelector     from '../components/YearRangeSelector';
+import MovieItem                  from '../components/MovieItem';
+import MovieTrailer               from '../components/MovieTrailer';
+import YearRangeSelector          from '../components/YearRangeSelector';
 
-import { movieDetailFetch }  from '../actions/movieDetails';
-import { movieTrailerFetch } from '../actions/movieTrailers';
+import { movieDetailFetch }       from '../actions/movieDetails';
+import { movieTrailerFetch }      from '../actions/movieTrailers';
 
-import { skipMovie }         from '../actions/movies';
-import { recordMovieRating } from '../actions/movieRatings';
+import { skipMovie }              from '../actions/movies';
+import { recordMovieRating }      from '../actions/movieRatings';
+import { setMovieYearRange }      from '../actions/movieYearRange';
 
 /* global $ */
 class Recommendation extends React.Component {
@@ -42,12 +43,12 @@ class Recommendation extends React.Component {
     }
 
     get recommendedMovies() {
-        const recommendedMovieIds = Object.keys(this.props.recommendedMovies).filter((movieId) => {
+        const recommendedMovieIds = Object.keys(this.props.recommendedMovies.items).filter((movieId) => {
             return !this.props.skippedMovies[movieId];
         }).sort();
 
         return recommendedMovieIds.map((movieId) => {
-            const movie = this.props.recommendedMovies[movieId];
+            const movie = this.props.recommendedMovies.items[movieId];
             return (
                 <MovieItem
                     isRecommendation={true}
@@ -97,7 +98,10 @@ class Recommendation extends React.Component {
                 <div className="header">
                     <h1>Recommendations</h1>
                 </div>
-                <YearRangeSelector />
+                <YearRangeSelector
+                    disabled={this.props.recommendedMovies.isFetching}
+                    movieYearRange={this.props.movieYearRange}
+                    dispatchSetMovieYearRange={this.props.dispatchSetMovieYearRange} />
                 {this.trailerPlayer}
                 <div className="movies">
                     {this.recommendedMovies}
@@ -111,11 +115,13 @@ Recommendation.propTypes = {
     movieDetails: React.PropTypes.object.isRequired,
     skippedMovies: React.PropTypes.object.isRequired,
     movieTrailers: React.PropTypes.object.isRequired,
+    movieYearRange: React.PropTypes.object.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
     dispatchSkipMovie: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
     dispatchMovieTrailerFetch: React.PropTypes.func.isRequired,
-    dispatchRecordMovieRating: React.PropTypes.func.isRequired
+    dispatchRecordMovieRating: React.PropTypes.func.isRequired,
+    dispatchSetMovieYearRange: React.PropTypes.func.isRequired
 };
 
 const mapReduxStateToProps = (state) => {
@@ -123,7 +129,8 @@ const mapReduxStateToProps = (state) => {
         movieDetails: state.movieDetails,
         movieTrailers: state.movieTrailers,
         skippedMovies: state.skippedMovies,
-        recommendedMovies: state.recommendedMovies
+        recommendedMovies: state.recommendedMovies,
+        movieYearRange: state.movieYearRange
     };
 };
 
@@ -132,7 +139,8 @@ const mapDispatchToProps = (dispatch) => {
         dispatchSkipMovie: (movieId) => dispatch(skipMovie(movieId)),
         dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
         dispatchMovieTrailerFetch: (imdbId) => dispatch(movieTrailerFetch(imdbId)),
-        dispatchRecordMovieRating: (movieId, rating) => dispatch(recordMovieRating(movieId, rating))
+        dispatchRecordMovieRating: (movieId, rating) => dispatch(recordMovieRating(movieId, rating)),
+        dispatchSetMovieYearRange: (minYear, maxYear) => dispatch(setMovieYearRange(minYear, maxYear))
     };
 };
 

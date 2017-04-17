@@ -19,7 +19,7 @@ class RatingRecord extends React.Component {
     get ratedMovies() {
         const ratedMovieIds = Object.keys(this.props.movieRatings);
         return ratedMovieIds.map((movieId) => {
-            const movie = this.props.mostViewedMovies[movieId] || this.props.recommendedMovies[movieId];
+            const movie = this.props.mostViewedMovies[movieId] || this.props.recommendedMovies.items[movieId];
             return (
                 <MovieItem
                     isRecommendation={false}

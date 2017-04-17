@@ -18,32 +18,26 @@ class Recommender extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            numberOfRatingsNeededForNextFetch: 10
+            numOfRatingsNeededForFetching: 10
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        // First round of fetching
         if (
-            Object.keys(nextProps.movieRatings).length >= 10
-            && Object.keys(nextProps.recommendedMovies).length === 0
+            Object.keys(nextProps.movieRatings).length === this.state.numOfRatingsNeededForFetching
+            && !nextProps.recommendedMovies.isFetching
         ) {
-            this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings);
-            this.setState({
-                numberOfRatingsNeededForNextFetch: this.state.numberOfRatingsNeededForNextFetch + 10
-            });
-        }
+            // Fetching recommendation
+            this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings, nextProps.movieYearRange);
 
-        if (Object.keys(nextProps.movieRatings).length >= this.state.numberOfRatingsNeededForNextFetch) {
-            this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings);
             this.setState({
-                numberOfRatingsNeededForNextFetch: this.state.numberOfRatingsNeededForNextFetch + 10
+                numOfRatingsNeededForFetching: this.state.numOfRatingsNeededForFetching + 10
             });
         }
     }
 
     get content() {
-        if (Object.keys(this.props.recommendedMovies).length > 0) {
+        if (Object.keys(this.props.recommendedMovies.items).length > 0) {
             return (
                 <div className="recommender">
                     <Recommendation />
@@ -67,12 +61,14 @@ class Recommender extends React.Component {
 
 Recommender.propTypes = {
     movieRatings: React.PropTypes.object.isRequired,
+    movieYearRange: React.PropTypes.object.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
     dispatchRecommendedMoviesFetch: React.PropTypes.func.isRequired
 };
 
 const mapReduxStateToProps = (state) => {
     return {
+        movieYearRange: state.movieYearRange,
         movieRatings: state.movieRatings,
         recommendedMovies: state.recommendedMovies
     };
@@ -80,7 +76,9 @@ const mapReduxStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatchRecommendedMoviesFetch: (movieRatings) => dispatch(recommendedMoviesFetch(movieRatings))
+        dispatchRecommendedMoviesFetch: (movieRatings, yearRange) => {
+            dispatch(recommendedMoviesFetch(movieRatings, yearRange));
+        }
     };
 };
 

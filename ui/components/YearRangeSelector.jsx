@@ -16,9 +16,8 @@ class YearRangeSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            minYear: 1930,
-            maxYear: 2016,
-            disabled: false
+            minYear: this.props.movieYearRange.minYear,
+            maxYear: this.props.movieYearRange.maxYear,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -35,9 +34,8 @@ class YearRangeSelector extends React.Component {
         }
 
         this.disableTimer = setTimeout(() => {
-            this.setState({
-                disabled: true
-            });
+            console.log('Modify the movie year range in store');
+            // this.props.dispatchSetMovieYearRange(this.state.minYear, this.state.maxYear);
         }, 2000);
     }
 
@@ -51,13 +49,13 @@ class YearRangeSelector extends React.Component {
                 className="year-range-selector">
                 <div className="instruction">
                     <p>
-                        Move the slider to select your year range
+                        Slide to filter by year
                     </p>
                 </div>
                 <div className="slider">
                     <Range
-                        disabled={this.state.disabled}
-                        defaultValue={[1930, 2016]}
+                        disabled={this.props.disabled}
+                        defaultValue={[this.state.minYear, this.state.maxYear]}
                         min={1930}
                         max={2016}
                         allowCross={false}
@@ -72,7 +70,12 @@ class YearRangeSelector extends React.Component {
             </OverlayTrigger>
         );
     }
-
 }
+
+YearRangeSelector.propTypes = {
+    disabled: React.PropTypes.bool.isRequired,
+    movieYearRange: React.PropTypes.object.isRequired,
+    dispatchSetMovieYearRange: React.PropTypes.func.isRequired
+};
 
 export default YearRangeSelector;

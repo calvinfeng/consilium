@@ -51,11 +51,11 @@ class Api::MoviesController < ApplicationController
 
         new_user = User.new(movie_ratings)
 
-        start_year = params[:start_year]
-        end_year = params[:end_year]
+        min_year = params[:min_year]
+        max_year = params[:max_year]
 
         # NOTE: Change it back later
-        # @movies = generate_recommendations(start_year, end_year, movie_ratings)
+        # @movies = generate_recommendations(min_year, max_year, movie_ratings)
         @movies = Movie.find(eval($redis.get("most_viewed_movie_ids"))).first(10)
         render 'api/movies/recommendation.json.jbuilder'
     end
@@ -70,10 +70,10 @@ class Api::MoviesController < ApplicationController
     #     eval(params.require(:recommender))
     # end
 
-    def generate_recommendations(start_year, end_year, movie_ratings_by_user)
-        start_year = start_year || 1900
-        end_year = end_year || 2017
-        movies = Movie.where("year >= #{start_year} AND year <= #{end_year}")
+    def generate_recommendations(min_year, max_year, movie_ratings_by_user)
+        min_year = min_year || 1900
+        max_year = max_year || 2017
+        movies = Movie.where("year >= #{min_year} AND year <= #{max_year}")
         indices = (0...movies.length).to_a.shuffle
 
         recommended_movies = []
