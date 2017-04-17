@@ -7,7 +7,7 @@
 require 'byebug'
 
 class User
-    attr_reader :ratings, :average_rating, :preferences
+    attr_reader :ratings, :average_rating, :preference_vector
     def initialize(movie_ratings)
         @ratings = Hash.new
         movie_ratings.each do |movie_id, rating|
@@ -16,7 +16,7 @@ class User
 
         # Compute other instance properties
         compute_average_rating
-        compute_preferences
+        compute_preference_vector
     end
 
     def compute_average_rating
@@ -27,59 +27,64 @@ class User
         @average_rating = sum/@ratings.length
     end
 
-    def compute_preferences
-        @preference = Array.new(8) { rand }
+    def compute_preference_vector
+        @preference_vector = Array.new(8) { rand }
         movie_features = eval($redis.get("movie_features"))
         learning_rate = 0.1
         regularized_factor = 0.15
-        500.times do |i|
-            pref_copy = @preference.dup
+        1000.times do |i|
+            pref_copy = @preference_vector.dup
             deviations = get_deviations(movie_features)
             pref_copy.each_index do |k|
-                pref_copy[k] = pref_copy[k] - (learning_rate*derivative_j_wrt_preference(movie_features, k, deviations, regularized_factor))
+                pref_copy[k] = pref_copy[k] - (learning_rate * derivative_j_wrt_preference(movie_features, k, deviations, regularized_factor))
             end
-            @preference = pref_copy
+            @preference_vector = pref_copy
+            puts "Cost: #{cost_function(movie_features, regularized_factor)}"
         end
+        @preference_vector
     end
 
     def derivative_j_wrt_preference(movie_features, k, deviations, l)
+        # Regularized term
         if k > 0
-            step = l*@preference[k]
+            dj = l * @preference_vector[k]
         else
-            step = 0
+            dj = 0
         end
+        # Sum over all the movies user has rated
         deviations.each do |movie_id, deviation|
-            step += deviation*movie_features[movie_id][k]
+            dj += deviation * movie_features[movie_id][k]
         end
-        return step / @ratings.size
+        # Average it
+        return dj / @ratings.size
     end
 
     def get_deviations(movie_features)
         deviation_map = {}
         @ratings.each do |movie_id, user_rating|
             predicted_rating = 0
-            @preference.each_index do |k|
-                predicted_rating += @preference[k]*movie_features[movie_id][k]
+            @preference_vector.each_index do |k|
+                predicted_rating += @preference_vector[k] * movie_features[movie_id][k]
             end
             deviation_map[movie_id] = predicted_rating - user_rating
         end
         return deviation_map
     end
 
-    def cost_function(movie_features, l)
+    def cost_function(movie_features, regularized_factor)
         sq_error_sum = 0
         @ratings.each do |movie_id, rating|
             predicted_rating = 0
-            @preference.each_index do |k|
-                predicted_rating += @preference[k]*movie_features[movie_id][k]
+            @preference_vector.each_index do |k|
+                predicted_rating += @preference_vector[k]*movie_features[movie_id][k]
             end
             sq_error_sum += (predicted_rating - rating)**2
         end
         regularized_sum = 0
-        @preference.each do |pref|
+        @preference_vector.each do |pref|
             regularized_sum += pref**2
         end
-        return (sq_error_sum + l*regularized_sum)/@ratings.length
+        return (sq_error_sum + regularized_factor * regularized_sum)/@ratings.length
     end
 
     # def sim(other_user)

@@ -36,7 +36,10 @@ class PosterSlider extends React.Component {
     }
 
     get arePostersLoaded() {
-        return this.state.posters.length === Object.keys(this.props.movies).length;
+        return (
+            this.state.posters.length === Object.keys(this.props.movies).length
+            && this.state.posters.length !== 0
+        );
     }
 
     get carouselItems() {
@@ -81,9 +84,7 @@ class PosterSlider extends React.Component {
         }
 
         return (
-            <div className="poster-slider">
-                <h1 className="title">Loading...</h1>
-            </div>
+            <div />
         );
     }
 }

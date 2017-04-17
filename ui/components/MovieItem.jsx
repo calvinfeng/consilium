@@ -20,6 +20,7 @@ class MovieItem extends React.Component {
         super(props);
         this.handleSkip = this.handleSkip.bind(this);
         this.handleRatingClick = this.handleRatingClick.bind(this);
+        this.handlePlayTrailer = this.handlePlayTrailer.bind(this);
         this.initLoadingMovieDetail = this.initLoadingMovieDetail.bind(this);
         this.completeLoadingMovieDetail = this.completeLoadingMovieDetail.bind(this);
     }
@@ -56,6 +57,10 @@ class MovieItem extends React.Component {
 
     handleSkip() {
         this.props.dispatchSkipMovie(this.props.movieId);
+    }
+
+    handlePlayTrailer() {
+        this.props.playTrailer(this.props.imdbId);
     }
 
     get poster() {
@@ -99,7 +104,7 @@ class MovieItem extends React.Component {
                     key="play"
                     bsSize="xsmall"
                     className="react-buttons"
-                    onClick={this.handleSkip}
+                    onClick={this.handlePlayTrailer}
                     bsStyle="primary">
                     Play Trailer
                 </Button>
@@ -217,20 +222,22 @@ class MovieItem extends React.Component {
 }
 
 MovieItem.defaultProps = {
-    rating: undefined,
     movieDetail: {
         isDefaultProp: true,
         title: 'Loading...',
         year: '....',
         plot: 'Loading...'
     },
-    movieTrailers: undefined
+    rating: undefined,
+    movieTrailers: undefined,
+    playTrailer: undefined
 };
 
 MovieItem.propTypes = {
     movieId: React.PropTypes.number.isRequired,
     imdbId: React.PropTypes.string.isRequired,
     isRecommendation: React.PropTypes.bool.isRequired,
+    playTrailer: React.PropTypes.func,
     rating: React.PropTypes.number,
     movieDetail: React.PropTypes.object,
     movieTrailers: React.PropTypes.array,

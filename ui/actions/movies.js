@@ -37,8 +37,15 @@ export const mostViewedMoviesFetch = () => (dispatch) => {
         });
 };
 
+export const RECOMMENDED_MOVIES_FETCH_START = 'RECOMMENDED_MOVIES_FETCH_START';
 export const RECOMMENDED_MOVIES_FETCH_SUCCESS = 'RECOMMENDED_MOVIES_FETCH_SUCCESS';
 export const RECOMMENDED_MOVIES_FETCH_FAIL = 'RECOMMENDED_MOVIES_FETCH_FAIL';
+
+const recommendedMoviesFetchStart = () => {
+    return {
+        type: RECOMMENDED_MOVIES_FETCH_START
+    };
+};
 
 const recommendedMoviesFetchSuccess = (movies) => {
     return {
@@ -54,17 +61,20 @@ const recommendedMoviesFetchFail = (error) => {
     };
 };
 
-export const recommendedMoviesFetch = (movieRatings) => (dispatch) => {
-    // TODO: Don't store it in window!!!
+export const recommendedMoviesFetch = (movieRatings, yearRange) => (dispatch) => {
+    dispatch(recommendedMoviesFetchStart());
     const config = {
         headers:
         {
             'X-CSRF-Token': XSRF_TOKEN
         }
     };
+    // TODO: Don't store it in window!!!
     return request
         .post('api/movies/recommendations', {
-            movie_ratings: movieRatings
+            movie_ratings: movieRatings,
+            min_year: yearRange.minYear,
+            max_year: yearRange.maxYear
         }, config)
         .then((res) => {
             dispatch(recommendedMoviesFetchSuccess(res.data));
