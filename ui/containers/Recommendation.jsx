@@ -42,6 +42,7 @@ class Recommendation extends React.Component {
         }, 1000);
     }
 
+
     get recommendedMovies() {
         const recommendedMovieIds = Object.keys(this.props.recommendedMovies.items).filter((movieId) => {
             return !this.props.skippedMovies[movieId];

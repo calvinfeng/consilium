@@ -35,13 +35,14 @@ class RatingRecord extends React.Component {
             );
         });
     }
-
+    /*
+    <div className="header">
+        <h1>Rating History</h1>
+    </div>
+    */
     render() {
         return (
             <div className="rating-record-container">
-                <div className="header">
-                    <h1>Rating History</h1>
-                </div>
                 <div className="movies">
                     {this.ratedMovies}
                 </div>
