@@ -5,10 +5,10 @@
  * @author Calvin Feng
  */
 
-/* global XSRF_TOKEN */
 // Thirdparty imports
 import request    from 'axios';
 
+/* global XSRF_TOKEN */
 export const MOST_VIEWED_MOVIES_FETCH_SUCCESS = 'MOST_VIEWED_MOVIES_FETCH_SUCCESS';
 export const MOST_VIEWED_MOVIES_FETCH_FAIL = 'MOST_VIEWED_MOVIES_FETCH_FAIL';
 

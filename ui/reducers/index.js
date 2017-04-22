@@ -12,8 +12,9 @@ import recommendedMoviesReducer from './movies/recommendedMovies';
 import skippedMoviesReducer     from './movies/skippedMovies';
 import movieDetailsReducer      from './movies/movieDetails';
 import movieTrailersReducer     from './movies/movieTrailers';
-import movieRatingsReducer      from './users/movieRatings';
 import movieYearRangeReducer    from './movies/movieYearRange';
+import movieRatingsReducer      from './users/movieRatings';
+import userPreferenceReducer    from './users/userPreference';
 
 export default combineReducers({
     movieRatings: movieRatingsReducer,
@@ -22,5 +23,6 @@ export default combineReducers({
     movieYearRange: movieYearRangeReducer,
     skippedMovies: skippedMoviesReducer,
     mostViewedMovies: mostViewedMoviesReducer,
-    recommendedMovies: recommendedMoviesReducer
+    recommendedMovies: recommendedMoviesReducer,
+    userPreference: userPreferenceReducer
 });

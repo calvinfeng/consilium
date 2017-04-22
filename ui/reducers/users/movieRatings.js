@@ -1,13 +1,15 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+ * @copyright Consilium, 2017
+ * @author Calvin Feng
+ */
 
 import { RECORD_MOVIE_RATING } from '../../actions/movieRatings';
 import { DELETE_MOVIE_RATING } from '../../actions/movieRatings';
 
 // Key Actions - Create, Update, Delete, Fetch
-export default function ratingsReducer(state = {}, action) {
+export default function movieRatingsReducer(state = {}, action) {
     switch (action.type) {
 
         case RECORD_MOVIE_RATING:
