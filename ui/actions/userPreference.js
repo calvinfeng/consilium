@@ -9,7 +9,7 @@ import request from 'axios';
 
 /* global XSRF_TOKEN */
 export const USER_PREFERENCE_FETCH_START = 'USER_PREFERENCE_FETCH_START';
-export const USER_PERFERENCE_FETCH_SUCCESS = 'USER_PERFERENCE_FETCH_SUCCESS';
+export const USER_PREFERENCE_FETCH_SUCCESS = 'USER_PREFERENCE_FETCH_SUCCESS';
 export const USER_PREFERENCE_FETCH_FAIL = 'USER_PREFERENCE_FETCH_FAIL';
 
 const userPreferenceFetchStart = () => {
@@ -18,11 +18,10 @@ const userPreferenceFetchStart = () => {
     };
 };
 
-const userPreferenceFetchSuccess = (data, imdbId) => {
+const userPreferenceFetchSuccess = (data) => {
     return {
-        type: USER_PERFERENCE_FETCH_SUCCESS,
-        data,
-        imdbId
+        type: USER_PREFERENCE_FETCH_SUCCESS,
+        preferenceVector: data.preference_vector
     };
 };
 
@@ -47,7 +46,6 @@ export const userPreferenceFetch = (movieRatings) => (dispatch) => {
             movie_ratings: movieRatings
         }, config)
         .then((res) => {
-            debugger
             dispatch(userPreferenceFetchSuccess(res.data));
         })
         .catch((error) => {

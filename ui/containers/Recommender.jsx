@@ -7,7 +7,7 @@ import React                       from 'react';
 import { connect }                 from 'react-redux';
 
 import { recommendedMoviesFetch }  from '../actions/movies';
-
+import { userPreferenceFetch }     from '../actions/userPreference';
 import RatingRecord                from './RatingRecord';
 import MostViewed                  from './MostViewed';
 import Recommendation              from './Recommendation';
@@ -29,6 +29,8 @@ class Recommender extends React.Component {
         ) {
             // Fetching recommendation
             this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings, nextProps.movieYearRange);
+            // Fetching user preference
+            this.props.dispatchUserPreferenceFetch(nextProps.movieRatings);
 
             this.setState({
                 numOfRatingsNeededForFetching: this.state.numOfRatingsNeededForFetching + 10
@@ -63,6 +65,8 @@ Recommender.propTypes = {
     movieRatings: React.PropTypes.object.isRequired,
     movieYearRange: React.PropTypes.object.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
+    userPreference: React.PropTypes.object.isRequired,
+    dispatchUserPreferenceFetch: React.PropTypes.func.isRequired,
     dispatchRecommendedMoviesFetch: React.PropTypes.func.isRequired
 };
 
@@ -70,12 +74,16 @@ const mapReduxStateToProps = (state) => {
     return {
         movieYearRange: state.movieYearRange,
         movieRatings: state.movieRatings,
-        recommendedMovies: state.recommendedMovies
+        recommendedMovies: state.recommendedMovies,
+        userPreference: state.userPreference
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        dispatchUserPreferenceFetch: (movieRatings) => {
+            dispatch(userPreferenceFetch(movieRatings));
+        },
         dispatchRecommendedMoviesFetch: (movieRatings, yearRange) => {
             dispatch(recommendedMoviesFetch(movieRatings, yearRange));
         }
