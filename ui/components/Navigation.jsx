@@ -35,6 +35,16 @@ class Navigation extends React.Component {
         }
     }
 
+    /*
+    <NavDropdown eventKey={3} title="Menu" id="basic-nav-dropdown">
+        <MenuItem eventKey={3.1}>Do</MenuItem>
+        <MenuItem eventKey={3.2}>Something</MenuItem>
+        <MenuItem eventKey={3.3}>Here</MenuItem>
+        <MenuItem divider />
+        <MenuItem eventKey={3.4}>Separated link</MenuItem>
+    </NavDropdown>
+    */
+
     render() {
         return (
             <div className="navigation">
@@ -47,14 +57,8 @@ class Navigation extends React.Component {
                     </Navbar.Header>
                     <Navbar.Collapse>
                         <Nav pullRight>
-                            <NavItem eventKey={1} href="https://calvinfeng.github.io/recommender.html">About</NavItem>
-                            <NavDropdown eventKey={2} title="Menu" id="basic-nav-dropdown">
-                                <MenuItem eventKey={2.1}>Do</MenuItem>
-                                <MenuItem eventKey={2.2}>Something</MenuItem>
-                                <MenuItem eventKey={2.3}>Here</MenuItem>
-                                <MenuItem divider />
-                                <MenuItem eventKey={2.4}>Separated link</MenuItem>
-                            </NavDropdown>
+                            <NavItem eventKey={1} href="#/about">Recommendations</NavItem>
+                            <NavItem eventKey={2} href="https://calvinfeng.github.io/recommender.html">About</NavItem>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
