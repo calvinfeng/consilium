@@ -26,15 +26,34 @@ class LandingPage extends React.Component {
             && nextMovieRatingCount > currentMovieRatingCount
             && !this.props.recommendedMovies.isFetching
         ) {
-            // TODO: Remove fetching recommendation
-            this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings, this.props.movieYearRange);
             // Fetching user preference
             this.props.dispatchUserPreferenceFetch(nextProps.movieRatings);
             // Increase rating count requirement
             this.props.dispatchSetRatingsCountNeededForFetching(this.props.ratingsCountNeededForFetching + 10);
         }
 
-        console.log('ratingCount requirement', nextProps.ratingsCountNeededForFetching);
+        if (this.hasPreferenceChanged(nextProps)) {
+            // Fetching recommendation
+            console.log('Preference has changed now fetching recommendations');
+            this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings, nextProps.movieYearRange);
+        }
+    }
+
+    hasPreferenceChanged(nextProps) {
+        const prevPref = this.props.userPreference.preferenceVector;
+        const nextPref = nextProps.userPreference.preferenceVector;
+
+        if (prevPref.length !== nextPref.length) {
+            return true;
+        }
+
+        for (let i = 0; i < prevPref.length; i += 1) {
+            if (prevPref[i] !== nextPref[i]) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     render() {
