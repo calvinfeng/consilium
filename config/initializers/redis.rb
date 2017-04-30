@@ -80,6 +80,7 @@ def load_movie_features
     movie_features
 end
 
+# This is for k-nearest neighbor algorithm
 puts "\nLoading movie_rating_map into redis...\n\n"
 movie_map = load_movies()
 $redis.set('movie_rating_map', movie_map)
@@ -92,12 +93,18 @@ puts "\nLoading average_rating_map into redis\n\n"
 average_rating_map = load_average_ratings_by_user_id
 $redis.set('average_rating_map', average_rating_map)
 
-puts "\nLoading most_viewed_movie_ids into redis\n\n"
 # Cache ID's of those movies with plenty historical ratings
-most_viewed_movie_ids = []
+movie_rating_count_map = Hash.new
+
 movie_map.each do |movie_id, info|
     if info[:ratings] && info[:ratings].length > 450
-        most_viewed_movie_ids << movie_id
+        movie_rating_count_map[movie_id] = info[:ratings].length
     end
 end
+
+most_viewed_movie_ids = movie_rating_count_map.keys.sort do |id_1, id_2|
+    movie_rating_count_map[id_2] <=> movie_rating_count_map[id_1]
+end.first(200)
+
+puts "\nLoading most_viewed_movie_ids into redis\n\n"
 $redis.set('most_viewed_movie_ids', most_viewed_movie_ids)

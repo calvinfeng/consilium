@@ -1,7 +1,9 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+ * @copyright Consilium, 2017
+ * @author Calvin Feng
+ */
 
 import React                 from 'react';
 import { connect }           from 'react-redux';
@@ -35,13 +37,14 @@ class RatingRecord extends React.Component {
             );
         });
     }
-
+    /*
+    <div className="header">
+        <h1>Rating History</h1>
+    </div>
+    */
     render() {
         return (
             <div className="rating-record-container">
-                <div className="header">
-                    <h1>Rating History</h1>
-                </div>
                 <div className="movies">
                     {this.ratedMovies}
                 </div>

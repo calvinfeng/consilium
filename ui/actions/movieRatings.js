@@ -26,3 +26,12 @@ export const deleteMovieRating = (movieId) => (dispatch) => {
         movieId: movieId
     });
 };
+
+export const SET_RATINGS_COUNT_NEEDED_FOR_FETCHING = 'SET_RATINGS_COUNT_NEEDED_FOR_FETCHING';
+
+export const setRatingsCountNeededForFetching = (count) => (dispatch) => {
+    dispatch({
+        type: SET_RATINGS_COUNT_NEEDED_FOR_FETCHING,
+        count
+    });
+};

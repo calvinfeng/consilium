@@ -1,7 +1,9 @@
 'use strict';
 
-// Copyright 2017 Consilium
-// Author(s): Calvin Feng
+/**
+* @copyright Consilium, 2017
+* @author Calvin Feng
+*/
 
 import React                     from 'react';
 import { connect }               from 'react-redux';
@@ -9,6 +11,7 @@ import _                         from 'lodash';
 
 import { ProgressBar }           from 'react-bootstrap';
 import { Button }                from 'react-bootstrap';
+import LinearProgress            from 'material-ui/LinearProgress';
 
 // Components
 import PosterSlider              from '../components/PosterSlider';
@@ -27,8 +30,7 @@ class MostViewed extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            moviesOnDisplay: {},
-            ratingCount: 0
+            moviesOnDisplay: {}
         };
 
         this.handleClickMoreMovies = this.handleClickMoreMovies.bind(this);
@@ -36,7 +38,9 @@ class MostViewed extends React.Component {
     }
 
     componentDidMount() {
-        this.props.dispatchMostViewedMoviesFetch();
+        if (Object.keys(this.props.mostViewedMovies).length === 0) {
+            this.props.dispatchMostViewedMoviesFetch();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -49,8 +53,9 @@ class MostViewed extends React.Component {
         const instruction = `These are some of the most viewed American films. We think it is very likely that you have
         seen at least some of them.  If you have seen them, whether you like or dislike them, let us know and give them
         ratings! It will help our backend machine learning algorithm to learn your taste and preference`;
+        const ratingCount = Object.keys(this.props.movieRatings).length;
 
-        if (this.state.ratingCount === 0) {
+        if (ratingCount === 0) {
             return (
                 <div className="instruction">
                     <p>{instruction}</p>
@@ -59,12 +64,21 @@ class MostViewed extends React.Component {
                     </h4>
                 </div>
             );
+        } else if (ratingCount >= 10) {
+            return (
+                <div className="instruction">
+                    <p>{instruction}</p>
+                    <h4>
+                        Recommendations are ready!
+                    </h4>
+                </div>
+            );
         }
 
         return (
             <div className="instruction">
                 <p>{instruction}</p>
-                <h4>Rate <strong>{10 - this.state.ratingCount}</strong> more movies</h4>
+                <h4>Rate <strong>{10 - ratingCount}</strong> more movies</h4>
             </div>
         );
     }
@@ -106,11 +120,30 @@ class MostViewed extends React.Component {
     }
 
     handleClickMoreMovies() {
-        this.randomlySetMoviesOnDisplay(this.props.mostViewedMovies);
+        if (Object.keys(this.props.mostViewedMovies).length > 0) {
+            this.randomlySetMoviesOnDisplay(this.props.mostViewedMovies);
+        } else {
+            this.props.dispatchMostViewedMoviesFetch();
+        }
     }
 
     render() {
         const progressPercentage = (100 * Object.keys(this.props.movieRatings).length) / 10;
+
+        if (Object.keys(this.props.mostViewedMovies).length === 0) {
+            return (
+                <div className="most-viewed-container">
+                    <div className="header">
+                        <h1>Popular Movies</h1>
+                    </div>
+                    <div>
+                        <h5>Please wait while movies are fetching</h5>
+                        <LinearProgress mode="indeterminate" />
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div className="most-viewed-container">
                 <div className="header">

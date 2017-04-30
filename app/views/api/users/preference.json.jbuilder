@@ -1,0 +1,1 @@
+json.preference_vector @new_user.preference_vector

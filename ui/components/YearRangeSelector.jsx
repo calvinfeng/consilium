@@ -34,9 +34,8 @@ class YearRangeSelector extends React.Component {
         }
 
         this.disableTimer = setTimeout(() => {
-            console.log('Modify the movie year range in store');
-            // this.props.dispatchSetMovieYearRange(this.state.minYear, this.state.maxYear);
-        }, 2000);
+            this.props.dispatchSetMovieYearRange(this.state.minYear, this.state.maxYear);
+        }, 1000);
     }
 
     render() {
