@@ -11,6 +11,10 @@ import { IndexRoute, hashHistory, Router, Route } from 'react-router';
 import { createStore, applyMiddleware }           from 'redux';
 import thunk                                      from 'redux-thunk';
 
+import darkBaseTheme    from 'material-ui/styles/baseThemes/darkBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme      from 'material-ui/styles/getMuiTheme';
+
 // Consilium imports
 import RecommenderPage  from './containers/RecommenderPage';
 import LandingPage      from './containers/LandingPage';
@@ -22,10 +26,12 @@ import Reducer                          from './reducers/index';
 
 const Consilium = (props) => {
     return (
-        <div className="consilium">
-            <Navigation />
-            {props.children}
-        </div>
+        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+            <div className="consilium">
+                <Navigation />
+                {props.children}
+            </div>
+        </MuiThemeProvider>
     );
 };
 

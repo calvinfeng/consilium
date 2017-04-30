@@ -33,11 +33,23 @@ class RecommenderPage extends React.Component {
             this.props.dispatchSetRatingsCountNeededForFetching(this.props.ratingsCountNeededForFetching + 10);
         }
 
-        if (this.hasPreferenceChanged(nextProps)) {
-            // Fetching recommendation
-            console.log('Preference has changed now fetching recommendations');
+        const hasPreferenceChanged = this.hasPreferenceChanged(nextProps);
+        const hasMovieYearRangeChanged = this.hasMovieYearRangeChanged(nextProps);
+
+        if (hasPreferenceChanged || hasMovieYearRangeChanged) {
             this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings, nextProps.movieYearRange);
         }
+    }
+
+    hasMovieYearRangeChanged(nextProps) {
+        const prevRange = this.props.movieYearRange;
+        const nextRange = nextProps.movieYearRange;
+
+        if (prevRange.minYear !== nextRange.minYear || prevRange.maxYear !== nextRange.maxYear) {
+            return true;
+        }
+
+        return false;
     }
 
     hasPreferenceChanged(nextProps) {

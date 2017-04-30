@@ -7,6 +7,7 @@
 
 import React                      from 'react';
 import { connect }                from 'react-redux';
+import CircularProgress           from 'material-ui/CircularProgress';
 
 import MovieItem                  from '../components/MovieItem';
 import MovieTrailer               from '../components/MovieTrailer';
@@ -43,7 +44,6 @@ class Recommendation extends React.Component {
             scrollTop: 0
         }, 1000);
     }
-
 
     get recommendedMovies() {
         const recommendedMovieIds = Object.keys(this.props.recommendedMovies.items).filter((movieId) => {
@@ -95,6 +95,27 @@ class Recommendation extends React.Component {
         return <div className="trailer-player" />;
     }
 
+    get movies() {
+        if (this.props.recommendedMovies.isFetching) {
+            return (
+                <div className="movies">
+                    <div className="circular-progress" >
+                        <h4>
+                            Please wait, recommendations are fetching...
+                        </h4>
+                        <CircularProgress size={100} thickness={7} />
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="movies">
+                {this.recommendedMovies}
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="recommendation-container">
@@ -106,9 +127,7 @@ class Recommendation extends React.Component {
                     movieYearRange={this.props.movieYearRange}
                     dispatchSetMovieYearRange={this.props.dispatchSetMovieYearRange} />
                 {this.trailerPlayer}
-                <div className="movies">
-                    {this.recommendedMovies}
-                </div>
+                {this.movies}
             </div>
         );
     }

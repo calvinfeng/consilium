@@ -34,7 +34,6 @@ class LandingPage extends React.Component {
 
         if (this.hasPreferenceChanged(nextProps)) {
             // Fetching recommendation
-            console.log('Preference has changed now fetching recommendations');
             this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings, nextProps.movieYearRange);
         }
     }

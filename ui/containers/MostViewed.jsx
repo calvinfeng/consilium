@@ -29,8 +29,7 @@ class MostViewed extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            moviesOnDisplay: {},
-            ratingCount: 0
+            moviesOnDisplay: {}
         };
 
         this.handleClickMoreMovies = this.handleClickMoreMovies.bind(this);
@@ -51,8 +50,9 @@ class MostViewed extends React.Component {
         const instruction = `These are some of the most viewed American films. We think it is very likely that you have
         seen at least some of them.  If you have seen them, whether you like or dislike them, let us know and give them
         ratings! It will help our backend machine learning algorithm to learn your taste and preference`;
+        const ratingCount = Object.keys(this.props.movieRatings).length;
 
-        if (this.state.ratingCount === 0) {
+        if (ratingCount === 0) {
             return (
                 <div className="instruction">
                     <p>{instruction}</p>
@@ -61,12 +61,21 @@ class MostViewed extends React.Component {
                     </h4>
                 </div>
             );
+        } else if (ratingCount >= 10) {
+            return (
+                <div className="instruction">
+                    <p>{instruction}</p>
+                    <h4>
+                        Recommendations are ready!
+                    </h4>
+                </div>
+            );
         }
 
         return (
             <div className="instruction">
                 <p>{instruction}</p>
-                <h4>Rate <strong>{10 - this.state.ratingCount}</strong> more movies</h4>
+                <h4>Rate <strong>{10 - ratingCount}</strong> more movies</h4>
             </div>
         );
     }
