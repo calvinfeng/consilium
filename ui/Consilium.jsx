@@ -18,8 +18,7 @@ import getMuiTheme      from 'material-ui/styles/getMuiTheme';
 // Consilium imports
 import RecommenderPage  from './containers/RecommenderPage';
 import LandingPage      from './containers/LandingPage';
-import About            from './components/About';
-import Navigation       from './components/Navigation';
+import Navigation       from './containers/Navigation';
 
 // Root reducer
 import Reducer                          from './reducers/index';
@@ -47,7 +46,6 @@ const Routes = (
             <Route path="/" component={Consilium}>
                 <IndexRoute component={LandingPage} />
                 <Route path="/recommendations" component={RecommenderPage} />
-                <Route path="/about" component={About} />
             </Route>
         </Router>
     </Provider>
