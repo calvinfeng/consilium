@@ -25,34 +25,22 @@ class Api::MoviesController < ApplicationController
         end
     end
 
-    # Required params
-    # {
-    #   start_year: 2010,
-    #   end_year: 2015,
-    #   movie_ratings: {
-    #       1: 4.5,
-    #       5: 5.0,
-    #       32: 4.5,
-    #       109487: 5.0,
-    #       109374: 3.5,
-    #       112556: 4.5,
-    #       112852: 4.0,
-    #       116797: 5.0,
-    #       91529: 3.5,
-    #       87232: 2.0,
-    #       81591: 2.5
-    #   }
-    # }
     def recommendations
-        movie_ratings = Hash.new
-        params[:movie_ratings].each do |movie_id, rating|
-            movie_ratings[movie_id] = rating.to_f
-        end
-
-        new_user = User.new(movie_ratings)
-
+        preference_vector = params[:preference_vector]
         min_year = params[:min_year]
         max_year = params[:max_year]
+        movie_features = eval($redis.get("movie_features"))
+
+        movie_features.each do |movie_id, feature_vector|
+            prediction = 0
+            feature_vector.each_index do |idx|
+                prediction += preference_vector[idx] * feature_vector[idx]
+            end
+            puts prediction
+        end
+
+        puts "Movie year range #{min_year} - #{max_year}"
+        puts "Total number of movies #{movie_features.values.length}"
 
         # NOTE: Change it back later
         # @movies = generate_recommendations(min_year, max_year, movie_ratings)
@@ -66,10 +54,6 @@ class Api::MoviesController < ApplicationController
     end
 
     private
-    # def recommender_params
-    #     eval(params.require(:recommender))
-    # end
-
     def generate_recommendations(min_year, max_year, movie_ratings_by_user)
         min_year = min_year || 1900
         max_year = max_year || 2017

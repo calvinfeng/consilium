@@ -36,8 +36,12 @@ class RecommenderPage extends React.Component {
         const hasPreferenceChanged = this.hasPreferenceChanged(nextProps);
         const hasMovieYearRangeChanged = this.hasMovieYearRangeChanged(nextProps);
 
-        if (hasPreferenceChanged || hasMovieYearRangeChanged) {
-            this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings, nextProps.movieYearRange);
+        if (
+            (hasPreferenceChanged || hasMovieYearRangeChanged)
+            && nextProps.userPreference.preferenceVector.length > 0
+        ) {
+            const preferenceVector = nextProps.userPreference.preferenceVector;
+            this.props.dispatchRecommendedMoviesFetch(preferenceVector, nextProps.movieYearRange);
         }
     }
 
@@ -70,7 +74,10 @@ class RecommenderPage extends React.Component {
     }
 
     get content() {
-        if (Object.keys(this.props.recommendedMovies.items).length === 0) {
+        if (
+            Object.keys(this.props.recommendedMovies.items).length === 0
+            && !this.props.recommendedMovies.isFetching
+        ) {
             return (
                 <div className="recommender-page">
                     <h3>Recommendations are not ready</h3>
@@ -117,8 +124,8 @@ const mapDispatchToProps = (dispatch) => {
         dispatchUserPreferenceFetch: (movieRatings) => {
             dispatch(userPreferenceFetch(movieRatings));
         },
-        dispatchRecommendedMoviesFetch: (movieRatings, yearRange) => {
-            dispatch(recommendedMoviesFetch(movieRatings, yearRange));
+        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange) => {
+            dispatch(recommendedMoviesFetch(preferenceVector, yearRange));
         },
         dispatchSetRatingsCountNeededForFetching: (count) => {
             dispatch(setRatingsCountNeededForFetching(count));

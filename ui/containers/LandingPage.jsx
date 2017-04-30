@@ -32,9 +32,13 @@ class LandingPage extends React.Component {
             this.props.dispatchSetRatingsCountNeededForFetching(this.props.ratingsCountNeededForFetching + 10);
         }
 
-        if (this.hasPreferenceChanged(nextProps)) {
+        if (
+            this.hasPreferenceChanged(nextProps)
+            && nextProps.userPreference.preferenceVector.length > 0
+        ) {
             // Fetching recommendation
-            this.props.dispatchRecommendedMoviesFetch(nextProps.movieRatings, nextProps.movieYearRange);
+            const preferenceVector = nextProps.userPreference.preferenceVector;
+            this.props.dispatchRecommendedMoviesFetch(preferenceVector, nextProps.movieYearRange);
         }
     }
 
@@ -91,8 +95,8 @@ const mapDispatchToProps = (dispatch) => {
         dispatchUserPreferenceFetch: (movieRatings) => {
             dispatch(userPreferenceFetch(movieRatings));
         },
-        dispatchRecommendedMoviesFetch: (movieRatings, yearRange) => {
-            dispatch(recommendedMoviesFetch(movieRatings, yearRange));
+        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange) => {
+            dispatch(recommendedMoviesFetch(preferenceVector, yearRange));
         },
         dispatchSetRatingsCountNeededForFetching: (count) => {
             dispatch(setRatingsCountNeededForFetching(count));

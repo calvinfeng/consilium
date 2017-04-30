@@ -8,10 +8,10 @@
 import React              from 'react';
 import Spinner            from 'spin';
 import Rating             from 'react-rating';
-import { Button }         from 'react-bootstrap';
 import { OverlayTrigger } from 'react-bootstrap';
 import { Popover }        from 'react-bootstrap';
 import { Tooltip }        from 'react-bootstrap';
+import FlatButton         from 'material-ui/FlatButton';
 
 /* global document */
 class MovieItem extends React.Component {
@@ -56,7 +56,7 @@ class MovieItem extends React.Component {
     }
 
     handleSkip() {
-        this.props.dispatchSkipMovie(this.props.movieId);
+        // this.props.dispatchSkipMovie(this.props.movieId);
     }
 
     handlePlayTrailer() {
@@ -96,30 +96,44 @@ class MovieItem extends React.Component {
         );
     }
 
+    // <Button
+    //     key="play"
+    //     bsSize="xsmall"
+    //     className="react-buttons"
+    //     onClick={this.handlePlayTrailer}
+    //     bsStyle="primary">
+    //     Play Trailer
+    // </Button>
+
+    // <Button
+    //     key="skip"
+    //     bsSize="xsmall"
+    //     className="react-buttons"
+    //     onClick={this.handleSkip}
+    //     bsStyle="primary">
+    //     Not Interested
+    // </Button>
+
     get recommendedItemContent() {
         const buttons = [];
         if (this.props.movieTrailers && this.props.movieTrailers.length > 0) {
             buttons.push(
-                <Button
+                <FlatButton
                     key="play"
-                    bsSize="xsmall"
-                    className="react-buttons"
-                    onClick={this.handlePlayTrailer}
-                    bsStyle="primary">
-                    Play Trailer
-                </Button>
+                    label="Play Trailer"
+                    primary={true}
+                    onTouchTap={this.handlePlayTrailer}
+                    onClick={this.handlePlayTrailer} />
             );
         }
 
         buttons.push(
-            <Button
+            <FlatButton
                 key="skip"
-                bsSize="xsmall"
-                className="react-buttons"
+                label="Not interested"
+                secondary={true}
                 onClick={this.handleSkip}
-                bsStyle="primary">
-                Not Interested
-            </Button>
+                onTouchTap={this.handleSkip} />
         );
 
         return (

@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * @copyright Consilium, 2017
- * @author Calvin Feng
- */
+* @copyright Consilium, 2017
+* @author Calvin Feng
+*/
 
 import React                     from 'react';
 import { connect }               from 'react-redux';
@@ -11,6 +11,7 @@ import _                         from 'lodash';
 
 import { ProgressBar }           from 'react-bootstrap';
 import { Button }                from 'react-bootstrap';
+import LinearProgress            from 'material-ui/LinearProgress';
 
 // Components
 import PosterSlider              from '../components/PosterSlider';
@@ -37,7 +38,9 @@ class MostViewed extends React.Component {
     }
 
     componentDidMount() {
-        this.props.dispatchMostViewedMoviesFetch();
+        if (Object.keys(this.props.mostViewedMovies).length === 0) {
+            this.props.dispatchMostViewedMoviesFetch();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -117,11 +120,30 @@ class MostViewed extends React.Component {
     }
 
     handleClickMoreMovies() {
-        this.randomlySetMoviesOnDisplay(this.props.mostViewedMovies);
+        if (Object.keys(this.props.mostViewedMovies).length > 0) {
+            this.randomlySetMoviesOnDisplay(this.props.mostViewedMovies);
+        } else {
+            this.props.dispatchMostViewedMoviesFetch();
+        }
     }
 
     render() {
         const progressPercentage = (100 * Object.keys(this.props.movieRatings).length) / 10;
+
+        if (Object.keys(this.props.mostViewedMovies).length === 0) {
+            return (
+                <div className="most-viewed-container">
+                    <div className="header">
+                        <h1>Popular Movies</h1>
+                    </div>
+                    <div>
+                        <h5>Please wait while movies are fetching</h5>
+                        <LinearProgress mode="indeterminate" />
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div className="most-viewed-container">
                 <div className="header">

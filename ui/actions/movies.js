@@ -30,9 +30,11 @@ export const mostViewedMoviesFetch = () => (dispatch) => {
     return request
         .get('api/movies/most_viewed')
         .then((res) => {
+            console.log('Most viewed movie received', res);
             dispatch(mostViewedMoviesFetchSuccess(res.data));
         })
         .catch((error) => {
+            console.log('Most viewed movie error', error);
             dispatch(mostViewedMoviesFetchFail(error));
         });
 };
@@ -61,7 +63,7 @@ const recommendedMoviesFetchFail = (error) => {
     };
 };
 
-export const recommendedMoviesFetch = (movieRatings, yearRange) => (dispatch) => {
+export const recommendedMoviesFetch = (preferenceVector, yearRange) => (dispatch) => {
     dispatch(recommendedMoviesFetchStart());
     const config = {
         headers:
@@ -72,7 +74,7 @@ export const recommendedMoviesFetch = (movieRatings, yearRange) => (dispatch) =>
     // TODO: Don't store it in window!!!
     return request
         .post('api/movies/recommendations', {
-            movie_ratings: movieRatings,
+            preference_vector: preferenceVector,
             min_year: yearRange.minYear,
             max_year: yearRange.maxYear
         }, config)
