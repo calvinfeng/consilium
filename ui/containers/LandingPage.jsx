@@ -58,7 +58,7 @@ class LandingPage extends React.Component {
 
     render() {
         return (
-            <div className="recommender">
+            <div className="landing-page">
                 <MostViewed />
                 <RatingRecord />
             </div>

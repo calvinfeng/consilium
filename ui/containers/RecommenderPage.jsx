@@ -60,14 +60,14 @@ class RecommenderPage extends React.Component {
     get content() {
         if (Object.keys(this.props.recommendedMovies.items).length === 0) {
             return (
-                <div className="recommender">
+                <div className="recommender-page">
                     <h3>Recommendations are not ready</h3>
                 </div>
             );
         }
 
         return (
-            <div className="recommender">
+            <div className="recommender-page">
                 <Recommendation />
                 <RatingRecord />
             </div>

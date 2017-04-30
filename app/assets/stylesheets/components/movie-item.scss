@@ -44,6 +44,7 @@
             height: 100%;
             overflow: hidden;
             cursor: pointer;
+            transition: width 2s, height 2s;
         }
     }
 
@@ -87,6 +88,7 @@
     width: 72px;
     height: 108px;
     background-color: transparent;
+    transition: width 2s, height 2s;
 
     .poster {
         display: flex;
@@ -102,6 +104,7 @@
             height: 100%;
             overflow: hidden;
             cursor: pointer;
+            transition: width 2s, height 2s;
         }
     }
 }
@@ -118,6 +121,7 @@
     margin-bottom: 1em;
     border-top-left-radius: 1em;
     border-top-right-radius: 1em;
+    transition: width 2s, height 2s;
 
     .content-box {
         display: flex;
@@ -146,6 +150,7 @@
                     width: 100%;
                     height: 100%;
                     overflow: hidden;
+                    transition: width 2s, height 2s;
                 }
             }
         }
