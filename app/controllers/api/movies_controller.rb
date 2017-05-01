@@ -1,4 +1,5 @@
 require 'byebug'
+require "#{Rails.root}/lib/tasks/binary_heap.rb"
 
 class Api::MoviesController < ApplicationController
 
@@ -29,18 +30,22 @@ class Api::MoviesController < ApplicationController
         preference_vector = params[:preference_vector]
         min_year = params[:min_year]
         max_year = params[:max_year]
-        movie_features = eval($redis.get("movie_features"))
 
+        priority_queue = BinaryHeap.new
+
+        movie_features = eval($redis.get("movie_features"))
         movie_features.each do |movie_id, feature_vector|
             prediction = 0
             feature_vector.each_index do |idx|
                 prediction += preference_vector[idx] * feature_vector[idx]
             end
-            puts prediction
+
+            priority_queue.push({ id: movie_id, predicted_rating: prediction })
         end
 
         puts "Movie year range #{min_year} - #{max_year}"
         puts "Total number of movies #{movie_features.values.length}"
+        puts "Peeking at priority queue, #{priority_queue.peek}"
 
         # NOTE: Change it back later
         # @movies = generate_recommendations(min_year, max_year, movie_ratings)
