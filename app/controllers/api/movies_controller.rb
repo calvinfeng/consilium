@@ -31,25 +31,11 @@ class Api::MoviesController < ApplicationController
         min_year = params[:min_year]
         max_year = params[:max_year]
 
-        priority_queue = BinaryHeap.new
-
-        movie_features = eval($redis.get("movie_features"))
-        movie_features.each do |movie_id, feature_vector|
-            prediction = 0
-            feature_vector.each_index do |idx|
-                prediction += preference_vector[idx] * feature_vector[idx]
-            end
-
-            priority_queue.push({ id: movie_id, predicted_rating: prediction })
-        end
-
-        puts "Movie year range #{min_year} - #{max_year}"
-        puts "Total number of movies #{movie_features.values.length}"
-        puts "Peeking at priority queue, #{priority_queue.peek}"
-
         # NOTE: Change it back later
         # @movies = generate_recommendations(min_year, max_year, movie_ratings)
-        @movies = Movie.find(eval($redis.get("most_viewed_movie_ids"))).first(10)
+        svd_recommendations(min_year, max_year, preference_vector)
+
+        @movies = Movie.all.first(10)
         render 'api/movies/recommendation.json.jbuilder'
     end
 
@@ -62,6 +48,7 @@ class Api::MoviesController < ApplicationController
     def generate_recommendations(min_year, max_year, movie_ratings_by_user)
         min_year = min_year || 1900
         max_year = max_year || 2017
+
         movies = Movie.where("year >= #{min_year} AND year <= #{max_year}")
         indices = (0...movies.length).to_a.shuffle
 
@@ -79,4 +66,31 @@ class Api::MoviesController < ApplicationController
         return recommended_movies
     end
 
+    def svd_recommendations(min_year, max_year, preference_vector)
+        priority_queue = BinaryHeap.new
+
+        movie_features = eval($redis.get("movie_features"))
+        movie_features.each do |movie_id, feature_vector|
+            prediction = 0
+            feature_vector.each_index do |idx|
+                prediction += preference_vector[idx] * feature_vector[idx]
+            end
+
+            priority_queue.push({ id: movie_id, predicted_rating: prediction })
+        end
+
+        puts "Movie year range #{min_year} - #{max_year}"
+        puts "Total number of movies #{movie_features.values.length}"
+
+        count = 0
+        movie_years = eval($redis.get("movie_years"))
+        until count == 10
+            movie = priority_queue.extract
+            movie_year = movie_years[movie[:id]]
+            if min_year <= movie_year && movie_year <= max_year
+                puts "Movie #{movie[:id]}: #{movie[:predicted_rating]}"
+                count += 1
+            end
+        end
+    end
 end
