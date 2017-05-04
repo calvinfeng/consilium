@@ -3,9 +3,6 @@
 # The purpose of this model class is to perform business logic; the core logic
 # of the recommender system.
 # ==============================================================================
-
-require 'byebug'
-
 class User
     attr_reader :ratings, :average_rating, :preference_vector
     def initialize(movie_ratings)

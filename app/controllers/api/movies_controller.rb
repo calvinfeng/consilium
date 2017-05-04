@@ -1,4 +1,3 @@
-require 'byebug'
 require "#{Rails.root}/lib/tasks/binary_heap.rb"
 
 class Api::MoviesController < ApplicationController
@@ -31,11 +30,11 @@ class Api::MoviesController < ApplicationController
         min_year = params[:min_year]
         max_year = params[:max_year]
 
-        # NOTE: Change it back later
-        # @movies = generate_recommendations(min_year, max_year, movie_ratings)
-        svd_recommendations(min_year, max_year, preference_vector)
+        # NOTE: We are going to move away from kNN algorithm due to Redis's ridiculously high pricing
+        # movie_ratings = params[:movie_ratings]
+        # @movies = knn_recommendations(min_year, max_year, movie_ratings)
 
-        @movies = Movie.all.first(10)
+        @movies = Movie.find(svd_recommendations(min_year, max_year, preference_vector))
         render 'api/movies/recommendation.json.jbuilder'
     end
 
@@ -45,7 +44,7 @@ class Api::MoviesController < ApplicationController
     end
 
     private
-    def generate_recommendations(min_year, max_year, movie_ratings_by_user)
+    def knn_recommendations(min_year, max_year, movie_ratings_by_user)
         min_year = min_year || 1900
         max_year = max_year || 2017
 
@@ -54,7 +53,7 @@ class Api::MoviesController < ApplicationController
 
         recommended_movies = []
         user = User.new(movie_ratings_by_user)
-        until recommended_movies.count >= 5 || indices.length == 0
+        until recommended_movies.count >= 10 || indices.length == 0
             index = indices.pop
             prediction = movies[index].knn_prediction_for(user)
             puts "\n#{movies[index].title} - prediction = #{prediction}\n\n" unless prediction.nil?
@@ -84,13 +83,15 @@ class Api::MoviesController < ApplicationController
 
         count = 0
         movie_years = eval($redis.get("movie_years"))
-        until count == 10
+        recommendation_list = []
+        until recommendation_list.length == 10
             movie = priority_queue.extract
             movie_year = movie_years[movie[:id]]
             if min_year <= movie_year && movie_year <= max_year
                 puts "Movie #{movie[:id]}: #{movie[:predicted_rating]}"
-                count += 1
+                recommendation_list << movie[:id]
             end
         end
+        recommendation_list
     end
 end
