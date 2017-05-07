@@ -26,10 +26,12 @@ export default function recommendedMoviesReducer(state = defaultState, action) {
         case RECOMMENDED_MOVIES_FETCH_SUCCESS:
             const movieList = action.movies;
 
-            const items = {};
+            const newItems = {};
             movieList.forEach((movie) => {
-                items[movie.id] = movie;
+                newItems[movie.id] = movie;
             });
+
+            const items = Object.assign({}, state.items, newItems);
 
             return Object.assign({}, state, { items }, {
                 isFetching: false,

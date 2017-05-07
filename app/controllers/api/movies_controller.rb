@@ -36,13 +36,15 @@ class Api::MoviesController < ApplicationController
         # movie_ratings = params[:movie_ratings]
         # @movies = knn_recommendations(min_year, max_year, movie_ratings)
 
-        recommended_movie_ids = svd_recommendations(min_year,
+        @svd_recommendations = svd_recommendations(min_year,
             max_year,
             preference_vector,
             skipped_movies,
             movie_ratings)
 
+        recommended_movie_ids = @svd_recommendations.keys
         @movies = Movie.find(recommended_movie_ids)
+
         render 'api/movies/recommendation.json.jbuilder'
     end
 
@@ -52,27 +54,6 @@ class Api::MoviesController < ApplicationController
     end
 
     private
-    def knn_recommendations(min_year, max_year, movie_ratings_by_user)
-        min_year = min_year || 1900
-        max_year = max_year || 2017
-
-        movies = Movie.where("year >= #{min_year} AND year <= #{max_year}")
-        indices = (0...movies.length).to_a.shuffle
-
-        recommended_movies = []
-        user = User.new(movie_ratings_by_user)
-        until recommended_movies.count >= 10 || indices.length == 0
-            index = indices.pop
-            prediction = movies[index].knn_prediction_for(user)
-            puts "\n#{movies[index].title} - prediction = #{prediction}\n\n" unless prediction.nil?
-            if !prediction.nil? && movies[index].knn_prediction_for(user) > 3.5
-                recommended_movies << movies[index]
-            end
-        end
-
-        return recommended_movies
-    end
-
     def svd_recommendations(min_year, max_year, preference_vector, skipped_movies, movie_ratings)
         priority_queue = BinaryHeap.new
 
@@ -92,15 +73,36 @@ class Api::MoviesController < ApplicationController
         puts "Total number of movies #{movie_features.values.length}"
 
         movie_years = eval($redis.get("movie_years"))
-        recommendation_list = []
-        until recommendation_list.length == 10
+        recommendations = Hash.new
+        until recommendations.length == 10
             movie = priority_queue.extract
             movie_year = movie_years[movie[:id]]
             if min_year <= movie_year && movie_year <= max_year
                 puts "Movie #{movie[:id]}: #{movie[:predicted_rating]}"
-                recommendation_list << movie[:id]
+                recommendations[movie[:id]] = movie
             end
         end
-        recommendation_list
+        recommendations
+    end
+
+    def knn_recommendations(min_year, max_year, movie_ratings_by_user)
+        min_year = min_year || 1900
+        max_year = max_year || 2017
+
+        movies = Movie.where("year >= #{min_year} AND year <= #{max_year}")
+        indices = (0...movies.length).to_a.shuffle
+
+        recommended_movies = []
+        user = User.new(movie_ratings_by_user)
+        until recommended_movies.count >= 10 || indices.length == 0
+            index = indices.pop
+            prediction = movies[index].knn_prediction_for(user)
+            puts "\n#{movies[index].title} - prediction = #{prediction}\n\n" unless prediction.nil?
+            if !prediction.nil? && movies[index].knn_prediction_for(user) > 3.5
+                recommended_movies << movies[index]
+            end
+        end
+
+        return recommended_movies
     end
 end

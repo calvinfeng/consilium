@@ -48,7 +48,10 @@ class Recommendation extends React.Component {
     get recommendedMovies() {
         const recommendedMovieIds = Object.keys(this.props.recommendedMovies.items).filter((movieId) => {
             return !this.props.skippedMovies[movieId] && !this.props.movieRatings[movieId];
-        }).sort();
+        }).sort((movie1, movie2) => {
+            // Sort by descending order
+            return movie2.predictedRating - movie1.predictedRating;
+        });
 
         return recommendedMovieIds.map((movieId) => {
             const movie = this.props.recommendedMovies.items[movieId];
