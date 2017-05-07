@@ -13,7 +13,7 @@ $redis = Redis.new(:host => 'localhost', :port => 6379)
 $redis.flushdb
 
 def load_ratings_into_movies(movies)
-    csv = CSV.parse(File.read('db/csv/100-users/training_ratings.csv'), :headers => true)
+    csv = CSV.parse(File.read('db/csv/20k-users/training_ratings.csv'), :headers => true)
     csv.each do |row|
         user_id = row['userId'].to_i
         movie_id = row['movieId'].to_i
@@ -30,7 +30,7 @@ end
 
 def load_movies()
     movies = Hash.new
-    csv = CSV.parse(File.read('db/csv/100-users/training_movies.csv'), :headers => true)
+    csv = CSV.parse(File.read('db/csv/20k-users/training_movies.csv'), :headers => true)
     csv.each do |row|
         id = row['movieId'].to_i
         title = row['title']
@@ -42,7 +42,7 @@ end
 
 def load_average_ratings_by_user_id
     historical_ratings_by_user_id = Hash.new
-    csv = CSV.parse(File.read('db/csv/100-users/training_ratings.csv'), :headers => true)
+    csv = CSV.parse(File.read('db/csv/20k-users/training_ratings.csv'), :headers => true)
     csv.each do |row|
         user_id = row['userId'].to_i
         movie_id = row['movieId'].to_i
@@ -66,7 +66,7 @@ end
 
 def load_movie_features
     movie_features = Hash.new
-    csv = CSV.parse(File.read('db/csv/100-users/movie_features.csv'), :headers => true)
+    csv = CSV.parse(File.read('db/csv/20k-users/movie_features.csv'), :headers => true)
     csv.each do |row|
         movie_id = row["movieId"].to_i
         i = 1
@@ -82,7 +82,7 @@ end
 
 def load_movie_years
     movie_years = Hash.new
-    csv = CSV.parse(File.read('db/csv/100-users/training_movies.csv'), :headers => true)
+    csv = CSV.parse(File.read('db/csv/20k-users/training_movies.csv'), :headers => true)
     csv.each do |row|
         movie_id = row["movieId"].to_i
         year = row["year"].to_i
