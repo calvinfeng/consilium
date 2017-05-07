@@ -56,7 +56,7 @@ class MovieItem extends React.Component {
     }
 
     handleSkip() {
-        // this.props.dispatchSkipMovie(this.props.movieId);
+        this.props.dispatchSkipMovie(this.props.movieId);
     }
 
     handlePlayTrailer() {
@@ -95,24 +95,6 @@ class MovieItem extends React.Component {
             </div>
         );
     }
-
-    // <Button
-    //     key="play"
-    //     bsSize="xsmall"
-    //     className="react-buttons"
-    //     onClick={this.handlePlayTrailer}
-    //     bsStyle="primary">
-    //     Play Trailer
-    // </Button>
-
-    // <Button
-    //     key="skip"
-    //     bsSize="xsmall"
-    //     className="react-buttons"
-    //     onClick={this.handleSkip}
-    //     bsStyle="primary">
-    //     Not Interested
-    // </Button>
 
     get recommendedItemContent() {
         const buttons = [];

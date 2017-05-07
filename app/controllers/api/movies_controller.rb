@@ -1,5 +1,5 @@
 require "#{Rails.root}/lib/tasks/binary_heap.rb"
-
+require 'byebug'
 class Api::MoviesController < ApplicationController
 
     def index
@@ -26,6 +26,8 @@ class Api::MoviesController < ApplicationController
     end
 
     def recommendations
+        movie_ratings = params[:movie_ratings]
+        skipped_movies = params[:skipped_movies]
         preference_vector = params[:preference_vector]
         min_year = params[:min_year]
         max_year = params[:max_year]
@@ -34,7 +36,15 @@ class Api::MoviesController < ApplicationController
         # movie_ratings = params[:movie_ratings]
         # @movies = knn_recommendations(min_year, max_year, movie_ratings)
 
-        @movies = Movie.find(svd_recommendations(min_year, max_year, preference_vector))
+        @svd_recommendations = svd_recommendations(min_year,
+            max_year,
+            preference_vector,
+            skipped_movies,
+            movie_ratings)
+
+        recommended_movie_ids = @svd_recommendations.keys
+        @movies = Movie.find(recommended_movie_ids)
+
         render 'api/movies/recommendation.json.jbuilder'
     end
 
@@ -44,6 +54,37 @@ class Api::MoviesController < ApplicationController
     end
 
     private
+    def svd_recommendations(min_year, max_year, preference_vector, skipped_movies, movie_ratings)
+        priority_queue = BinaryHeap.new
+
+        movie_features = eval($redis.get("movie_features"))
+        movie_features.each do |movie_id, feature_vector|
+            if skipped_movies[movie_id.to_s].nil? && movie_ratings[movie_id.to_s].nil?
+                prediction = 0
+                feature_vector.each_index do |idx|
+                    prediction += preference_vector[idx] * feature_vector[idx]
+                end
+
+                priority_queue.push({ id: movie_id, predicted_rating: prediction })
+            end
+        end
+
+        puts "Movie year range #{min_year} - #{max_year}"
+        puts "Total number of movies #{movie_features.values.length}"
+
+        movie_years = eval($redis.get("movie_years"))
+        recommendations = Hash.new
+        until recommendations.length == 10
+            movie = priority_queue.extract
+            movie_year = movie_years[movie[:id]]
+            if min_year <= movie_year && movie_year <= max_year
+                puts "Movie #{movie[:id]}: #{movie[:predicted_rating]}"
+                recommendations[movie[:id]] = movie
+            end
+        end
+        recommendations
+    end
+
     def knn_recommendations(min_year, max_year, movie_ratings_by_user)
         min_year = min_year || 1900
         max_year = max_year || 2017
@@ -63,35 +104,5 @@ class Api::MoviesController < ApplicationController
         end
 
         return recommended_movies
-    end
-
-    def svd_recommendations(min_year, max_year, preference_vector)
-        priority_queue = BinaryHeap.new
-
-        movie_features = eval($redis.get("movie_features"))
-        movie_features.each do |movie_id, feature_vector|
-            prediction = 0
-            feature_vector.each_index do |idx|
-                prediction += preference_vector[idx] * feature_vector[idx]
-            end
-
-            priority_queue.push({ id: movie_id, predicted_rating: prediction })
-        end
-
-        puts "Movie year range #{min_year} - #{max_year}"
-        puts "Total number of movies #{movie_features.values.length}"
-
-        count = 0
-        movie_years = eval($redis.get("movie_years"))
-        recommendation_list = []
-        until recommendation_list.length == 10
-            movie = priority_queue.extract
-            movie_year = movie_years[movie[:id]]
-            if min_year <= movie_year && movie_year <= max_year
-                puts "Movie #{movie[:id]}: #{movie[:predicted_rating]}"
-                recommendation_list << movie[:id]
-            end
-        end
-        recommendation_list
     end
 end

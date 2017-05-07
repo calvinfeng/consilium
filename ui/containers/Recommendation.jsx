@@ -47,8 +47,15 @@ class Recommendation extends React.Component {
 
     get recommendedMovies() {
         const recommendedMovieIds = Object.keys(this.props.recommendedMovies.items).filter((movieId) => {
-            return !this.props.skippedMovies[movieId];
-        }).sort();
+            const condition1 = !this.props.skippedMovies[movieId] && !this.props.movieRatings[movieId];
+            const condition2 = this.props.movieYearRange.minYear <= this.props.recommendedMovies.items[movieId].year;
+            const condition3 = this.props.recommendedMovies.items[movieId].year <= this.props.movieYearRange.maxYear;
+            return condition1 && condition2 && condition3;
+        }).sort((movieId1, movieId2) => {
+            return this.props.recommendedMovies.items[movieId2].predictedRating
+                - this.props.recommendedMovies.items[movieId1].predictedRating;
+            // Sort by descending order
+        });
 
         return recommendedMovieIds.map((movieId) => {
             const movie = this.props.recommendedMovies.items[movieId];
@@ -134,8 +141,9 @@ class Recommendation extends React.Component {
 }
 
 Recommendation.propTypes = {
-    movieDetails: React.PropTypes.object.isRequired,
     skippedMovies: React.PropTypes.object.isRequired,
+    movieDetails: React.PropTypes.object.isRequired,
+    movieRatings: React.PropTypes.object.isRequired,
     movieTrailers: React.PropTypes.object.isRequired,
     movieYearRange: React.PropTypes.object.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
@@ -150,6 +158,7 @@ const mapReduxStateToProps = (state) => {
     return {
         movieDetails: state.movieDetails,
         movieTrailers: state.movieTrailers,
+        movieRatings: state.movieRatings,
         skippedMovies: state.skippedMovies,
         recommendedMovies: state.recommendedMovies,
         movieYearRange: state.movieYearRange

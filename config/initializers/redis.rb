@@ -115,6 +115,9 @@ movie_map.each do |movie_id, info|
     movie_rating_count_map[movie_id] = info[:ratings].length
 end
 
+puts "\nLoading movie_rating_count_map into redis\n\n"
+$redis.set('movie_rating_count_map', movie_rating_count_map)
+
 most_viewed_movie_ids = movie_rating_count_map.keys.sort do |id_1, id_2|
     movie_rating_count_map[id_2] <=> movie_rating_count_map[id_1]
 end.first(200)
