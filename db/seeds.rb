@@ -10,7 +10,7 @@ require 'csv'
 require 'byebug'
 
 # Load movies
-csv = CSV.parse(File.read('db/csv/20k-users/training_movies.csv'), :headers => true)
+csv = CSV.parse(File.read('db/csv/100-users/training_movies.csv'), :headers => true)
 
 movies = Hash.new
 
@@ -25,7 +25,7 @@ csv.each do |row|
 end
 
 # Load movies' relevant information
-csv = CSV.parse(File.read('db/csv/20k-users/training_links.csv'), :headers => true)
+csv = CSV.parse(File.read('db/csv/100-users/training_links.csv'), :headers => true)
 
 csv.each do |row|
     id = row['movieId'].to_i
@@ -33,7 +33,7 @@ csv.each do |row|
     movies[id][:imdb_id] = imdb_id
 end
 
-csv = CSV.parse(File.read('db/csv/20k-users/movie_features.csv'), :headers => true)
+csv = CSV.parse(File.read('db/csv/100-users/movie_features.csv'), :headers => true)
 
 csv.each do |row|
     feature_array = []
@@ -53,7 +53,7 @@ end
 puts 'Movies have been inserted into database'
 
 # Load historical users and historical ratings
-csv = CSV.parse(File.read('db/csv/20k-users/training_ratings.csv'), :headers => true)
+csv = CSV.parse(File.read('db/csv/100-users/training_ratings.csv'), :headers => true)
 
 historical_users = Set.new
 

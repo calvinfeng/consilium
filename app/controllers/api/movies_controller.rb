@@ -1,5 +1,5 @@
 require "#{Rails.root}/lib/tasks/binary_heap.rb"
-
+require 'byebug'
 class Api::MoviesController < ApplicationController
 
     def index
@@ -26,6 +26,7 @@ class Api::MoviesController < ApplicationController
     end
 
     def recommendations
+        skipped_movies = params[:skipped_movies]
         preference_vector = params[:preference_vector]
         min_year = params[:min_year]
         max_year = params[:max_year]
@@ -34,7 +35,7 @@ class Api::MoviesController < ApplicationController
         # movie_ratings = params[:movie_ratings]
         # @movies = knn_recommendations(min_year, max_year, movie_ratings)
 
-        @movies = Movie.find(svd_recommendations(min_year, max_year, preference_vector))
+        @movies = Movie.find(svd_recommendations(min_year, max_year, preference_vector, skipped_movies))
         render 'api/movies/recommendation.json.jbuilder'
     end
 
@@ -65,23 +66,24 @@ class Api::MoviesController < ApplicationController
         return recommended_movies
     end
 
-    def svd_recommendations(min_year, max_year, preference_vector)
+    def svd_recommendations(min_year, max_year, preference_vector, skipped_movies)
         priority_queue = BinaryHeap.new
 
         movie_features = eval($redis.get("movie_features"))
         movie_features.each do |movie_id, feature_vector|
-            prediction = 0
-            feature_vector.each_index do |idx|
-                prediction += preference_vector[idx] * feature_vector[idx]
-            end
+            unless skipped_movies[movie_id.to_s]
+                prediction = 0
+                feature_vector.each_index do |idx|
+                    prediction += preference_vector[idx] * feature_vector[idx]
+                end
 
-            priority_queue.push({ id: movie_id, predicted_rating: prediction })
+                priority_queue.push({ id: movie_id, predicted_rating: prediction })
+            end
         end
 
         puts "Movie year range #{min_year} - #{max_year}"
         puts "Total number of movies #{movie_features.values.length}"
 
-        count = 0
         movie_years = eval($redis.get("movie_years"))
         recommendation_list = []
         until recommendation_list.length == 10

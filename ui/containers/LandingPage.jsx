@@ -38,7 +38,9 @@ class LandingPage extends React.Component {
         ) {
             // Fetching recommendation
             const preferenceVector = nextProps.userPreference.preferenceVector;
-            this.props.dispatchRecommendedMoviesFetch(preferenceVector, nextProps.movieYearRange);
+            const movieYearRange = nextProps.movieYearRange;
+            const skippedMovies = nextProps.skippedMovies;
+            this.props.dispatchRecommendedMoviesFetch(preferenceVector, movieYearRange, skippedMovies);
         }
     }
 
@@ -74,6 +76,7 @@ LandingPage.propTypes = {
     movieRatings: React.PropTypes.object.isRequired,
     movieYearRange: React.PropTypes.object.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
+    skippedMovies: React.PropTypes.object.isRequired,
     ratingsCountNeededForFetching: React.PropTypes.number.isRequired,
     dispatchUserPreferenceFetch: React.PropTypes.func.isRequired,
     dispatchRecommendedMoviesFetch: React.PropTypes.func.isRequired,
@@ -86,6 +89,7 @@ const mapReduxStateToProps = (state) => {
         movieYearRange: state.movieYearRange,
         movieRatings: state.movieRatings,
         recommendedMovies: state.recommendedMovies,
+        skippedMovies: state.skippedMovies,
         ratingsCountNeededForFetching: state.ratingsCountNeededForFetching
     };
 };
@@ -95,8 +99,8 @@ const mapDispatchToProps = (dispatch) => {
         dispatchUserPreferenceFetch: (movieRatings) => {
             dispatch(userPreferenceFetch(movieRatings));
         },
-        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange) => {
-            dispatch(recommendedMoviesFetch(preferenceVector, yearRange));
+        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange, skippedMovies) => {
+            dispatch(recommendedMoviesFetch(preferenceVector, yearRange, skippedMovies));
         },
         dispatchSetRatingsCountNeededForFetching: (count) => {
             dispatch(setRatingsCountNeededForFetching(count));

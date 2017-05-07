@@ -61,7 +61,7 @@ const recommendedMoviesFetchFail = (error) => {
     };
 };
 
-export const recommendedMoviesFetch = (preferenceVector, yearRange) => (dispatch) => {
+export const recommendedMoviesFetch = (preferenceVector, yearRange, skippedMovies) => (dispatch) => {
     dispatch(recommendedMoviesFetchStart());
     const config = {
         headers:
@@ -72,6 +72,7 @@ export const recommendedMoviesFetch = (preferenceVector, yearRange) => (dispatch
     // TODO: Don't store it in window!!!
     return request
         .post('api/movies/recommendations', {
+            skipped_movies: skippedMovies,
             preference_vector: preferenceVector,
             min_year: yearRange.minYear,
             max_year: yearRange.maxYear
