@@ -80,26 +80,39 @@ def load_movie_features
     movie_features
 end
 
+def load_movie_years
+    movie_years = Hash.new
+    csv = CSV.parse(File.read('db/csv/20k-users/training_movies.csv'), :headers => true)
+    csv.each do |row|
+        movie_id = row["movieId"].to_i
+        year = row["year"].to_i
+        movie_years[movie_id] = year
+    end
+    movie_years
+end
+
 # This is for k-nearest neighbor algorithm
-puts "\nLoading movie_rating_map into redis...\n\n"
+puts "\nLoading movie_rating_map, but not into redis...\n\n"
 movie_map = load_movies()
-$redis.set('movie_rating_map', movie_map)
+# $redis.set('movie_rating_map', movie_map)
 
 puts "\nLoading movie_features into redis\n\n"
 features = load_movie_features
 $redis.set('movie_features', features)
 
-puts "\nLoading average_rating_map into redis\n\n"
-average_rating_map = load_average_ratings_by_user_id
-$redis.set('average_rating_map', average_rating_map)
+puts "\nLoading movie years into redis\n\n"
+years = load_movie_years
+$redis.set('movie_years', years)
+
+# puts "\nLoading average_rating_map into redis\n\n"
+# average_rating_map = load_average_ratings_by_user_id
+# $redis.set('average_rating_map', average_rating_map)
 
 # Cache ID's of those movies with plenty historical ratings
 movie_rating_count_map = Hash.new
 
 movie_map.each do |movie_id, info|
-    if info[:ratings] && info[:ratings].length > 450
-        movie_rating_count_map[movie_id] = info[:ratings].length
-    end
+    movie_rating_count_map[movie_id] = info[:ratings].length
 end
 
 most_viewed_movie_ids = movie_rating_count_map.keys.sort do |id_1, id_2|

@@ -1,4 +1,3 @@
-require 'byebug'
 class HistoricalUser < ActiveRecord::Base
 
     has_many :ratings,

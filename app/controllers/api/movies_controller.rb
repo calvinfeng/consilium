@@ -1,4 +1,4 @@
-require 'byebug'
+require "#{Rails.root}/lib/tasks/binary_heap.rb"
 
 class Api::MoviesController < ApplicationController
 
@@ -29,22 +29,12 @@ class Api::MoviesController < ApplicationController
         preference_vector = params[:preference_vector]
         min_year = params[:min_year]
         max_year = params[:max_year]
-        movie_features = eval($redis.get("movie_features"))
 
-        movie_features.each do |movie_id, feature_vector|
-            prediction = 0
-            feature_vector.each_index do |idx|
-                prediction += preference_vector[idx] * feature_vector[idx]
-            end
-            puts prediction
-        end
+        # NOTE: We are going to move away from kNN algorithm due to Redis's ridiculously high pricing
+        # movie_ratings = params[:movie_ratings]
+        # @movies = knn_recommendations(min_year, max_year, movie_ratings)
 
-        puts "Movie year range #{min_year} - #{max_year}"
-        puts "Total number of movies #{movie_features.values.length}"
-
-        # NOTE: Change it back later
-        # @movies = generate_recommendations(min_year, max_year, movie_ratings)
-        @movies = Movie.find(eval($redis.get("most_viewed_movie_ids"))).first(10)
+        @movies = Movie.find(svd_recommendations(min_year, max_year, preference_vector))
         render 'api/movies/recommendation.json.jbuilder'
     end
 
@@ -54,15 +44,16 @@ class Api::MoviesController < ApplicationController
     end
 
     private
-    def generate_recommendations(min_year, max_year, movie_ratings_by_user)
+    def knn_recommendations(min_year, max_year, movie_ratings_by_user)
         min_year = min_year || 1900
         max_year = max_year || 2017
+
         movies = Movie.where("year >= #{min_year} AND year <= #{max_year}")
         indices = (0...movies.length).to_a.shuffle
 
         recommended_movies = []
         user = User.new(movie_ratings_by_user)
-        until recommended_movies.count >= 5 || indices.length == 0
+        until recommended_movies.count >= 10 || indices.length == 0
             index = indices.pop
             prediction = movies[index].knn_prediction_for(user)
             puts "\n#{movies[index].title} - prediction = #{prediction}\n\n" unless prediction.nil?
@@ -74,4 +65,33 @@ class Api::MoviesController < ApplicationController
         return recommended_movies
     end
 
+    def svd_recommendations(min_year, max_year, preference_vector)
+        priority_queue = BinaryHeap.new
+
+        movie_features = eval($redis.get("movie_features"))
+        movie_features.each do |movie_id, feature_vector|
+            prediction = 0
+            feature_vector.each_index do |idx|
+                prediction += preference_vector[idx] * feature_vector[idx]
+            end
+
+            priority_queue.push({ id: movie_id, predicted_rating: prediction })
+        end
+
+        puts "Movie year range #{min_year} - #{max_year}"
+        puts "Total number of movies #{movie_features.values.length}"
+
+        count = 0
+        movie_years = eval($redis.get("movie_years"))
+        recommendation_list = []
+        until recommendation_list.length == 10
+            movie = priority_queue.extract
+            movie_year = movie_years[movie[:id]]
+            if min_year <= movie_year && movie_year <= max_year
+                puts "Movie #{movie[:id]}: #{movie[:predicted_rating]}"
+                recommendation_list << movie[:id]
+            end
+        end
+        recommendation_list
+    end
 end

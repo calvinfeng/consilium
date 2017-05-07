@@ -30,11 +30,9 @@ export const mostViewedMoviesFetch = () => (dispatch) => {
     return request
         .get('api/movies/most_viewed')
         .then((res) => {
-            console.log('Most viewed movie received', res);
             dispatch(mostViewedMoviesFetchSuccess(res.data));
         })
         .catch((error) => {
-            console.log('Most viewed movie error', error);
             dispatch(mostViewedMoviesFetchFail(error));
         });
 };
