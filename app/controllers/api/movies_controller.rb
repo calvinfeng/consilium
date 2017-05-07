@@ -26,6 +26,7 @@ class Api::MoviesController < ApplicationController
     end
 
     def recommendations
+        movie_ratings = params[:movie_ratings]
         skipped_movies = params[:skipped_movies]
         preference_vector = params[:preference_vector]
         min_year = params[:min_year]
@@ -35,7 +36,13 @@ class Api::MoviesController < ApplicationController
         # movie_ratings = params[:movie_ratings]
         # @movies = knn_recommendations(min_year, max_year, movie_ratings)
 
-        @movies = Movie.find(svd_recommendations(min_year, max_year, preference_vector, skipped_movies))
+        recommended_movie_ids = svd_recommendations(min_year,
+            max_year,
+            preference_vector,
+            skipped_movies,
+            movie_ratings)
+
+        @movies = Movie.find(recommended_movie_ids)
         render 'api/movies/recommendation.json.jbuilder'
     end
 
@@ -66,12 +73,12 @@ class Api::MoviesController < ApplicationController
         return recommended_movies
     end
 
-    def svd_recommendations(min_year, max_year, preference_vector, skipped_movies)
+    def svd_recommendations(min_year, max_year, preference_vector, skipped_movies, movie_ratings)
         priority_queue = BinaryHeap.new
 
         movie_features = eval($redis.get("movie_features"))
         movie_features.each do |movie_id, feature_vector|
-            unless skipped_movies[movie_id.to_s]
+            if skipped_movies[movie_id.to_s].nil? && movie_ratings[movie_id.to_s].nil?
                 prediction = 0
                 feature_vector.each_index do |idx|
                     prediction += preference_vector[idx] * feature_vector[idx]

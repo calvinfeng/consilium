@@ -22,6 +22,11 @@ class RatingRecord extends React.Component {
         const ratedMovieIds = Object.keys(this.props.movieRatings);
         return ratedMovieIds.map((movieId) => {
             const movie = this.props.mostViewedMovies[movieId] || this.props.recommendedMovies.items[movieId];
+
+            if (movie === undefined) {
+                debugger;
+            }
+
             return (
                 <MovieItem
                     isRecommendation={false}
@@ -37,11 +42,7 @@ class RatingRecord extends React.Component {
             );
         });
     }
-    /*
-    <div className="header">
-        <h1>Rating History</h1>
-    </div>
-    */
+
     render() {
         return (
             <div className="rating-record-container">
