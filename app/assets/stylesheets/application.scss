@@ -3,10 +3,12 @@
 @import "components/indicator.scss";
 @import "components/movie-item.scss";
 @import "components/poster-slider.scss";
+@import "components/navigation.scss";
+@import "components/popularity-selector.scss";
+@import "components/year-range-selector";
 
 @import "containers/recommendation.scss";
 @import "containers/rating-record.scss";
 @import "containers/most-viewed.scss";
-
 @import "containers/recommender-page.scss";
 @import "containers/landing-page.scss";
