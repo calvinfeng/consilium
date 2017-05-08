@@ -6,10 +6,11 @@
  */
 
 
-import { RECORD_MOVIE_RATING } from '../../actions/movieRatings';
-import { DELETE_MOVIE_RATING } from '../../actions/movieRatings';
-
+import { RECORD_MOVIE_RATING }                   from '../../actions/movieRatings';
+import { DELETE_MOVIE_RATING }                   from '../../actions/movieRatings';
 import { SET_RATINGS_COUNT_NEEDED_FOR_FETCHING } from '../../actions/movieRatings';
+import { SET_MOVIE_RATING_COUNT_PERCENTILE }     from '../../actions/movieRatings';
+
 
 // Key Actions - Create, Update, Delete, Fetch
 export function movieRatingsReducer(state = {}, action) {
@@ -33,6 +34,16 @@ export function ratingsCountNeededForFetchingReducer(state = 10, action) {
     switch (action.type) {
         case SET_RATINGS_COUNT_NEEDED_FOR_FETCHING:
             return action.count;
+
+        default:
+            return state;
+    }
+}
+
+export function movieRatingCountPercentileReducer(state = 0, action) {
+    switch (action.type) {
+        case SET_MOVIE_RATING_COUNT_PERCENTILE:
+            return action.percentile;
 
         default:
             return state;

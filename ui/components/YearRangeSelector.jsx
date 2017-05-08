@@ -26,7 +26,7 @@ class YearRangeSelector extends React.Component {
     handleChange(value) {
         this.setState({
             minYear: value[0],
-            maxYear: value[1],
+            maxYear: value[1]
         });
 
         if (this.disableTimer) {

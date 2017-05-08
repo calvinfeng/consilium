@@ -13,18 +13,58 @@ import { Popover }        from 'react-bootstrap';
 
 class PopularitySelector extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            percentile: this.props.movieRatingCountPercentile
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+
     handleChange(value) {
-        console.log(value);
+        this.setState({
+            percentile: value
+        });
+
+        if (this.disableTimer) {
+            clearTimeout(this.disableTimer);
+        }
+
+        this.disableTimer = setTimeout(() => {
+            // this.props.dispatchSetMovieYearRange(this.state.minYear, this.state.maxYear);
+            // this.props.dispatchSetMovieRatingCountPercentile(this.state.percentile)
+        }, 1000);
     }
 
     render() {
-        const title = 'Filter by review counts';
+        let title;
+
+        switch (this.state.percentile) {
+            case 0:
+                title = 'Movies with any reviews';
+                break;
+            case 20:
+                title = '> 20th percentile';
+                break;
+            case 50:
+                title = '> 50th percentile';
+                break;
+            case 80:
+                title = '> 80th percentile';
+                break;
+            case 100:
+                title = 'Most reviewed movies';
+                break;
+        }
+
         const marks = {
-            0: 'Any reviews',
-            25: '> 50 reviews',
-            50: '> 500 reviews',
-            75: '> 1000 reviews',
-            100: '> 5000 reviews'
+            0: 'Any',
+            20: '> 20th',
+            50: '> 50th',
+            80: '> 80th',
+            100: 'Top'
         };
 
         const popover = (
@@ -38,7 +78,13 @@ class PopularitySelector extends React.Component {
                     </p>
                 </div>
                 <div className="slider">
-                    <Slider min={-10} marks={marks} step={null} onChange={this.handleChange} defaultValue={20} />
+                    <Slider
+                        disabled={this.props.disabled}
+                        min={0}
+                        marks={marks}
+                        step={null}
+                        onChange={this.handleChange}
+                        defaultValue={this.state.percentile} />
                 </div>
             </Popover>
         );
@@ -52,7 +98,9 @@ class PopularitySelector extends React.Component {
 }
 
 PopularitySelector.propTypes = {
-    disabled: React.PropTypes.bool.isRequired
+    disabled: React.PropTypes.bool.isRequired,
+    movieRatingCountPercentile: React.PropTypes.bool.isRequired,
+    dispatchSetMovieRatingCountPercentile: React.PropTypes.func.isRequired
 };
 
 export default PopularitySelector;
