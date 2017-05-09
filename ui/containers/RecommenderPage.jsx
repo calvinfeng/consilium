@@ -35,9 +35,9 @@ class RecommenderPage extends React.Component {
 
         const hasPreferenceChanged = this.hasPreferenceChanged(nextProps);
         const hasMovieYearRangeChanged = this.hasMovieYearRangeChanged(nextProps);
-
+        const hasMovieRatingCountPercentileChanged = this.hasMovieRatingCountPercentileChanged(nextProps);
         if (
-            (hasPreferenceChanged || hasMovieYearRangeChanged)
+            (hasPreferenceChanged || hasMovieYearRangeChanged || hasMovieRatingCountPercentileChanged)
             && nextProps.userPreference.preferenceVector.length > 0
         ) {
             // Fetching recommendation
@@ -52,6 +52,10 @@ class RecommenderPage extends React.Component {
                 movieRatings
             );
         }
+    }
+
+    hasMovieRatingCountPercentileChanged(nextProps) {
+        return this.props.movieRatingCountPercentile !== nextProps.movieRatingCountPercentile;
     }
 
     hasMovieYearRangeChanged(nextProps) {
@@ -111,6 +115,7 @@ RecommenderPage.propTypes = {
     userPreference: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
     movieYearRange: React.PropTypes.object.isRequired,
+    movieRatingCountPercentile: React.PropTypes.number.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
     skippedMovies: React.PropTypes.object.isRequired,
     ratingsCountNeededForFetching: React.PropTypes.number.isRequired,
@@ -121,10 +126,11 @@ RecommenderPage.propTypes = {
 
 const mapReduxStateToProps = (state) => {
     return {
-        userPreference: state.userPreference,
         movieYearRange: state.movieYearRange,
         movieRatings: state.movieRatings,
+        movieRatingCountPercentile: state.movieRatingCountPercentile,
         recommendedMovies: state.recommendedMovies,
+        userPreference: state.userPreference,
         skippedMovies: state.skippedMovies,
         ratingsCountNeededForFetching: state.ratingsCountNeededForFetching
     };

@@ -12,7 +12,6 @@ import { OverlayTrigger } from 'react-bootstrap';
 import { Popover }        from 'react-bootstrap';
 
 class PopularitySelector extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -21,7 +20,6 @@ class PopularitySelector extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
     }
-
 
     handleChange(value) {
         this.setState({
@@ -33,8 +31,7 @@ class PopularitySelector extends React.Component {
         }
 
         this.disableTimer = setTimeout(() => {
-            // this.props.dispatchSetMovieYearRange(this.state.minYear, this.state.maxYear);
-            // this.props.dispatchSetMovieRatingCountPercentile(this.state.percentile)
+            this.props.dispatchSetMovieRatingCountPercentile(this.state.percentile);
         }, 1000);
     }
 
@@ -99,7 +96,7 @@ class PopularitySelector extends React.Component {
 
 PopularitySelector.propTypes = {
     disabled: React.PropTypes.bool.isRequired,
-    movieRatingCountPercentile: React.PropTypes.bool.isRequired,
+    movieRatingCountPercentile: React.PropTypes.number.isRequired,
     dispatchSetMovieRatingCountPercentile: React.PropTypes.func.isRequired
 };
 
