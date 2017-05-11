@@ -50,10 +50,10 @@ class Recommendation extends React.Component {
 
     get recommendedMovies() {
         const recommendedMovieIds = Object.keys(this.props.recommendedMovies.items).filter((movieId) => {
-            const condition1 = !this.props.skippedMovies[movieId] && !this.props.movieRatings[movieId];
-            const condition2 = this.props.movieYearRange.minYear <= this.props.recommendedMovies.items[movieId].year;
-            const condition3 = this.props.recommendedMovies.items[movieId].year <= this.props.movieYearRange.maxYear;
-            return condition1 && condition2 && condition3;
+            return !this.props.skippedMovies[movieId] && !this.props.movieRatings[movieId]
+            && this.props.movieYearRange.minYear <= this.props.recommendedMovies.items[movieId].year
+            && this.props.recommendedMovies.items[movieId].year <= this.props.movieYearRange.maxYear
+            && this.props.recommendedMovies.items[movieId].percentile === this.props.movieRatingCountPercentile;
         }).sort((movieId1, movieId2) => {
             return this.props.recommendedMovies.items[movieId2].predictedRating
                 - this.props.recommendedMovies.items[movieId1].predictedRating;
