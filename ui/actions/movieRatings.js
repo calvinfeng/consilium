@@ -35,3 +35,12 @@ export const setRatingsCountNeededForFetching = (count) => (dispatch) => {
         count
     });
 };
+
+export const SET_MOVIE_RATING_COUNT_PERCENTILE = 'SET_MOVIE_RATING_COUNT_PERCENTILE';
+
+export const setMovieRatingCountPercentile = (percentile) => (dispatch) => {
+    dispatch({
+        type: SET_MOVIE_RATING_COUNT_PERCENTILE,
+        percentile
+    });
+};

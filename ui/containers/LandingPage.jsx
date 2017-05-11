@@ -41,11 +41,13 @@ class LandingPage extends React.Component {
             const movieYearRange = nextProps.movieYearRange;
             const skippedMovies = nextProps.skippedMovies;
             const movieRatings = nextProps.movieRatings;
+            const movieRatingCountPercentile = nextProps.movieRatingCountPercentile;
             this.props.dispatchRecommendedMoviesFetch(
                 preferenceVector,
                 movieYearRange,
                 skippedMovies,
-                movieRatings
+                movieRatings,
+                movieRatingCountPercentile
             );
         }
     }
@@ -81,6 +83,7 @@ LandingPage.propTypes = {
     userPreference: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
     movieYearRange: React.PropTypes.object.isRequired,
+    movieRatingCountPercentile: React.PropTypes.number.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
     skippedMovies: React.PropTypes.object.isRequired,
     ratingsCountNeededForFetching: React.PropTypes.number.isRequired,
@@ -94,6 +97,7 @@ const mapReduxStateToProps = (state) => {
         userPreference: state.userPreference,
         movieYearRange: state.movieYearRange,
         movieRatings: state.movieRatings,
+        movieRatingCountPercentile: state.movieRatingCountPercentile,
         recommendedMovies: state.recommendedMovies,
         skippedMovies: state.skippedMovies,
         ratingsCountNeededForFetching: state.ratingsCountNeededForFetching
@@ -105,8 +109,8 @@ const mapDispatchToProps = (dispatch) => {
         dispatchUserPreferenceFetch: (movieRatings) => {
             dispatch(userPreferenceFetch(movieRatings));
         },
-        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange, skippedMovies, movieRatings) => {
-            dispatch(recommendedMoviesFetch(preferenceVector, yearRange, skippedMovies, movieRatings));
+        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange, skippedMovies, movieRatings, percentile) => {
+            dispatch(recommendedMoviesFetch(preferenceVector, yearRange, skippedMovies, movieRatings, percentile));
         },
         dispatchSetRatingsCountNeededForFetching: (count) => {
             dispatch(setRatingsCountNeededForFetching(count));

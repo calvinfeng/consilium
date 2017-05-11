@@ -6,4 +6,5 @@ json.array! @movies do |movie|
   json.averageRating movie.average_rating
   json.ratingCount movie.ratings.length
   json.predictedRating @svd_recommendations[movie.id][:predicted_rating]
+  json.percentile @svd_recommendations[movie.id][:percentile]
 end

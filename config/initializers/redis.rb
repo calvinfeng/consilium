@@ -1,4 +1,5 @@
 require 'csv'
+require 'byebug'
 # Heroku's new approach to Redis
 
 # $redis = Redis.new(url: ENV["REDIS_URL"])
@@ -97,11 +98,11 @@ movie_map = load_movies()
 # $redis.set('movie_rating_map', movie_map)
 
 puts "\nLoading movie_features into redis\n\n"
-features = load_movie_features
+features = load_movie_features()
 $redis.set('movie_features', features)
 
 puts "\nLoading movie years into redis\n\n"
-years = load_movie_years
+years = load_movie_years()
 $redis.set('movie_years', years)
 
 # puts "\nLoading average_rating_map into redis\n\n"
@@ -118,9 +119,35 @@ end
 puts "\nLoading movie_rating_count_map into redis\n\n"
 $redis.set('movie_rating_count_map', movie_rating_count_map)
 
-most_viewed_movie_ids = movie_rating_count_map.keys.sort do |id_1, id_2|
+sorted_movie_ids_by_rating_count = movie_rating_count_map.keys.sort do |id_1, id_2|
     movie_rating_count_map[id_2] <=> movie_rating_count_map[id_1]
-end.first(200)
+end
+
+most_viewed_movie_ids = sorted_movie_ids_by_rating_count.first(200)
 
 puts "\nLoading most_viewed_movie_ids into redis\n\n"
 $redis.set('most_viewed_movie_ids', most_viewed_movie_ids)
+
+top_5_percent = Hash.new
+sorted_movie_ids_by_rating_count.take(0.05 * sorted_movie_ids_by_rating_count.length).each do |movie_id|
+    top_5_percent[movie_id] = true
+end
+$redis.set('top_5_percent', top_5_percent)
+
+top_20_percent = Hash.new
+sorted_movie_ids_by_rating_count.take(0.20 * sorted_movie_ids_by_rating_count.length).each do |movie_id|
+    top_20_percent[movie_id] = true
+end
+$redis.set('top_20_percent', top_20_percent)
+
+top_50_percent = Hash.new
+sorted_movie_ids_by_rating_count.take(0.50 * sorted_movie_ids_by_rating_count.length).each do |movie_id|
+    top_50_percent[movie_id] = true
+end
+$redis.set('top_50_percent', top_50_percent)
+
+top_80_percent = Hash.new
+sorted_movie_ids_by_rating_count.take(0.80 * sorted_movie_ids_by_rating_count.length).each do |movie_id|
+    top_80_percent[movie_id] = true
+end
+$redis.set('top_80_percent', top_80_percent)

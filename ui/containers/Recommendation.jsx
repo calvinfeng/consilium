@@ -12,13 +12,16 @@ import CircularProgress           from 'material-ui/CircularProgress';
 import MovieItem                  from '../components/MovieItem';
 import MovieTrailer               from '../components/MovieTrailer';
 import YearRangeSelector          from '../components/YearRangeSelector';
+import PopularitySelector         from '../components/PopularitySelector';
 
 import { movieDetailFetch }       from '../actions/movieDetails';
 import { movieTrailerFetch }      from '../actions/movieTrailers';
 
-import { skipMovie }              from '../actions/movies';
-import { recordMovieRating }      from '../actions/movieRatings';
-import { setMovieYearRange }      from '../actions/movieYearRange';
+import { skipMovie }                     from '../actions/movies';
+import { recordMovieRating }             from '../actions/movieRatings';
+import { setMovieRatingCountPercentile } from '../actions/movieRatings';
+import { setMovieYearRange }             from '../actions/movieYearRange';
+
 
 /* global $ */
 class Recommendation extends React.Component {
@@ -47,10 +50,10 @@ class Recommendation extends React.Component {
 
     get recommendedMovies() {
         const recommendedMovieIds = Object.keys(this.props.recommendedMovies.items).filter((movieId) => {
-            const condition1 = !this.props.skippedMovies[movieId] && !this.props.movieRatings[movieId];
-            const condition2 = this.props.movieYearRange.minYear <= this.props.recommendedMovies.items[movieId].year;
-            const condition3 = this.props.recommendedMovies.items[movieId].year <= this.props.movieYearRange.maxYear;
-            return condition1 && condition2 && condition3;
+            return !this.props.skippedMovies[movieId] && !this.props.movieRatings[movieId]
+            && this.props.movieYearRange.minYear <= this.props.recommendedMovies.items[movieId].year
+            && this.props.recommendedMovies.items[movieId].year <= this.props.movieYearRange.maxYear
+            && this.props.recommendedMovies.items[movieId].percentile === this.props.movieRatingCountPercentile;
         }).sort((movieId1, movieId2) => {
             return this.props.recommendedMovies.items[movieId2].predictedRating
                 - this.props.recommendedMovies.items[movieId1].predictedRating;
@@ -129,10 +132,16 @@ class Recommendation extends React.Component {
                 <div className="header">
                     <h1>Recommendations</h1>
                 </div>
-                <YearRangeSelector
-                    disabled={this.props.recommendedMovies.isFetching}
-                    movieYearRange={this.props.movieYearRange}
-                    dispatchSetMovieYearRange={this.props.dispatchSetMovieYearRange} />
+                <div className="filters">
+                    <YearRangeSelector
+                        disabled={this.props.recommendedMovies.isFetching}
+                        movieYearRange={this.props.movieYearRange}
+                        dispatchSetMovieYearRange={this.props.dispatchSetMovieYearRange} />
+                    <PopularitySelector
+                        disabled={this.props.recommendedMovies.isFetching}
+                        movieRatingCountPercentile={this.props.movieRatingCountPercentile}
+                        dispatchSetMovieRatingCountPercentile={this.props.dispatchSetMovieRatingCountPercentile} />
+                </div>
                 {this.trailerPlayer}
                 {this.movies}
             </div>
@@ -146,12 +155,14 @@ Recommendation.propTypes = {
     movieRatings: React.PropTypes.object.isRequired,
     movieTrailers: React.PropTypes.object.isRequired,
     movieYearRange: React.PropTypes.object.isRequired,
+    movieRatingCountPercentile: React.PropTypes.number.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
     dispatchSkipMovie: React.PropTypes.func.isRequired,
     dispatchMovieDetailFetch: React.PropTypes.func.isRequired,
     dispatchMovieTrailerFetch: React.PropTypes.func.isRequired,
     dispatchRecordMovieRating: React.PropTypes.func.isRequired,
-    dispatchSetMovieYearRange: React.PropTypes.func.isRequired
+    dispatchSetMovieYearRange: React.PropTypes.func.isRequired,
+    dispatchSetMovieRatingCountPercentile: React.PropTypes.func.isRequired
 };
 
 const mapReduxStateToProps = (state) => {
@@ -161,7 +172,8 @@ const mapReduxStateToProps = (state) => {
         movieRatings: state.movieRatings,
         skippedMovies: state.skippedMovies,
         recommendedMovies: state.recommendedMovies,
-        movieYearRange: state.movieYearRange
+        movieYearRange: state.movieYearRange,
+        movieRatingCountPercentile: state.movieRatingCountPercentile
     };
 };
 
@@ -171,7 +183,8 @@ const mapDispatchToProps = (dispatch) => {
         dispatchMovieDetailFetch: (imdbId) => dispatch(movieDetailFetch(imdbId)),
         dispatchMovieTrailerFetch: (imdbId) => dispatch(movieTrailerFetch(imdbId)),
         dispatchRecordMovieRating: (movieId, rating) => dispatch(recordMovieRating(movieId, rating)),
-        dispatchSetMovieYearRange: (minYear, maxYear) => dispatch(setMovieYearRange(minYear, maxYear))
+        dispatchSetMovieYearRange: (minYear, maxYear) => dispatch(setMovieYearRange(minYear, maxYear)),
+        dispatchSetMovieRatingCountPercentile: (percentile) => dispatch(setMovieRatingCountPercentile(percentile))
     };
 };
 

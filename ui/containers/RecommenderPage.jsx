@@ -35,9 +35,9 @@ class RecommenderPage extends React.Component {
 
         const hasPreferenceChanged = this.hasPreferenceChanged(nextProps);
         const hasMovieYearRangeChanged = this.hasMovieYearRangeChanged(nextProps);
-
+        const hasMovieRatingCountPercentileChanged = this.hasMovieRatingCountPercentileChanged(nextProps);
         if (
-            (hasPreferenceChanged || hasMovieYearRangeChanged)
+            (hasPreferenceChanged || hasMovieYearRangeChanged || hasMovieRatingCountPercentileChanged)
             && nextProps.userPreference.preferenceVector.length > 0
         ) {
             // Fetching recommendation
@@ -45,13 +45,19 @@ class RecommenderPage extends React.Component {
             const movieYearRange = nextProps.movieYearRange;
             const skippedMovies = nextProps.skippedMovies;
             const movieRatings = nextProps.movieRatings;
+            const movieRatingCountPercentile = nextProps.movieRatingCountPercentile;
             this.props.dispatchRecommendedMoviesFetch(
                 preferenceVector,
                 movieYearRange,
                 skippedMovies,
-                movieRatings
+                movieRatings,
+                movieRatingCountPercentile
             );
         }
+    }
+
+    hasMovieRatingCountPercentileChanged(nextProps) {
+        return this.props.movieRatingCountPercentile !== nextProps.movieRatingCountPercentile;
     }
 
     hasMovieYearRangeChanged(nextProps) {
@@ -111,6 +117,7 @@ RecommenderPage.propTypes = {
     userPreference: React.PropTypes.object.isRequired,
     movieRatings: React.PropTypes.object.isRequired,
     movieYearRange: React.PropTypes.object.isRequired,
+    movieRatingCountPercentile: React.PropTypes.number.isRequired,
     recommendedMovies: React.PropTypes.object.isRequired,
     skippedMovies: React.PropTypes.object.isRequired,
     ratingsCountNeededForFetching: React.PropTypes.number.isRequired,
@@ -121,10 +128,11 @@ RecommenderPage.propTypes = {
 
 const mapReduxStateToProps = (state) => {
     return {
-        userPreference: state.userPreference,
         movieYearRange: state.movieYearRange,
         movieRatings: state.movieRatings,
+        movieRatingCountPercentile: state.movieRatingCountPercentile,
         recommendedMovies: state.recommendedMovies,
+        userPreference: state.userPreference,
         skippedMovies: state.skippedMovies,
         ratingsCountNeededForFetching: state.ratingsCountNeededForFetching
     };
@@ -135,8 +143,8 @@ const mapDispatchToProps = (dispatch) => {
         dispatchUserPreferenceFetch: (movieRatings) => {
             dispatch(userPreferenceFetch(movieRatings));
         },
-        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange, skippedMovies, movieRatings) => {
-            dispatch(recommendedMoviesFetch(preferenceVector, yearRange, skippedMovies, movieRatings));
+        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange, skippedMovies, movieRatings, percentile) => {
+            dispatch(recommendedMoviesFetch(preferenceVector, yearRange, skippedMovies, movieRatings, percentile));
         },
         dispatchSetRatingsCountNeededForFetching: (count) => {
             dispatch(setRatingsCountNeededForFetching(count));

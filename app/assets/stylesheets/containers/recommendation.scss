@@ -15,6 +15,12 @@
         }
     }
 
+    .filters {
+        width: 100%;
+        display: inherit;
+        flex-direction: row;
+    }
+
     .movies {
         display: flex;
         flex-direction: row;
