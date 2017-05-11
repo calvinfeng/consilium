@@ -45,11 +45,13 @@ class RecommenderPage extends React.Component {
             const movieYearRange = nextProps.movieYearRange;
             const skippedMovies = nextProps.skippedMovies;
             const movieRatings = nextProps.movieRatings;
+            const movieRatingCountPercentile = nextProps.movieRatingCountPercentile;
             this.props.dispatchRecommendedMoviesFetch(
                 preferenceVector,
                 movieYearRange,
                 skippedMovies,
-                movieRatings
+                movieRatings,
+                movieRatingCountPercentile
             );
         }
     }
@@ -141,8 +143,8 @@ const mapDispatchToProps = (dispatch) => {
         dispatchUserPreferenceFetch: (movieRatings) => {
             dispatch(userPreferenceFetch(movieRatings));
         },
-        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange, skippedMovies, movieRatings) => {
-            dispatch(recommendedMoviesFetch(preferenceVector, yearRange, skippedMovies, movieRatings));
+        dispatchRecommendedMoviesFetch: (preferenceVector, yearRange, skippedMovies, movieRatings, percentile) => {
+            dispatch(recommendedMoviesFetch(preferenceVector, yearRange, skippedMovies, movieRatings, percentile));
         },
         dispatchSetRatingsCountNeededForFetching: (count) => {
             dispatch(setRatingsCountNeededForFetching(count));

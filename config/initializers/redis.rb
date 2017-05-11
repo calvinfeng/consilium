@@ -146,7 +146,6 @@ sorted_movie_ids_by_rating_count.take(0.50 * sorted_movie_ids_by_rating_count.le
 end
 $redis.set('top_50_percent', top_50_percent)
 
-debugger
 top_80_percent = Hash.new
 sorted_movie_ids_by_rating_count.take(0.80 * sorted_movie_ids_by_rating_count.length).each do |movie_id|
     top_80_percent[movie_id] = true

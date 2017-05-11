@@ -61,29 +61,32 @@ const recommendedMoviesFetchFail = (error) => {
     };
 };
 
-export const recommendedMoviesFetch = (preferenceVector, yearRange, skippedMovies, movieRatings) => (dispatch) => {
-    dispatch(recommendedMoviesFetchStart());
-    const config = {
-        headers:
-        {
-            'X-CSRF-Token': XSRF_TOKEN
-        }
+export const recommendedMoviesFetch = function (preferenceVector, yearRange, skippedMovies, movieRatings, percentile) {
+    return (dispatch) => {
+        dispatch(recommendedMoviesFetchStart());
+        // TODO: Don't store it in window!!!
+        const config = {
+            headers:
+            {
+                'X-CSRF-Token': XSRF_TOKEN
+            }
+        };
+        return request
+            .post('api/movies/recommendations', {
+                percentile: percentile,
+                movie_ratings: movieRatings,
+                skipped_movies: skippedMovies,
+                preference_vector: preferenceVector,
+                min_year: yearRange.minYear,
+                max_year: yearRange.maxYear
+            }, config)
+            .then((res) => {
+                dispatch(recommendedMoviesFetchSuccess(res.data));
+            })
+            .catch((error) => {
+                dispatch(recommendedMoviesFetchFail(error));
+            });
     };
-    // TODO: Don't store it in window!!!
-    return request
-        .post('api/movies/recommendations', {
-            movie_ratings: movieRatings,
-            skipped_movies: skippedMovies,
-            preference_vector: preferenceVector,
-            min_year: yearRange.minYear,
-            max_year: yearRange.maxYear
-        }, config)
-        .then((res) => {
-            dispatch(recommendedMoviesFetchSuccess(res.data));
-        })
-        .catch((error) => {
-            dispatch(recommendedMoviesFetchFail(error));
-        });
 };
 
 // None-request type actions adapt a different naming convention

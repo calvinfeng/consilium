@@ -1,5 +1,6 @@
 require "#{Rails.root}/lib/tasks/binary_heap.rb"
 require 'byebug'
+
 class Api::MoviesController < ApplicationController
 
     def index
@@ -26,6 +27,7 @@ class Api::MoviesController < ApplicationController
     end
 
     def recommendations
+        percentile = params[:percentile].to_i
         movie_ratings = params[:movie_ratings]
         skipped_movies = params[:skipped_movies]
         preference_vector = params[:preference_vector]
@@ -40,7 +42,8 @@ class Api::MoviesController < ApplicationController
             max_year,
             preference_vector,
             skipped_movies,
-            movie_ratings)
+            movie_ratings,
+            percentile)
 
         recommended_movie_ids = @svd_recommendations.keys
         @movies = Movie.find(recommended_movie_ids)
@@ -54,33 +57,46 @@ class Api::MoviesController < ApplicationController
     end
 
     private
-    def svd_recommendations(min_year, max_year, preference_vector, skipped_movies, movie_ratings)
+    def svd_recommendations(min_year, max_year, preference_vector, skipped_movies, movie_ratings, percentile)
         priority_queue = BinaryHeap.new
+        popularity_bracket = nil
+        case percentile
+        when 20
+            popularity_bracket = eval($redis.get('top_80_percent'))
+        when 50
+            popularity_bracket = eval($redis.get('top_50_percent'))
+        when 80
+            popularity_bracket = eval($redis.get('top_20_percent'))
+        when 100
+            popularity_bracket = eval($redis.get('top_5_percent'))
+        end
 
         movie_features = eval($redis.get("movie_features"))
+        movie_years = eval($redis.get("movie_years"))
         movie_features.each do |movie_id, feature_vector|
-            if skipped_movies[movie_id.to_s].nil? && movie_ratings[movie_id.to_s].nil?
+            movie_year = movie_years[movie_id]
+            if skipped_movies[movie_id.to_s].nil? &&
+                movie_ratings[movie_id.to_s].nil? &&
+                (min_year <= movie_year && movie_year <= max_year) &&
+                (popularity_bracket.nil? || popularity_bracket[movie_id])
+
                 prediction = 0
                 feature_vector.each_index do |idx|
                     prediction += preference_vector[idx] * feature_vector[idx]
                 end
 
-                priority_queue.push({ id: movie_id, predicted_rating: prediction })
+                priority_queue.push({ id: movie_id, predicted_rating: prediction, percentile: percentile })
             end
         end
 
         puts "Movie year range #{min_year} - #{max_year}"
-        puts "Total number of movies #{movie_features.values.length}"
+        puts "Total number of movies in queue #{priority_queue.store.length}"
 
-        movie_years = eval($redis.get("movie_years"))
         recommendations = Hash.new
-        until recommendations.length == 10
+        until recommendations.length == 10 || priority_queue.store.length == 0
             movie = priority_queue.extract
-            movie_year = movie_years[movie[:id]]
-            if min_year <= movie_year && movie_year <= max_year
-                puts "Movie #{movie[:id]}: #{movie[:predicted_rating]}"
-                recommendations[movie[:id]] = movie
-            end
+            recommendations[movie[:id]] = movie
+            puts "Movie #{movie[:id]}: #{movie[:predicted_rating]}"
         end
         recommendations
     end
