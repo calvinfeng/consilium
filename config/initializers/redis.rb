@@ -1,6 +1,6 @@
 require 'csv'
-# Heroku's new approach to Redis
 
+# Heroku's new approach to Redis
 $redis = Redis.new(url: ENV["REDIS_URL"])
 
 # This no longer works
@@ -34,8 +34,9 @@ def load_movies()
     csv = CSV.parse(File.read('db/csv/20k-users/training_movies.csv'), :headers => true)
     csv.each do |row|
         id = row['movieId'].to_i
+        popularity = row['popularity'].to_i
         title = row['title']
-        movies[id] = { title: title }
+        movies[id] = { title: title, popularity: popularity }
     end
 
     # return load_ratings_into_movies(movies)
@@ -65,7 +66,6 @@ def load_average_ratings_by_user_id
     return average_rating_map
 end
 
-
 def load_movie_features
     movie_features = Hash.new
     csv = CSV.parse(File.read('db/csv/20k-users/movie_features.csv'), :headers => true)
@@ -93,6 +93,16 @@ def load_movie_years
     movie_years
 end
 
+
+movies = load_movies()
+
+puts "\nLoading movie_rating_count_map into redis\n\n"
+movie_rating_count_map = Hash.new
+movies.each do |movie_id, attributes|
+    movie_rating_count_map[movie_id] = movies[movie_id][:popularity]
+end
+$redis.set('movie_rating_count_map', movie_rating_count_map)
+
 puts "\nLoading movie_features into redis\n\n"
 movie_features = load_movie_features()
 $redis.set('movie_features', movie_features)
@@ -108,14 +118,6 @@ $redis.set('movie_years', movie_years)
 # $redis.set('movie_rating_map', movie_map)
 
 # Cache ID's of those movies with plenty historical ratings
-# ======================================================================================================================
-puts "\nLoading movie_rating_count_map into redis\n\n"
-movie_rating_count_map = Hash.new
-movie_features.each do |movie_id, info|
-    movie_rating_count_map[movie_id] = 0 # Movie.find(movie_id).ratings.length # info[:ratings].length
-end
-$redis.set('movie_rating_count_map', movie_rating_count_map)
-
 # ======================================================================================================================
 puts "\nLoading most_viewed_movie_ids into redis\n\n"
 sorted_movie_ids_by_rating_count = movie_rating_count_map.keys.sort do |id_1, id_2|
