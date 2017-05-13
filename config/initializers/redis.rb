@@ -12,6 +12,7 @@ $redis = Redis.new(url: ENV["REDIS_URL"])
 # $redis = Redis.new(:host => 'localhost', :port => 6379)
 $redis.flushdb
 
+# NOTE: DO NOT LOAD RATINGS ANYMORE
 def load_ratings_into_movies(movies)
     csv = CSV.parse(File.read('db/csv/20k-users/training_ratings.csv'), :headers => true)
     csv.each do |row|
@@ -37,7 +38,8 @@ def load_movies()
         movies[id] = { title: title }
     end
 
-    return load_ratings_into_movies(movies)
+    # return load_ratings_into_movies(movies)
+    movies
 end
 
 def load_average_ratings_by_user_id
@@ -109,24 +111,23 @@ $redis.set('movie_years', years)
 # $redis.set('average_rating_map', average_rating_map)
 
 # Cache ID's of those movies with plenty historical ratings
-movie_rating_count_map = Hash.new
-
-movie_map.each do |movie_id, info|
-    movie_rating_count_map[movie_id] = info[:ratings].length
-end
-
+# ======================================================================================================================
 puts "\nLoading movie_rating_count_map into redis\n\n"
+movie_rating_count_map = Hash.new
+movie_map.each do |movie_id, info|
+    movie_rating_count_map[movie_id] = Movie.find(movie_id).ratings.length # info[:ratings].length
+end
 $redis.set('movie_rating_count_map', movie_rating_count_map)
 
+# ======================================================================================================================
+puts "\nLoading most_viewed_movie_ids into redis\n\n"
 sorted_movie_ids_by_rating_count = movie_rating_count_map.keys.sort do |id_1, id_2|
     movie_rating_count_map[id_2] <=> movie_rating_count_map[id_1]
 end
-
 most_viewed_movie_ids = sorted_movie_ids_by_rating_count.first(200)
-
-puts "\nLoading most_viewed_movie_ids into redis\n\n"
 $redis.set('most_viewed_movie_ids', most_viewed_movie_ids)
 
+# ======================================================================================================================
 top_5_percent = Hash.new
 sorted_movie_ids_by_rating_count.take(0.05 * sorted_movie_ids_by_rating_count.length).each do |movie_id|
     top_5_percent[movie_id] = true
