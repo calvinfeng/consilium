@@ -7,7 +7,6 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 require 'csv'
-require 'byebug'
 
 # Load movies
 csv = CSV.parse(File.read('db/csv/20k-users/training_movies.csv'), :headers => true)

@@ -1,8 +1,7 @@
 require 'csv'
-require 'byebug'
 # Heroku's new approach to Redis
 
-# $redis = Redis.new(url: ENV["REDIS_URL"])
+$redis = Redis.new(url: ENV["REDIS_URL"])
 
 # This no longer works
 # host = "ec2-184-73-182-113.compute-1.amazonaws.com"
@@ -10,7 +9,7 @@ require 'byebug'
 # password = "pb56s1fjj1147takjkahe3r4n38"
 # $redis = Redis.new(:host => host, :port => port, :password => password)
 
-$redis = Redis.new(:host => 'localhost', :port => 6379)
+# $redis = Redis.new(:host => 'localhost', :port => 6379)
 $redis.flushdb
 
 def load_ratings_into_movies(movies)

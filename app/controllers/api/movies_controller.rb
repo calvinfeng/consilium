@@ -1,5 +1,4 @@
 require "#{Rails.root}/lib/tasks/binary_heap.rb"
-require 'byebug'
 
 class Api::MoviesController < ApplicationController
 
