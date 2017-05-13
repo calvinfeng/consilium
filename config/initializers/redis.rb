@@ -112,7 +112,7 @@ $redis.set('movie_years', movie_years)
 puts "\nLoading movie_rating_count_map into redis\n\n"
 movie_rating_count_map = Hash.new
 movie_features.each do |movie_id, info|
-    movie_rating_count_map[movie_id] = Movie.find(movie_id).ratings.length # info[:ratings].length
+    movie_rating_count_map[movie_id] = 0 # Movie.find(movie_id).ratings.length # info[:ratings].length
 end
 $redis.set('movie_rating_count_map', movie_rating_count_map)
 
