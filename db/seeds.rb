@@ -8,7 +8,7 @@
 
 require 'csv'
 
-Load movies
+# Load movies
 csv = CSV.parse(File.read('db/csv/20k-users/training_movies.csv'), :headers => true)
 
 movies = Hash.new
