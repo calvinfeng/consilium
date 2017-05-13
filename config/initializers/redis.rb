@@ -93,28 +93,25 @@ def load_movie_years
     movie_years
 end
 
-# This is for k-nearest neighbor algorithm
-puts "\nLoading movie_rating_map, but not into redis...\n\n"
-movie_map = load_movies()
-# $redis.set('movie_rating_map', movie_map)
-
 puts "\nLoading movie_features into redis\n\n"
-features = load_movie_features()
-$redis.set('movie_features', features)
+movie_features = load_movie_features()
+$redis.set('movie_features', movie_features)
 
 puts "\nLoading movie years into redis\n\n"
-years = load_movie_years()
-$redis.set('movie_years', years)
+movie_years = load_movie_years()
+$redis.set('movie_years', movie_years)
 
-# puts "\nLoading average_rating_map into redis\n\n"
+# DEPRECATED
 # average_rating_map = load_average_ratings_by_user_id
 # $redis.set('average_rating_map', average_rating_map)
+# movie_map = load_movies()
+# $redis.set('movie_rating_map', movie_map)
 
 # Cache ID's of those movies with plenty historical ratings
 # ======================================================================================================================
 puts "\nLoading movie_rating_count_map into redis\n\n"
 movie_rating_count_map = Hash.new
-movie_map.each do |movie_id, info|
+movie_features.each do |movie_id, info|
     movie_rating_count_map[movie_id] = Movie.find(movie_id).ratings.length # info[:ratings].length
 end
 $redis.set('movie_rating_count_map', movie_rating_count_map)
