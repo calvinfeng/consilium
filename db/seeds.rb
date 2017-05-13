@@ -9,47 +9,47 @@
 require 'csv'
 
 # Load movies
-csv = CSV.parse(File.read('db/csv/20k-users/training_movies.csv'), :headers => true)
-
-movies = Hash.new
-
-csv.each do |row|
-    id = row['movieId'].to_i
-    title = row['title']
-    year = row['year'].to_i
-    if year < 1000
-        year = nil
-    end
-    movies[id] = {title: title, year: year}
-end
-
-# Load movies' relevant information
-csv = CSV.parse(File.read('db/csv/20k-users/training_links.csv'), :headers => true)
-
-csv.each do |row|
-    id = row['movieId'].to_i
-    imdb_id = row['imdbId']
-    movies[id][:imdb_id] = imdb_id
-end
-
-csv = CSV.parse(File.read('db/csv/20k-users/movie_features.csv'), :headers => true)
-
-csv.each do |row|
-    feature_array = []
-    movie_id = row['movieId'].to_i
-    row.each do |key, value|
-        if key != 'movieId'
-            feature_array << value.to_f
-        end
-    end
-    movies[movie_id][:feature] = feature_array
-end
-
-puts 'Movie information has been loaded'
-movies.each do |id, movie|
-    Movie.create!(id: id, title: movie[:title], year: movie[:year], imdb_id: movie[:imdb_id], feature: movie[:feature])
-end
-puts 'Movies have been inserted into database'
+# csv = CSV.parse(File.read('db/csv/20k-users/training_movies.csv'), :headers => true)
+#
+# movies = Hash.new
+#
+# csv.each do |row|
+#     id = row['movieId'].to_i
+#     title = row['title']
+#     year = row['year'].to_i
+#     if year < 1000
+#         year = nil
+#     end
+#     movies[id] = {title: title, year: year}
+# end
+#
+# # Load movies' relevant information
+# csv = CSV.parse(File.read('db/csv/20k-users/training_links.csv'), :headers => true)
+#
+# csv.each do |row|
+#     id = row['movieId'].to_i
+#     imdb_id = row['imdbId']
+#     movies[id][:imdb_id] = imdb_id
+# end
+#
+# csv = CSV.parse(File.read('db/csv/20k-users/movie_features.csv'), :headers => true)
+#
+# csv.each do |row|
+#     feature_array = []
+#     movie_id = row['movieId'].to_i
+#     row.each do |key, value|
+#         if key != 'movieId'
+#             feature_array << value.to_f
+#         end
+#     end
+#     movies[movie_id][:feature] = feature_array
+# end
+#
+# puts 'Movie information has been loaded'
+# movies.each do |id, movie|
+#     Movie.create!(id: id, title: movie[:title], year: movie[:year], imdb_id: movie[:imdb_id], feature: movie[:feature])
+# end
+# puts 'Movies have been inserted into database'
 
 # Load historical users and historical ratings
 csv = CSV.parse(File.read('db/csv/20k-users/training_ratings.csv'), :headers => true)
