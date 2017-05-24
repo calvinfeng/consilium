@@ -19,8 +19,14 @@ class Movie < ActiveRecord::Base
         self.ratings.each do | rating |
             sum += rating.value
         end
-        @average_rating = sum / self.ratings.count
-        return @average_rating
+
+        if self.ratings.count == 0
+            @average_rating = sum
+        else
+            @average_rating = sum / self.ratings.count
+        end
+
+        @average_rating
     end
 
     # Generate prediction using incremental SVD algorithm
